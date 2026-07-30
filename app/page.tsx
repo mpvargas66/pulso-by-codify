@@ -8,7 +8,14 @@ const FACTORES = [
     emoji: '🎓',
     nombre: 'Conocimiento & Expertise',
     peso: 25,
-    desc: 'Formación, certificaciones, dominio técnico y años de experiencia relevante.',
+    desc: 'Formación académica, certificaciones, dominio técnico y años de experiencia relevante.',
+    niveles: [
+      'Sin formación formal. Conocimientos básicos autodidactas.',
+      'Formación técnica o en curso. Conocimientos intermedios.',
+      'Formación profesional completa. Dominio sólido del área.',
+      'Formación avanzada + certificaciones. Expertise reconocido.',
+      'Máster/PhD o equivalente. Referente técnico en la industria.',
+    ],
   },
   {
     key: 'alcance',
@@ -16,6 +23,13 @@ const FACTORES = [
     nombre: 'Alcance & Complejidad',
     peso: 25,
     desc: 'Tamaño de proyectos, cantidad de stakeholders e interdependencias.',
+    niveles: [
+      'Tareas individuales simples. Sin dependencias externas.',
+      'Proyectos pequeños con 1-2 stakeholders. Baja complejidad.',
+      'Proyectos medianos con equipo reducido. Múltiples dependencias.',
+      'Proyectos grandes cross-funcional. Coordinación de equipos.',
+      'Iniciativas estratégicas empresa-wide. Alta incertidumbre.',
+    ],
   },
   {
     key: 'impacto',
@@ -23,6 +37,13 @@ const FACTORES = [
     nombre: 'Impacto & Resultados',
     peso: 20,
     desc: 'Influencia directa en resultados de negocio del cliente, valor medible.',
+    niveles: [
+      'Impacto operacional menor. Métricas difíciles de medir.',
+      'Mejoras tangibles en procesos. KPIs locales afectados.',
+      'Impacto directo en objetivos de equipo. ROI medible.',
+      'Impacto en objetivos de negocio del cliente. Revenue/Costos.',
+      'Impacto estratégico. Transforma el modelo de negocio.',
+    ],
   },
   {
     key: 'autonomia',
@@ -30,6 +51,13 @@ const FACTORES = [
     nombre: 'Autonomía & Decisión',
     peso: 15,
     desc: 'Nivel de independencia, supervisión requerida y definición de estrategia.',
+    niveles: [
+      'Alta supervisión. Instrucciones paso a paso.',
+      'Supervisión regular. Revisa entregables clave.',
+      'Autonomía en ejecución. Reporta avances periódicos.',
+      'Autonomía total en proyecto. Define metodología.',
+      'Define estrategia y roadmap. Cero supervisión.',
+    ],
   },
   {
     key: 'comunicacion',
@@ -37,6 +65,13 @@ const FACTORES = [
     nombre: 'Comunicación & Influencia',
     peso: 15,
     desc: 'Negociación, presentación a C-level, manejo de conflictos, liderazgo virtual.',
+    niveles: [
+      'Comunicación escrita básica. Reporta a 1 persona.',
+      'Presentaciones a equipo. Coordina con pares.',
+      'Presenta a clientes/líderes. Negocia alcances.',
+      'Presenta a C-level. Influencia decisiones estratégicas.',
+      'Speaker/Thought leader. Construye alianzas clave.',
+    ],
   },
 ]
 
@@ -57,6 +92,7 @@ function fmt(n: number) {
 
 export default function Home() {
   const [selecciones, setSelecciones] = useState<Record<string, number>>({})
+  const [expandido, setExpandido] = useState<string | null>(null)
   const [resultado, setResultado] = useState<{
     score: number
     cargo: (typeof CARGOS)[0]
@@ -82,9 +118,7 @@ export default function Home() {
     score = Math.round(score)
 
     const cargo = CARGOS.find((c) => score >= c.min && score <= c.max) || CARGOS[CARGOS.length - 1]
-
     const debiles = FACTORES.filter((f) => (selecciones[f.key] || 0) <= 2).map((f) => f.nombre)
-
     const certId =
       'PULSO-' +
       Math.random().toString(36).substring(2, 10).toUpperCase() +
@@ -98,284 +132,209 @@ export default function Home() {
   }
 
   return (
-    <main
-      style={{
-        maxWidth: 640,
-        margin: '0 auto',
-        padding: '24px 16px',
-        minHeight: '100vh',
-        background: '#fafafa',
-      }}
-    >
+    <main style={{ maxWidth: 680, margin: '0 auto', padding: '32px 20px', minHeight: '100vh' }}>
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: 28 }}>
-        <h1
+      <div style={{ textAlign: 'center', marginBottom: 40 }}>
+        <div
           style={{
-            fontSize: 28,
-            fontWeight: 800,
-            color: '#1a1a2e',
-            letterSpacing: '-0.5px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 10,
+            marginBottom: 12,
           }}
         >
-          Pulso <span style={{ color: '#4f46e5' }}>by Codify</span>
-        </h1>
-        <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>
-          Evalúa tu posición en el mercado laboral con la metodología Codify
+          <div
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 12,
+              background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 20,
+              boxShadow: '0 4px 12px rgba(34,197,94,0.3)',
+            }}
+          >
+            📊
+          </div>
+          <h1
+            style={{
+              fontSize: 32,
+              fontWeight: 800,
+              color: '#f8fafc',
+              letterSpacing: '-0.5px',
+            }}
+          >
+            Pulso <span style={{ color: '#22c55e' }}>by Codify</span>
+          </h1>
+        </div>
+        <p style={{ fontSize: 15, color: '#94a3b8', maxWidth: 420, margin: '0 auto', lineHeight: 1.5 }}>
+          Evalúa tu posición en el mercado laboral con la metodología de pesaje de cargos usada por las empresas líderes de Chile
         </p>
       </div>
 
       {/* Factores */}
-      {FACTORES.map((f) => (
-        <div
-          key={f.key}
-          style={{
-            background: 'white',
-            borderRadius: 16,
-            padding: 20,
-            marginBottom: 16,
-            boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-            border: '1px solid #f3f4f6',
-          }}
-        >
+      {FACTORES.map((f) => {
+        const isExpanded = expandido === f.key
+        return (
           <div
+            key={f.key}
             style={{
-              fontSize: 14,
-              fontWeight: 700,
-              color: '#1f2937',
-              marginBottom: 4,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-            }}
-          >
-            {f.emoji} {f.nombre}{' '}
-            <span style={{ color: '#4f46e5', fontSize: 11 }}>{f.peso}%</span>
-          </div>
-          <div style={{ fontSize: 12, color: '#9ca3af', marginBottom: 12 }}>{f.desc}</div>
-          <div style={{ display: 'flex', gap: 6 }}>
-            {[1, 2, 3, 4, 5].map((n) => {
-              const active = selecciones[f.key] === n
-              return (
-                <button
-                  key={n}
-                  onClick={() => handleSelect(f.key, n)}
-                  style={{
-                    flex: 1,
-                    height: 40,
-                    borderRadius: 8,
-                    border: `2px solid ${active ? '#4f46e5' : '#e5e7eb'}`,
-                    background: active ? '#4f46e5' : 'white',
-                    color: active ? 'white' : '#6b7280',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.15s',
-                    boxShadow: active ? '0 2px 8px rgba(79,70,229,0.25)' : 'none',
-                  }}
-                >
-                  {n}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      ))}
-
-      {/* Botón */}
-      <button
-        onClick={calcular}
-        style={{
-          width: '100%',
-          padding: 14,
-          background: '#4f46e5',
-          color: 'white',
-          border: 'none',
-          borderRadius: 12,
-          fontSize: 15,
-          fontWeight: 700,
-          cursor: 'pointer',
-          marginTop: 8,
-          transition: 'all 0.15s',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = '#4338ca'
-          e.currentTarget.style.transform = 'translateY(-1px)'
-          e.currentTarget.style.boxShadow = '0 4px 12px rgba(79,70,229,0.3)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = '#4f46e5'
-          e.currentTarget.style.transform = 'translateY(0)'
-          e.currentTarget.style.boxShadow = 'none'
-        }}
-      >
-        Calcular mi posición en el mercado
-      </button>
-
-      {/* Resultado */}
-      {resultado && (
-        <div id="resultado" style={{ marginTop: 24, animation: 'fadeIn 0.4s ease' }}>
-          <style>{`@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }`}</style>
-
-          {/* Score */}
-          <div
-            style={{
-              background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+              background: 'var(--glass)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
               borderRadius: 16,
-              padding: 24,
-              color: 'white',
-              textAlign: 'center',
+              padding: 20,
               marginBottom: 16,
-            }}
-          >
-            <div style={{ fontSize: 48, fontWeight: 800, lineHeight: 1 }}>{resultado.score}</div>
-            <div
-              style={{
-                fontSize: 12,
-                opacity: 0.85,
-                marginTop: 6,
-                textTransform: 'uppercase',
-                letterSpacing: 1,
-              }}
-            >
-              Puntos / 500
-            </div>
-          </div>
-
-          {/* Cargo */}
-          <div
-            style={{
-              background: 'white',
-              borderRadius: 12,
-              padding: 16,
-              marginBottom: 12,
-              border: '1px solid #e5e7eb',
+              border: '1px solid var(--border)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
             }}
           >
             <div
               style={{
-                fontSize: 11,
-                color: '#6b7280',
-                textTransform: 'uppercase',
-                letterSpacing: 0.5,
-                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 6,
               }}
             >
-              Cargo homologado Codify
-            </div>
-            <div style={{ fontSize: 18, fontWeight: 700, color: '#1f2937', marginTop: 4 }}>
-              {resultado.cargo.name}
-            </div>
-            <span
-              style={{
-                display: 'inline-block',
-                background: '#ecfdf5',
-                color: '#047857',
-                fontSize: 11,
-                fontWeight: 700,
-                padding: '4px 10px',
-                borderRadius: 20,
-                marginTop: 8,
-              }}
-            >
-              {resultado.cargo.grade}
-            </span>
-          </div>
-
-          {/* Banda */}
-          <div
-            style={{
-              background: 'white',
-              borderRadius: 12,
-              padding: 16,
-              border: '1px solid #e5e7eb',
-            }}
-          >
-            {[
-              { label: 'P25 (Bajo)', val: resultado.cargo.p25, highlight: false },
-              { label: 'P50 (Mediana)', val: resultado.cargo.p50, highlight: true },
-              { label: 'P75 (Competitivo)', val: resultado.cargo.p75, highlight: false },
-              { label: 'P90 (Top)', val: resultado.cargo.p90, highlight: false },
-            ].map((row) => (
               <div
-                key={row.label}
                 style={{
+                  fontSize: 15,
+                  fontWeight: 700,
+                  color: '#f8fafc',
                   display: 'flex',
-                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  padding: '8px 0',
-                  borderBottom: '1px solid #f3f4f6',
+                  gap: 8,
                 }}
               >
-                <span style={{ fontSize: 12, fontWeight: 600, color: '#6b7280' }}>{row.label}</span>
+                {f.emoji} {f.nombre}
                 <span
                   style={{
-                    fontSize: row.highlight ? 16 : 14,
-                    fontWeight: 700,
-                    color: row.highlight ? '#4f46e5' : '#1f2937',
+                    color: '#22c55e',
+                    fontSize: 11,
+                    fontWeight: 800,
+                    background: 'rgba(34,197,94,0.15)',
+                    padding: '2px 8px',
+                    borderRadius: 20,
                   }}
                 >
-                  {fmt(row.val)}
+                  {f.peso}%
                 </span>
               </div>
-            ))}
-          </div>
+              <button
+                onClick={() => setExpandido(isExpanded ? null : f.key)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#64748b',
+                  fontSize: 12,
+                  cursor: 'pointer',
+                  padding: '4px 8px',
+                  borderRadius: 6,
+                }}
+              >
+                {isExpanded ? 'Ocultar niveles ↑' : 'Ver niveles ↓'}
+              </button>
+            </div>
 
-          {/* Alerta */}
-          {resultado.debiles.length > 0 && (
-            <div
-              style={{
-                background: '#fef3c7',
-                borderLeft: '3px solid #f59e0b',
-                padding: '12px 14px',
-                borderRadius: '0 8px 8px 0',
-                marginTop: 12,
-                fontSize: 12,
-                color: '#92400e',
-              }}
-            >
-              💡 Oportunidad: si subes{' '}
-              <strong>{resultado.debiles.join(', ')}</strong> al nivel 3, podrías rehomologar a un
-              cargo superior y aumentar tu banda salarial.
-            </div>
-          )}
+            <div style={{ fontSize: 13, color: '#64748b', marginBottom: 14 }}>{f.desc}</div>
 
-          {/* Certificado */}
-          <div
-            style={{
-              background: 'linear-gradient(135deg, #1a1a2e 0%, #312e81 100%)',
-              borderRadius: 12,
-              padding: 20,
-              color: 'white',
-              marginTop: 16,
-              textAlign: 'center',
-            }}
-          >
-            <div style={{ fontSize: 32, marginBottom: 8 }}>🏅</div>
-            <div
-              style={{
-                fontSize: 13,
-                fontWeight: 700,
-                letterSpacing: 1,
-                textTransform: 'uppercase',
-                opacity: 0.7,
-              }}
-            >
-              Certificado Codify Individual
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 700, marginTop: 4 }}>{resultado.cargo.name}</div>
-            <div
-              style={{
-                fontSize: 10,
-                opacity: 0.5,
-                marginTop: 8,
-                fontFamily: 'monospace',
-              }}
-            >
-              ID: {resultado.certId}
+            {/* Descripción de niveles expandible */}
+            {isExpanded && (
+              <div
+                style={{
+                  marginBottom: 14,
+                  padding: 12,
+                  background: 'rgba(15,23,42,0.5)',
+                  borderRadius: 10,
+                  border: '1px solid rgba(148,163,184,0.1)',
+                }}
+              >
+                {f.niveles.map((nivel, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 8,
+                      padding: '6px 0',
+                      borderBottom:
+                        idx < f.niveles.length - 1 ? '1px solid rgba(148,163,184,0.08)' : 'none',
+                    }}
+                  >
+                    <span
+                      style={{
+                        minWidth: 20,
+                        height: 20,
+                        borderRadius: '50%',
+                        background:
+                          selecciones[f.key] === idx + 1
+                            ? '#22c55e'
+                            : 'rgba(148,163,184,0.15)',
+                        color: selecciones[f.key] === idx + 1 ? '#0f172a' : '#94a3b8',
+                        fontSize: 10,
+                        fontWeight: 800,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginTop: 2,
+                      }}
+                    >
+                      {idx + 1}
+                    </span>
+                    <span style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5 }}>{nivel}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Botones de nivel */}
+            <div style={{ display: 'flex', gap: 6 }}>
+              {[1, 2, 3, 4, 5].map((n) => {
+                const active = selecciones[f.key] === n
+                return (
+                  <button
+                    key={n}
+                    onClick={() => handleSelect(f.key, n)}
+                    style={{
+                      flex: 1,
+                      height: 44,
+                      borderRadius: 10,
+                      border: `2px solid ${active ? '#22c55e' : 'rgba(148,163,184,0.2)'}`,
+                      background: active
+                        ? 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)'
+                        : 'rgba(15,23,42,0.4)',
+                      color: active ? '#0f172a' : '#94a3b8',
+                      fontSize: 13,
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s',
+                      boxShadow: active
+                        ? '0 2px 12px rgba(34,197,94,0.35)'
+                        : 'none',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!active) {
+                        e.currentTarget.style.borderColor = 'rgba(34,197,94,0.5)'
+                        e.currentTarget.style.color = '#e2e8f0'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!active) {
+                        e.currentTarget.style.borderColor = 'rgba(148,163,184,0.2)'
+                        e.currentTarget.style.color = '#94a3b8'
+                      }
+                    }}
+                  >
+                    {n}
+                  </button>
+                )
+              })}
             </div>
           </div>
-        </div>
-      )}
-    </main>
-  )
-}
+        )
+      })}
+
+      {/* Bot
