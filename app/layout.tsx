@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Pulso by Codify',
-  description: 'Evalúa tu posición en el mercado laboral con la metodología Codify',
+  description: 'Toma el pulso del mercado salarial con la metodología Codify',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
