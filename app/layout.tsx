@@ -1,3 +1,5 @@
+import './globals.css'
+
 export const metadata = {
   title: 'Pulso by Codify',
   description: 'Toma el pulso del mercado salarial con la metodología Codify',
