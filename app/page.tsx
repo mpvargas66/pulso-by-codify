@@ -337,4 +337,232 @@ export default function Home() {
         )
       })}
 
-      {/* Bot
+      {/* Botón calcular */}
+      <button
+        onClick={calcular}
+        style={{
+          width: '100%',
+          padding: '16px 24px',
+          background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+          color: '#0f172a',
+          border: 'none',
+          borderRadius: 14,
+          fontSize: 16,
+          fontWeight: 800,
+          cursor: 'pointer',
+          marginTop: 8,
+          transition: 'all 0.2s',
+          boxShadow: '0 4px 20px rgba(34,197,94,0.25)',
+          letterSpacing: '-0.3px',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'translateY(-2px)'
+          e.currentTarget.style.boxShadow = '0 8px 30px rgba(34,197,94,0.4)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.boxShadow = '0 4px 20px rgba(34,197,94,0.25)'
+        }}
+      >
+        Calcular mi posición en el mercado
+      </button>
+
+      {/* Resultados */}
+      {resultado && (
+        <div id="resultado" className="animate-fade-in" style={{ marginTop: 32 }}>
+          {/* Score Card */}
+          <div
+            style={{
+              background: 'linear-gradient(135deg, rgba(34,197,94,0.15) 0%, rgba(79,70,229,0.1) 100%)',
+              backdropFilter: 'blur(20px)',
+              borderRadius: 20,
+              padding: 32,
+              textAlign: 'center',
+              marginBottom: 20,
+              border: '1px solid rgba(34,197,94,0.2)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+              animation: 'pulse-glow 3s infinite',
+            }}
+          >
+            <div style={{ fontSize: 14, color: '#22c55e', fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 2 }}>
+              Tu Score Pulso
+            </div>
+            <div style={{ fontSize: 56, fontWeight: 800, color: '#f8fafc', lineHeight: 1 }}>
+              {resultado.score}
+            </div>
+            <div style={{ fontSize: 13, color: '#64748b', marginTop: 6 }}>
+              de 500 puntos posibles
+            </div>
+          </div>
+
+          {/* Cargo */}
+          <div
+            style={{
+              background: 'var(--glass)',
+              backdropFilter: 'blur(20px)',
+              borderRadius: 16,
+              padding: 24,
+              marginBottom: 16,
+              border: '1px solid var(--border)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
+            }}
+          >
+            <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 700 }}>
+              Cargo homologado Codify
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#f8fafc', marginTop: 6 }}>
+              {resultado.cargo.name}
+            </div>
+            <span
+              style={{
+                display: 'inline-block',
+                background: 'rgba(34,197,94,0.15)',
+                color: '#22c55e',
+                fontSize: 12,
+                fontWeight: 700,
+                padding: '6px 14px',
+                borderRadius: 20,
+                marginTop: 10,
+                border: '1px solid rgba(34,197,94,0.2)',
+              }}
+            >
+              {resultado.cargo.grade}
+            </span>
+          </div>
+
+          {/* Bandas */}
+          <div
+            style={{
+              background: 'var(--glass)',
+              backdropFilter: 'blur(20px)',
+              borderRadius: 16,
+              padding: 24,
+              border: '1px solid var(--border)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
+            }}
+          >
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#f8fafc', marginBottom: 16 }}>
+              Banda salarial de mercado
+            </div>
+            {[
+              { label: 'P25 — Bajo', val: resultado.cargo.p25, highlight: false, color: '#ef4444' },
+              { label: 'P50 — Mediana', val: resultado.cargo.p50, highlight: true, color: '#22c55e' },
+              { label: 'P75 — Competitivo', val: resultado.cargo.p75, highlight: false, color: '#3b82f6' },
+              { label: 'P90 — Top', val: resultado.cargo.p90, highlight: false, color: '#a855f7' },
+            ].map((row) => (
+              <div
+                key={row.label}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '12px 0',
+                  borderBottom: '1px solid rgba(148,163,184,0.1)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: row.color,
+                      boxShadow: `0 0 8px ${row.color}`,
+                    }}
+                  />
+                  <span style={{ fontSize: 13, fontWeight: 600, color: row.highlight ? '#f8fafc' : '#94a3b8' }}>
+                    {row.label}
+                  </span>
+                </div>
+                <span
+                  style={{
+                    fontSize: row.highlight ? 18 : 15,
+                    fontWeight: 800,
+                    color: row.highlight ? '#22c55e' : '#f8fafc',
+                  }}
+                >
+                  {fmt(row.val)}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Alerta */}
+          {resultado.debiles.length > 0 && (
+            <div
+              style={{
+                background: 'rgba(245,158,11,0.1)',
+                borderLeft: '3px solid #f59e0b',
+                padding: '16px 20px',
+                borderRadius: '0 12px 12px 0',
+                marginTop: 16,
+                fontSize: 13,
+                color: '#fbbf24',
+                lineHeight: 1.6,
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <strong>💡 Oportunidad detectada:</strong> Si subes{' '}
+              <strong>{resultado.debiles.join(', ')}</strong> al nivel 3 o superior, tu cargo se
+              rehomologaría a uno de grado superior, aumentando tu banda salarial entre un 25-40%.
+            </div>
+          )}
+
+          {/* Certificado */}
+          <div
+            style={{
+              background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+              borderRadius: 16,
+              padding: 28,
+              marginTop: 20,
+              textAlign: 'center',
+              border: '1px solid rgba(34,197,94,0.2)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                top: -50,
+                right: -50,
+                width: 150,
+                height: 150,
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%)',
+              }}
+            />
+            <div style={{ fontSize: 40, marginBottom: 12 }}>🏅</div>
+            <div
+              style={{
+                fontSize: 11,
+                fontWeight: 800,
+                letterSpacing: 2,
+                textTransform: 'uppercase',
+                color: '#22c55e',
+                opacity: 0.8,
+              }}
+            >
+              Certificado Codify Individual
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: '#f8fafc', marginTop: 8 }}>
+              {resultado.cargo.name}
+            </div>
+            <div
+              style={{
+                fontSize: 10,
+                color: '#475569',
+                marginTop: 12,
+                fontFamily: 'monospace',
+                letterSpacing: 1,
+              }}
+            >
+              ID: {resultado.certId}
+            </div>
+          </div>
+        </div>
+      )}
+    </main>
+  )
+}
