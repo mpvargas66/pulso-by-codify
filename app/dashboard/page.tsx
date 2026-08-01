@@ -104,19 +104,24 @@ export default function Dashboard() {
     const loadUser = async () => {
       try {
         const supabase = createClient()
-        const { data } = await supabase.auth.getUser()
-        if (!data.user) {
+        const { data, error } = await supabase.auth.getUser()
+        console.log('Auth check:', { data, error })
+
+        if (error || !data.user) {
+          console.log('No user, redirecting to login')
           router.push('/login')
         } else {
+          console.log('User found:', data.user.email)
           setUser(data.user)
           cargarHistorial(data.user.id)
         }
       } catch (error) {
         console.error('Auth error:', error)
+        router.push('/login')
       }
     }
     loadUser()
-  }, [])
+  }, [router])
 
   const cargarHistorial = async (uid: string) => {
     const supabase = createClient()
