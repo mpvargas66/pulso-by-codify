@@ -324,100 +324,174 @@ function Step2Experiencia({ form, updateForm, onNext, onBack }: any) {
 }
 
 // ==================== PASO 3: COMPETENCIAS TÉCNICAS ====================
+const SKILLS_BY_INDUSTRY = {
+  'Tech': [
+    'Python', 'JavaScript/TypeScript', 'SQL', 'React', 'Java', 'C++',
+    'Node.js', 'Vue.js', 'AWS', 'Docker', 'Kubernetes', 'Git/GitHub',
+    'Machine Learning', 'TensorFlow', 'API Development'
+  ],
+  'Data & Analytics': [
+    'Excel Avanzado', 'Power BI', 'Tableau', 'Google Analytics',
+    'Looker Studio', 'Apache Spark', 'R Programming', 'SQL Avanzado'
+  ],
+  'Finanzas': [
+    'Financial Modeling', 'SAP Finance', 'Treasury Management',
+    'Risk Analysis', 'Valuación Empresarial', 'Compliance & Auditoría'
+  ],
+  'Logística & Supply Chain': [
+    'SAP Logistics', 'Procurement', 'Inventory Management',
+    'Forecasting', 'Transportation Management'
+  ],
+  'Ventas & Marketing': [
+    'Salesforce', 'HubSpot', 'Estrategia Digital', 'SEO/SEM',
+    'Email Marketing', 'B2B Sales', 'CRM Strategy'
+  ],
+  'Legal & Compliance': [
+    'Contract Management', 'Due Diligence', 'Legal Tech',
+    'Compliance Management', 'Risk Management'
+  ],
+  'Transversal': [
+    'Agile/Scrum', 'Project Management', 'Liderazgo',
+    'Comunicación Escrita', 'Negociación', 'Pensamiento Crítico',
+    'Inglés Técnico', 'Power Automate'
+  ]
+};
+
 function Step3CompetenciasTecnicas({ form, updateForm, onNext, onBack }: any) {
-  const [skillInput, setSkillInput] = useState('')
-  const [certInput, setCertInput] = useState('')
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
+    'Tech': true,
+    'Data & Analytics': false,
+    'Finanzas': false,
+    'Logística & Supply Chain': false,
+    'Ventas & Marketing': false,
+    'Legal & Compliance': false,
+    'Transversal': true,
+  });
 
-  const addSkill = () => {
-    if (skillInput.trim()) {
-      updateForm('habilidades_tecnicas', [...(form.habilidades_tecnicas || []), skillInput.trim()])
-      setSkillInput('')
-    }
-  }
-  const removeSkill = (i: number) => {
-    updateForm('habilidades_tecnicas', form.habilidades_tecnicas.filter((_: any, idx: number) => idx !== i))
-  }
-  const addCert = () => {
-    if (certInput.trim()) {
-      updateForm('certificaciones', [...(form.certificaciones || []), certInput.trim()])
-      setCertInput('')
-    }
-  }
-  const removeCert = (i: number) => {
-    updateForm('certificaciones', form.certificaciones.filter((_: any, idx: number) => idx !== i))
-  }
+  const selectedSkills = form.habilidades_tecnicas || [];
 
-  const addIdioma = (idioma: string, nivel: string) => {
-    const current = form.idiomas || []
-    const filtered = current.filter((i: any) => i.idioma !== idioma)
-    updateForm('idiomas', [...filtered, { idioma, nivel }])
-  }
+  const toggleSkill = (skill: string) => {
+    if (selectedSkills.includes(skill)) {
+      updateForm('habilidades_tecnicas', selectedSkills.filter((s: string) => s !== skill));
+    } else {
+      updateForm('habilidades_tecnicas', [...selectedSkills, skill]);
+    }
+  };
+
+  const toggleCategory = (category: string) => {
+    setExpandedCategories((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
 
   return (
-    <div style={{ background: 'rgba(30,41,59,0.6)', backdropFilter: 'blur(20px)', borderRadius: 16, padding: 24, border: '1px solid rgba(148,163,184,0.15)' }}>
-      <h2 style={{ fontSize: 18, fontWeight: 700, color: '#f8fafc', marginBottom: 4 }}>Competencias Técnicas</h2>
-      <p style={{ fontSize: 13, color: '#64748b', marginBottom: 20 }}>Habilidades, certificaciones e idiomas</p>
+    <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
+      <h2 style={{ color: '#00d084', marginBottom: '20px', fontSize: '18px' }}>
+        Paso 3: Skills & Competencias
+      </h2>
+      <p style={{ color: '#aaa', marginBottom: '24px', fontSize: '13px' }}>
+        Selecciona las skills que posees. {selectedSkills.length} seleccionadas.
+      </p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        {/* Skills */}
-        <div>
-          <label style={labelStyle}>Habilidades técnicas relevantes</label>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-            <input type="text" placeholder="Ej: Excel, Python, SAP..." value={skillInput} onChange={e => setSkillInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && addSkill()} style={{ ...inputStyle, flex: 1 }} />
-            <button onClick={addSkill} style={{ ...btnPrimary, padding: '10px 16px' }}>+</button>
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {(form.habilidades_tecnicas || []).map((s: string, i: number) => (
-              <span key={i} style={{ background: 'rgba(34,197,94,0.15)', color: '#22c55e', fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 20, display: 'flex', alignItems: 'center', gap: 6 }}>
-                {s} <button onClick={() => removeSkill(i)} style={{ background: 'none', border: 'none', color: '#22c55e', cursor: 'pointer', fontSize: 14 }}>×</button>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Certificaciones */}
-        <div>
-          <label style={labelStyle}>Certificaciones / Cursos</label>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-            <input type="text" placeholder="Ej: PMP, SCRUM Master..." value={certInput} onChange={e => setCertInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && addCert()} style={{ ...inputStyle, flex: 1 }} />
-            <button onClick={addCert} style={{ ...btnPrimary, padding: '10px 16px' }}>+</button>
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {(form.certificaciones || []).map((c: string, i: number) => (
-              <span key={i} style={{ background: 'rgba(59,130,246,0.15)', color: '#3b82f6', fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 20, display: 'flex', alignItems: 'center', gap: 6 }}>
-                {c} <button onClick={() => removeCert(i)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer', fontSize: 14 }}>×</button>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Idiomas */}
-        <div>
-          <label style={labelStyle}>Idiomas</label>
-          {['Inglés', 'Portugués', 'Francés', 'Alemán', 'Chino', 'Japonés'].map(idioma => {
-            const current = (form.idiomas || []).find((i: any) => i.idioma === idioma)
-            return (
-              <div key={idioma} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <span style={{ width: 80, fontSize: 13, color: '#94a3b8' }}>{idioma}</span>
-                <select value={current?.nivel || ''} onChange={e => addIdioma(idioma, e.target.value)} style={{ ...inputStyle, flex: 1 }}>
-                  <option value="">No aplica</option>
-                  <option value="Básico">Básico</option>
-                  <option value="Intermedio">Intermedio</option>
-                  <option value="Avanzado">Avanzado</option>
-                  <option value="Nativo">Nativo</option>
-                </select>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        {Object.entries(SKILLS_BY_INDUSTRY).map(([category, skills]) => (
+          <div key={category} style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid #16213e', backgroundColor: '#0f3460' }}>
+            {/* Category Header */}
+            <div
+              onClick={() => toggleCategory(category)}
+              style={{
+                padding: '14px 16px',
+                backgroundColor: '#16213e',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                userSelect: 'none',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ color: '#00d084', fontSize: '16px' }}>
+                  {expandedCategories[category] ? '▼' : '▶'}
+                </span>
+                <span style={{ color: '#00d084', fontWeight: '600', fontSize: '14px' }}>
+                  {category}
+                </span>
               </div>
-            )
-          })}
-        </div>
+              <span style={{ color: '#666', fontSize: '12px' }}>
+                {skills.filter((s) => selectedSkills.includes(s)).length}/{skills.length}
+              </span>
+            </div>
+
+            {/* Skills Grid */}
+            {expandedCategories[category] && (
+              <div style={{ padding: '16px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '12px' }}>
+                {skills.map((skill) => {
+                  const isSelected = selectedSkills.includes(skill);
+                  return (
+                    <label
+                      key={skill}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        padding: '10px 12px',
+                        borderRadius: '8px',
+                        backgroundColor: isSelected ? 'rgba(0, 208, 132, 0.15)' : 'rgba(30, 41, 59, 0.6)',
+                        border: isSelected ? '1px solid #00d084' : '1px solid #16213e',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.backgroundColor = isSelected
+                          ? 'rgba(0, 208, 132, 0.25)'
+                          : 'rgba(30, 41, 59, 0.9)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.backgroundColor = isSelected
+                          ? 'rgba(0, 208, 132, 0.15)'
+                          : 'rgba(30, 41, 59, 0.6)';
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleSkill(skill)}
+                        style={{
+                          width: '18px',
+                          height: '18px',
+                          accentColor: '#00d084',
+                          cursor: 'pointer',
+                        }}
+                      />
+                      <span
+                        style={{
+                          color: isSelected ? '#00d084' : '#aaa',
+                          fontSize: '13px',
+                          fontWeight: isSelected ? '600' : '400',
+                        }}
+                      >
+                        {skill}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ))}
       </div>
 
-      <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-        <button onClick={onBack} style={btnSecondary}>← Atrás</button>
-        <button onClick={onNext} style={{ ...btnPrimary, flex: 1 }}>Siguiente →</button>
+      <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#16213e', color: '#00d084', border: '1px solid #00d084', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>
+          ← Atrás
+        </button>
+        <button onClick={onNext} style={{ flex: 1, padding: '12px', backgroundColor: '#00d084', color: '#1a1a2e', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>
+          Siguiente →
+        </button>
       </div>
     </div>
-  )
+  );
 }
 
 // ==================== PASO 4: COMPETENCIAS BLANDAS ====================
