@@ -1,28 +1,231 @@
 'use client'
 
+import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
+  const router = useRouter()
+  const [tab, setTab] = useState<'login' | 'signup'>('login')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
+
+  const supabase = createClient()
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        setError(error.message)
+      } else {
+        router.push('/dashboard')
+      }
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleEmailSignup = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setMessage('')
+    setLoading(true)
+
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+
+      if (error) {
+        setError(error.message)
+      } else {
+        setMessage('¡Verifica tu email para confirmar tu cuenta!')
+        setEmail('')
+        setPassword('')
+      }
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleGoogleLogin = async () => {
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    })
-    if (error) console.error(error)
+    setError('')
+    setLoading(true)
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+      if (error) setError(error.message)
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a', padding: 20 }}>
-      <div style={{ width: '100%', maxWidth: 400, background: 'rgba(30,41,59,0.6)', backdropFilter: 'blur(20px)', borderRadius: 20, padding: 32, border: '1px solid rgba(148,163,184,0.15)', textAlign: 'center' }}>
-        <div style={{ width: 64, height: 64, borderRadius: 20, background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, margin: '0 auto 20px', boxShadow: '0 8px 30px rgba(34,197,94,0.3)' }}>📊</div>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: '#f8fafc', marginBottom: 8 }}>Bienvenido a Pulso</h1>
-        <p style={{ fontSize: 14, color: '#64748b', marginBottom: 24 }}>Inicia sesión para evaluar tu posición en el mercado</p>
-        
+      <div style={{ width: '100%', maxWidth: 420, background: 'rgba(30,41,59,0.6)', backdropFilter: 'blur(20px)', borderRadius: 20, padding: 32, border: '1px solid rgba(148,163,184,0.15)' }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <div style={{ width: 64, height: 64, borderRadius: 20, background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, margin: '0 auto 20px', boxShadow: '0 8px 30px rgba(34,197,94,0.3)' }}>📊</div>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#f8fafc', marginBottom: 8 }}>Bienvenido a Pulso</h1>
+          <p style={{ fontSize: 14, color: '#64748b' }}>Inicia sesión para evaluar tu posición en el mercado</p>
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 24, background: 'rgba(148,163,184,0.1)', padding: 4, borderRadius: 12 }}>
+          <button
+            onClick={() => { setTab('login'); setError(''); setMessage(''); }}
+            style={{
+              flex: 1,
+              padding: '12px',
+              background: tab === 'login' ? 'rgba(34,197,94,0.2)' : 'transparent',
+              color: tab === 'login' ? '#22c55e' : '#64748b',
+              border: 'none',
+              borderRadius: 10,
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+            }}
+          >
+            Iniciar Sesión
+          </button>
+          <button
+            onClick={() => { setTab('signup'); setError(''); setMessage(''); }}
+            style={{
+              flex: 1,
+              padding: '12px',
+              background: tab === 'signup' ? 'rgba(34,197,94,0.2)' : 'transparent',
+              color: tab === 'signup' ? '#22c55e' : '#64748b',
+              border: 'none',
+              borderRadius: 10,
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+            }}
+          >
+            Crear Cuenta
+          </button>
+        </div>
+
+        {/* Email/Password Form */}
+        <form onSubmit={tab === 'login' ? handleEmailLogin : handleEmailSignup} style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+          <div>
+            <label style={{ display: 'block', fontSize: 13, color: '#94a3b8', marginBottom: 8, fontWeight: 500 }}>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="tu@email.com"
+              required
+              disabled={loading}
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                borderRadius: 10,
+                border: '1px solid rgba(148,163,184,0.2)',
+                background: 'rgba(15,23,42,0.5)',
+                color: '#f8fafc',
+                fontSize: 14,
+                outline: 'none',
+                transition: 'border-color 0.3s',
+                opacity: loading ? 0.6 : 1,
+              }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(34,197,94,0.5)'; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(148,163,184,0.2)'; }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', fontSize: 13, color: '#94a3b8', marginBottom: 8, fontWeight: 500 }}>Contraseña</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              disabled={loading}
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                borderRadius: 10,
+                border: '1px solid rgba(148,163,184,0.2)',
+                background: 'rgba(15,23,42,0.5)',
+                color: '#f8fafc',
+                fontSize: 14,
+                outline: 'none',
+                transition: 'border-color 0.3s',
+                opacity: loading ? 0.6 : 1,
+              }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(34,197,94,0.5)'; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(148,163,184,0.2)'; }}
+            />
+          </div>
+
+          {/* Error Message */}
+          {error && <div style={{ padding: 12, background: 'rgba(239,68,68,0.15)', borderRadius: 8, color: '#fca5a5', fontSize: 13, border: '1px solid rgba(239,68,68,0.3)' }}>⚠️ {error}</div>}
+
+          {/* Success Message */}
+          {message && <div style={{ padding: 12, background: 'rgba(34,197,94,0.15)', borderRadius: 8, color: '#86efac', fontSize: 13, border: '1px solid rgba(34,197,94,0.3)' }}>✓ {message}</div>}
+
+          <button
+            type="submit"
+            disabled={loading || !email || !password}
+            style={{
+              width: '100%',
+              padding: '14px 24px',
+              background: loading || !email || !password ? '#666' : 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+              color: '#1a1a2e',
+              border: 'none',
+              borderRadius: 12,
+              fontSize: 15,
+              fontWeight: 700,
+              cursor: loading || !email || !password ? 'not-allowed' : 'pointer',
+              transition: 'all 0.3s',
+              boxShadow: '0 4px 15px rgba(34,197,94,0.25)',
+            }}
+          >
+            {loading ? 'Cargando...' : tab === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
+          </button>
+        </form>
+
+        {/* Divider */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
+          <div style={{ flex: 1, height: 1, background: 'rgba(148,163,184,0.2)' }} />
+          <span style={{ fontSize: 12, color: '#64748b' }}>O continúa con</span>
+          <div style={{ flex: 1, height: 1, background: 'rgba(148,163,184,0.2)' }} />
+        </div>
+
+        {/* Google Login */}
         <button
           onClick={handleGoogleLogin}
+          disabled={loading}
           style={{
             width: '100%',
             padding: '14px 24px',
@@ -32,12 +235,14 @@ export default function Login() {
             borderRadius: 12,
             fontSize: 15,
             fontWeight: 700,
-            cursor: 'pointer',
+            cursor: loading ? 'not-allowed' : 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: 10,
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            opacity: loading ? 0.6 : 1,
+            transition: 'all 0.3s',
           }}
         >
           <svg width="20" height="20" viewBox="0 0 24 24">
