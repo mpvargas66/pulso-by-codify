@@ -101,15 +101,22 @@ export default function Dashboard() {
   })
 
   useEffect(() => {
-    const supabase = createClient()
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (!user) router.push('/login')
-      else {
-        setUser(user)
-        cargarHistorial(user.id)
+    const loadUser = async () => {
+      try {
+        const supabase = createClient()
+        const { data } = await supabase.auth.getUser()
+        if (!data.user) {
+          router.push('/login')
+        } else {
+          setUser(data.user)
+          cargarHistorial(data.user.id)
+        }
+      } catch (error) {
+        console.error('Auth error:', error)
       }
-    })
-  }, [router])
+    }
+    loadUser()
+  }, [])
 
   const cargarHistorial = async (uid: string) => {
     const supabase = createClient()
