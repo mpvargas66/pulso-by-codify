@@ -696,3 +696,4 @@ const labelStyle = { display: 'block', fontSize: 13, fontWeight: 600, color: '#9
 const inputStyle = { width: '100%', padding: '12px 14px', borderRadius: 10, border: '1px solid rgba(148,163,184,0.2)', background: 'rgba(15,23,42,0.5)', color: '#f8fafc', fontSize: 14, outline: 'none' }
 const btnPrimary = { padding: '12px 20px', background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', color: '#0f172a', border: 'none', borderRadius: 12, fontSize: 14, fontWeight: 800, cursor: 'pointer' }
 const btnSecondary = { padding: '12px 20px', background: 'rgba(30,41,59,0.6)', color: '#94a3b8', border: '1px solid rgba(148,163,184,0.2)', borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer' }
+// Force rebuild Sat Aug  1 08:34:44 -04 2026
