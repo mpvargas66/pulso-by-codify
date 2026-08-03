@@ -71,7 +71,15 @@ interface AnalysisResult {
   score_total: number;
   grade: number;
   cargo_homologado: string;
-  factor_scores: Record<string, number>;
+  factor_scores: {
+    expertise_funcional: number;
+    expertise_negocio: number;
+    influencia_liderazgo: number;
+    resolucion_problemas: number;
+    naturaleza_impacto: number;
+    alcance_impacto: number;
+    interaccion_comunicacion: number;
+  };
   salario_actual: number;
   banda_p25: number;
   banda_p50: number;
