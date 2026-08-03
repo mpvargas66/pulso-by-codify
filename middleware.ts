@@ -8,31 +8,35 @@ export async function middleware(request: NextRequest) {
     request: { headers: request.headers },
   })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          const value = request.cookies.get(name)?.value
-          console.log(`[Cookie GET] ${name}: ${value ? 'exists' : 'missing'}`)
-          return value
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          console.log(`[Cookie SET] ${name}`)
-          request.cookies.set({ name, value, ...options })
-          response = NextResponse.next({ request: { headers: request.headers } })
-          response.cookies.set({ name, value, ...options })
-        },
-        remove(name: string, options: CookieOptions) {
-          console.log(`[Cookie REMOVE] ${name}`)
-          request.cookies.set({ name, value: '', ...options })
-          response = NextResponse.next({ request: { headers: request.headers } })
-          response.cookies.set({ name, value: '', ...options })
-        },
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.log('[Middleware] Supabase not configured, allowing all requests')
+    return response
+  }
+
+  const supabase = createServerClient(supabaseUrl, supabaseKey, {
+    cookies: {
+      get(name: string) {
+        const value = request.cookies.get(name)?.value
+        console.log(`[Cookie GET] ${name}: ${value ? 'exists' : 'missing'}`)
+        return value
       },
-    }
-  )
+      set(name: string, value: string, options: CookieOptions) {
+        console.log(`[Cookie SET] ${name}`)
+        request.cookies.set({ name, value, ...options })
+        response = NextResponse.next({ request: { headers: request.headers } })
+        response.cookies.set({ name, value, ...options })
+      },
+      remove(name: string, options: CookieOptions) {
+        console.log(`[Cookie REMOVE] ${name}`)
+        request.cookies.set({ name, value: '', ...options })
+        response = NextResponse.next({ request: { headers: request.headers } })
+        response.cookies.set({ name, value: '', ...options })
+      },
+    },
+  })
 
   try {
     const { data: { user }, error } = await supabase.auth.getUser()
