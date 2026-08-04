@@ -156,7 +156,7 @@ const SKILLS_HELP = {
   'Transversal': '💡 Habilidades aplicables en cualquier industria',
 };
 
-type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 'resultado';
+type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 'resultado';
 
 interface UserForm {
   edad?: number;
