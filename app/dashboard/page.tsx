@@ -2,20 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import ChatWindow from '@/components/ChatWindow';
-
-let supabase: any = null;
-
-const useAutoSave = (form: UserForm, step: Step) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      localStorage.setItem('pulso_form_autosave', JSON.stringify({ form, step }));
-      console.log('✅ Progreso guardado automáticamente');
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [form, step]);
-};
 
 const EDUCATIONS = ['Ingeniería en Informática', 'Ingeniería en Computación', 'Ingeniería en Sistemas', 'Ingeniería en Software', 'Ingeniería Comercial', 'Ingeniería Industrial', 'Técnico en Informática', 'Técnico en Programación', 'Administración de Empresas', 'Contador/a', 'Abogado/a', 'Especialista en RRHH', 'Especialista en Marketing', 'Especialista en Logística', 'Data Scientist', 'Product Manager', 'UX/UI Designer', 'Profesor/a'];
 
@@ -49,11 +37,6 @@ const formatSalary = (value: number | string): string => {
   return num.toLocaleString('es-CL', { style: 'currency', currency: 'CLP', minimumFractionDigits: 0, maximumFractionDigits: 0 });
 };
 
-const formatSalaryInput = (value: number | string): string => {
-  if (!value) return '';
-  return value.toString().replace(/\D/g, '');
-};
-
 const SKILLS_BY_CATEGORY: Record<string, string[]> = {
   'Tech': ['Python', 'JavaScript/TypeScript', 'SQL', 'React', 'Java', 'C++', 'Node.js', 'Vue.js', 'AWS', 'Docker', 'Kubernetes', 'Git/GitHub', 'Machine Learning', 'TensorFlow', 'API Development'],
   'Data & Analytics': ['Excel Avanzado', 'Power BI', 'Tableau', 'Google Analytics', 'Looker Studio', 'Apache Spark', 'R Programming', 'SQL Avanzado'],
@@ -62,6 +45,23 @@ const SKILLS_BY_CATEGORY: Record<string, string[]> = {
   'Ventas & Marketing': ['Salesforce', 'HubSpot', 'Estrategia Digital', 'SEO/SEM', 'Email Marketing'],
   'Legal & Compliance': ['Contract Management', 'Due Diligence', 'Legal Tech', 'Compliance Management'],
   'Transversal': ['Agile/Scrum', 'Project Management', 'Liderazgo', 'Comunicación Escrita', 'Negociación', 'Pensamiento Crítico', 'Inglés Técnico'],
+};
+
+const FIELD_HELP = {
+  edad: '💡 Tu edad actual (18-70 años)',
+  genero: '💡 Selecciona tu identidad de género',
+  region: '💡 Región donde trabajas actualmente',
+  educacion: '💡 Tu formación académica más alta',
+  anos_experiencia: '💡 Años totales trabajando en tu industria',
+  industria: '💡 Industria principal donde trabajas',
+  tamano_empresa: '💡 Número de empleados de tu empresa',
+  anos_empresa: '💡 Tiempo que llevas en esta empresa',
+  cargo: '💡 Tu cargo actual o último cargo',
+  anos_cargo: '💡 Tiempo en este cargo',
+  modalidad: '💡 Tipo de jornada (presencial/híbrido/remoto)',
+  tipo_contrato: '💡 Tipo de contratación',
+  salario_bruto: '💡 Sueldo mensual ANTES de impuestos',
+  salario_liquido: '💡 Lo que recibes en tu cuenta cada mes',
 };
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 'resultado';
@@ -121,24 +121,19 @@ const searchJobs = (industry: string, query: string): string[] => {
   return jobs.filter(j => j.toLowerCase().includes(lower)).slice(0, 10);
 };
 
-const FIELD_HELP = {
-  edad: '💡 Tu edad actual (18-70 años)',
-  genero: '💡 Selecciona tu identidad de género',
-  region: '💡 Región donde trabajas actualmente',
-  educacion: '💡 Tu formación académica más alta',
-  anos_experiencia: '💡 Años totales trabajando en tu industria',
-  industria: '💡 Industria principal donde trabajas',
-  tamano_empresa: '💡 Número de empleados de tu empresa',
-  anos_empresa: '💡 Tiempo que llevas en esta empresa',
-  cargo: '💡 Tu cargo actual o último cargo',
-  anos_cargo: '💡 Tiempo en este cargo',
-  modalidad: '💡 Tipo de jornada (presencial/híbrido/remoto)',
-  tipo_contrato: '💡 Tipo de contratación',
-  salario_bruto: '💡 Sueldo mensual ANTES de impuestos',
-  salario_liquido: '💡 Lo que recibes en tu cuenta cada mes',
-};
-
 function Step1Basic({ form, updateForm, onNext }: any) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!form.edad) newErrors.edad = 'Requerido';
+    if (form.edad && (form.edad < 18 || form.edad > 70)) newErrors.edad = 'Debe estar entre 18-70';
+    if (!form.genero) newErrors.genero = 'Requerido';
+    if (!form.region) newErrors.region = 'Requerido';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 1: Datos Básicos</h2>
@@ -148,32 +143,33 @@ function Step1Basic({ form, updateForm, onNext }: any) {
             Edad
             <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.edad}</span>
           </label>
-          <input type="number" min="18" max="70" value={form.edad || ''} onChange={(e) => updateForm('edad', parseInt(e.target.value))} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }} />
-          {form.edad && form.edad < 18 && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ Debes tener al menos 18 años</div>}
-          {form.edad && form.edad > 70 && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ Edad máxima permitida es 70 años</div>}
+          <input type="number" min="18" max="70" value={form.edad || ''} onChange={(e) => updateForm('edad', parseInt(e.target.value))} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.edad ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }} />
+          {errors.edad && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.edad}</div>}
         </div>
         <div>
           <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Género
             <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.genero}</span>
           </label>
-          <select value={form.genero || ''} onChange={(e) => updateForm('genero', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}>
+          <select value={form.genero || ''} onChange={(e) => updateForm('genero', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.genero ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }}>
             <option value="">Selecciona...</option>
             {GENDERS.map((g) => <option key={g} value={g}>{g}</option>)}
           </select>
+          {errors.genero && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.genero}</div>}
         </div>
         <div>
           <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Región
             <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.region}</span>
           </label>
-          <select value={form.region || ''} onChange={(e) => updateForm('region', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}>
+          <select value={form.region || ''} onChange={(e) => updateForm('region', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.region ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }}>
             <option value="">Selecciona...</option>
             {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
           </select>
+          {errors.region && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.region}</div>}
         </div>
       </div>
-      <button onClick={onNext} disabled={!form.edad || !form.genero || !form.region} style={{ width: '100%', padding: '12px', marginTop: '20px', backgroundColor: '#BF057D', color: '#1C1B2E', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: !form.edad || !form.genero || !form.region ? 0.5 : 1 }}>Siguiente →</button>
+      <button onClick={() => validate() && onNext()} style={{ width: '100%', padding: '12px', marginTop: '20px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
     </div>
   );
 }
@@ -181,76 +177,125 @@ function Step1Basic({ form, updateForm, onNext }: any) {
 function Step2Education({ form, updateForm, onNext, onBack }: any) {
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!form.educacion) newErrors.educacion = 'Requerido';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 2: Formación</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ position: 'relative' }}>
-          <input type="text" placeholder="Busca tu carrera..." value={input} onChange={(e) => { setInput(e.target.value); setSuggestions(searchEducations(e.target.value)); }} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }} />
-          {suggestions.length > 0 && (
-            <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#1C1B2E', border: '1px solid #16213e', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '300px', overflowY: 'auto', zIndex: 10 }}>
-              {suggestions.map((s, i) => (
-                <div key={i} onClick={() => { updateForm('educacion', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#aaa', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1C1B2E'; e.currentTarget.style.color = '#aaa'; }}>{s}</div>
-              ))}
-            </div>
-          )}
+        <div>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Educación
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.educacion}</span>
+          </label>
+          <div style={{ position: 'relative' }}>
+            <input type="text" placeholder="Busca tu carrera..." value={input} onChange={(e) => { setInput(e.target.value); setSuggestions(searchEducations(e.target.value)); }} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.educacion ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }} />
+            {suggestions.length > 0 && (
+              <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#1a1a2e', border: '1px solid #16213e', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '300px', overflowY: 'auto', zIndex: 10 }}>
+                {suggestions.map((s, i) => (
+                  <div key={i} onClick={() => { updateForm('educacion', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#aaa', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1a1a2e'; e.currentTarget.style.color = '#aaa'; }}>{s}</div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-        {form.educacion && <div style={{ padding: '12px', backgroundColor: 'rgba(0, 208, 132, 0.15)', borderRadius: '8px', color: '#BF057D', fontSize: '13px' }}>✓ {form.educacion}</div>}
+        {form.educacion && <div style={{ padding: '12px', backgroundColor: 'rgba(191, 5, 125, 0.15)', borderRadius: '8px', color: '#BF057D', fontSize: '13px' }}>✓ {form.educacion}</div>}
+        {errors.educacion && <div style={{ color: '#ff6b6b', fontSize: '11px' }}>⚠️ {errors.educacion}</div>}
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
         <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#16213e', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
-        <button onClick={onNext} disabled={!form.educacion} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#1C1B2E', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: !form.educacion ? 0.5 : 1 }}>Siguiente →</button>
+        <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: !form.educacion ? 0.5 : 1 }}>Siguiente →</button>
       </div>
     </div>
   );
 }
 
 function Step3Experience({ form, updateForm, onNext, onBack }: any) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (form.anos_experiencia === undefined) newErrors.anos_experiencia = 'Requerido';
+    if (!form.industria) newErrors.industria = 'Requerido';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 3: Experiencia</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '8px' }}>Años totales: {form.anos_experiencia || 0}</label>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
+            Años totales: {form.anos_experiencia || 0}
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_experiencia}</span>
+          </label>
           <input type="range" min="0" max="50" value={form.anos_experiencia || 0} onChange={(e) => updateForm('anos_experiencia', parseInt(e.target.value))} style={{ width: '100%' }} />
         </div>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>Industria</label>
-          <select value={form.industria || ''} onChange={(e) => updateForm('industria', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Industria
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.industria}</span>
+          </label>
+          <select value={form.industria || ''} onChange={(e) => updateForm('industria', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.industria ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }}>
             <option value="">Selecciona...</option>
             {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
           </select>
+          {errors.industria && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.industria}</div>}
         </div>
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
         <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#16213e', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
-        <button onClick={onNext} disabled={form.anos_experiencia === undefined || !form.industria} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#1C1B2E', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: form.anos_experiencia === undefined || !form.industria ? 0.5 : 1 }}>Siguiente →</button>
+        <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
       </div>
     </div>
   );
 }
 
 function Step4Company({ form, updateForm, onNext, onBack }: any) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!form.tamano_empresa) newErrors.tamano_empresa = 'Requerido';
+    if (form.anos_empresa === undefined) newErrors.anos_empresa = 'Requerido';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 4: Empresa</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>Tamaño</label>
-          <select value={form.tamano_empresa || ''} onChange={(e) => updateForm('tamano_empresa', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Tamaño
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.tamano_empresa}</span>
+          </label>
+          <select value={form.tamano_empresa || ''} onChange={(e) => updateForm('tamano_empresa', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.tamano_empresa ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }}>
             <option value="">Selecciona...</option>
             {COMPANY_SIZES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
           </select>
+          {errors.tamano_empresa && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.tamano_empresa}</div>}
         </div>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '8px' }}>Años en empresa: {form.anos_empresa || 0}</label>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
+            Años en empresa: {form.anos_empresa || 0}
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_empresa}</span>
+          </label>
           <input type="range" min="0" max="40" value={form.anos_empresa || 0} onChange={(e) => updateForm('anos_empresa', parseInt(e.target.value))} style={{ width: '100%' }} />
         </div>
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
         <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#16213e', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
-        <button onClick={onNext} disabled={!form.tamano_empresa || form.anos_empresa === undefined} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#1C1B2E', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: !form.tamano_empresa || form.anos_empresa === undefined ? 0.5 : 1 }}>Siguiente →</button>
+        <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
       </div>
     </div>
   );
@@ -259,84 +304,113 @@ function Step4Company({ form, updateForm, onNext, onBack }: any) {
 function Step5Job({ form, updateForm, onNext, onBack }: any) {
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!form.cargo) newErrors.cargo = 'Requerido';
+    if (form.anos_cargo === undefined) newErrors.anos_cargo = 'Requerido';
+    if (!form.modalidad) newErrors.modalidad = 'Requerido';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 5: Cargo</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ position: 'relative' }}>
-          <input type="text" placeholder="Busca tu cargo..." value={input} onChange={(e) => { setInput(e.target.value); setSuggestions(searchJobs(form.industria, e.target.value)); }} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }} />
-          {suggestions.length > 0 && (
-            <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#1C1B2E', border: '1px solid #16213e', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '250px', overflowY: 'auto', zIndex: 10 }}>
-              {suggestions.map((s, i) => (
-                <div key={i} onClick={() => { updateForm('cargo', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#aaa', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1C1B2E'; e.currentTarget.style.color = '#aaa'; }}>{s}</div>
-              ))}
-            </div>
-          )}
-        </div>
-        {form.cargo && <div style={{ padding: '12px', backgroundColor: 'rgba(0, 208, 132, 0.15)', borderRadius: '8px', color: '#BF057D', fontSize: '13px' }}>✓ {form.cargo}</div>}
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '8px' }}>Años en cargo: {form.anos_cargo || 0}</label>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Cargo
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.cargo}</span>
+          </label>
+          <div style={{ position: 'relative' }}>
+            <input type="text" placeholder="Busca tu cargo..." value={input} onChange={(e) => { setInput(e.target.value); setSuggestions(searchJobs(form.industria, e.target.value)); }} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.cargo ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }} />
+            {suggestions.length > 0 && (
+              <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#1a1a2e', border: '1px solid #16213e', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '250px', overflowY: 'auto', zIndex: 10 }}>
+                {suggestions.map((s, i) => (
+                  <div key={i} onClick={() => { updateForm('cargo', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#aaa', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1a1a2e'; e.currentTarget.style.color = '#aaa'; }}>{s}</div>
+                ))}
+              </div>
+            )}
+          </div>
+          {errors.cargo && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.cargo}</div>}
+        </div>
+        {form.cargo && <div style={{ padding: '12px', backgroundColor: 'rgba(191, 5, 125, 0.15)', borderRadius: '8px', color: '#BF057D', fontSize: '13px' }}>✓ {form.cargo}</div>}
+        <div>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
+            Años en cargo: {form.anos_cargo || 0}
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_cargo}</span>
+          </label>
           <input type="range" min="0" max="40" value={form.anos_cargo || 0} onChange={(e) => updateForm('anos_cargo', parseInt(e.target.value))} style={{ width: '100%' }} />
         </div>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>Modalidad</label>
-          <select value={form.modalidad || ''} onChange={(e) => updateForm('modalidad', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Modalidad
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.modalidad}</span>
+          </label>
+          <select value={form.modalidad || ''} onChange={(e) => updateForm('modalidad', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.modalidad ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }}>
             <option value="">Selecciona...</option>
             {WORK_MODALITIES.map((m) => <option key={m} value={m}>{m}</option>)}
           </select>
+          {errors.modalidad && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.modalidad}</div>}
         </div>
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
         <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#16213e', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
-        <button onClick={onNext} disabled={!form.cargo || form.anos_cargo === undefined || !form.modalidad} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#1C1B2E', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: !form.cargo || form.anos_cargo === undefined || !form.modalidad ? 0.5 : 1 }}>Siguiente →</button>
+        <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
       </div>
     </div>
   );
 }
 
 function Step6Contract({ form, updateForm, onNext, onBack }: any) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!form.tipo_contrato) newErrors.tipo_contrato = 'Requerido';
+    if (!form.salario_bruto) newErrors.salario_bruto = 'Requerido';
+    if (!form.salario_liquido) newErrors.salario_liquido = 'Requerido';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 6: Contrato</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>Tipo contrato</label>
-          <select value={form.tipo_contrato || ''} onChange={(e) => updateForm('tipo_contrato', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Tipo contrato
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.tipo_contrato}</span>
+          </label>
+          <select value={form.tipo_contrato || ''} onChange={(e) => updateForm('tipo_contrato', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.tipo_contrato ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }}>
             <option value="">Selecciona...</option>
             {CONTRACT_TYPES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
+          {errors.tipo_contrato && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.tipo_contrato}</div>}
         </div>
         <div>
           <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Salario bruto (actual)
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>💡 Monto mensual antes de impuestos</span>
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.salario_bruto}</span>
           </label>
-          <input
-            type="text"
-            placeholder="$3.000.000"
-            value={form.salario_bruto ? formatSalary(form.salario_bruto) : ''}
-            onChange={(e) => updateForm('salario_bruto', parseInt(e.target.value.replace(/\D/g, '')) || 0)}
-            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}
-          />
+          <input type="text" placeholder="$3.000.000" value={form.salario_bruto ? formatSalary(form.salario_bruto) : ''} onChange={(e) => updateForm('salario_bruto', parseInt(e.target.value.replace(/\D/g, '')) || 0)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.salario_bruto ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }} />
+          {errors.salario_bruto && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.salario_bruto}</div>}
         </div>
         <div>
           <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Salario líquido (actual)
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>💡 Monto que recibes en tu cuenta</span>
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.salario_liquido}</span>
           </label>
-          <input
-            type="text"
-            placeholder="$2.100.000"
-            value={form.salario_liquido ? formatSalary(form.salario_liquido) : ''}
-            onChange={(e) => updateForm('salario_liquido', parseInt(e.target.value.replace(/\D/g, '')) || 0)}
-            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}
-          />
+          <input type="text" placeholder="$2.100.000" value={form.salario_liquido ? formatSalary(form.salario_liquido) : ''} onChange={(e) => updateForm('salario_liquido', parseInt(e.target.value.replace(/\D/g, '')) || 0)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.salario_liquido ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }} />
+          {errors.salario_liquido && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.salario_liquido}</div>}
         </div>
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
         <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#16213e', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
-        <button onClick={onNext} disabled={!form.tipo_contrato || !form.salario_bruto || !form.salario_liquido} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#1C1B2E', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: !form.tipo_contrato || !form.salario_bruto || !form.salario_liquido ? 0.5 : 1 }}>Siguiente →</button>
+        <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
       </div>
     </div>
   );
@@ -361,11 +435,11 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
 
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
-      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 7: Skills</h2>
-      <p style={{ color: '#aaa', marginBottom: '24px', fontSize: '13px' }}>Selecciona tus skills. {selectedSkills.length} seleccionadas.</p>
+      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 7: Skills Técnicos</h2>
+      <p style={{ color: '#aaa', marginBottom: '24px', fontSize: '13px' }}>💡 Selecciona las habilidades que dominas. {selectedSkills.length} seleccionadas.</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {Object.entries(SKILLS_BY_CATEGORY).map(([category, skills]) => (
-          <div key={category} style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid #16213e', backgroundColor: '#2D1B5E' }}>
+          <div key={category} style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid #16213e', backgroundColor: '#0f3460' }}>
             <div onClick={() => toggleCategory(category)} style={{ padding: '14px 16px', backgroundColor: '#16213e', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ color: '#BF057D', fontSize: '16px' }}>{expandedCategories[category] ? '▼' : '▶'}</span>
@@ -378,7 +452,7 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
                 {skills.map((skill) => {
                   const isSelected = selectedSkills.includes(skill);
                   return (
-                    <label key={skill} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', backgroundColor: isSelected ? 'rgba(0, 208, 132, 0.15)' : 'rgba(30, 41, 59, 0.6)', border: isSelected ? '1px solid #BF057D' : '1px solid #16213e', cursor: 'pointer' }}>
+                    <label key={skill} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', backgroundColor: isSelected ? 'rgba(191, 5, 125, 0.15)' : 'rgba(30, 41, 59, 0.6)', border: isSelected ? '1px solid #BF057D' : '1px solid #16213e', cursor: 'pointer' }}>
                       <input type="checkbox" checked={isSelected} onChange={() => toggleSkill(skill)} style={{ width: '18px', height: '18px', accentColor: '#BF057D', cursor: 'pointer' }} />
                       <span style={{ color: isSelected ? '#BF057D' : '#aaa', fontSize: '13px', fontWeight: isSelected ? '600' : '400' }}>{skill}</span>
                     </label>
@@ -391,7 +465,7 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
         <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#16213e', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
-        <button onClick={onNext} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#1C1B2E', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>Siguiente →</button>
+        <button onClick={onNext} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>Siguiente →</button>
       </div>
     </div>
   );
@@ -403,7 +477,7 @@ function Step8SoftSkills({ form, updateForm, onNext, onBack }: any) {
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 8: Soft Skills</h2>
-      <p style={{ color: '#aaa', marginBottom: '24px', fontSize: '13px' }}>Evalúate del 1 al 10</p>
+      <p style={{ color: '#aaa', marginBottom: '24px', fontSize: '13px' }}>💡 Evalúate del 1 al 10 en cada competencia</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {sliders.map((s) => (
           <div key={s.key}>
@@ -417,7 +491,7 @@ function Step8SoftSkills({ form, updateForm, onNext, onBack }: any) {
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
         <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#16213e', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
-        <button onClick={onNext} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#1C1B2E', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>Calcular →</button>
+        <button onClick={onNext} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>Calcular →</button>
       </div>
     </div>
   );
@@ -434,17 +508,35 @@ export default function Dashboard() {
     habilidades_tecnicas: [],
   });
 
+  // Auto-save progreso
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      localStorage.setItem('pulso_form_autosave', JSON.stringify({ form, step }));
+      console.log('✅ Progreso guardado automáticamente');
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, [form, step]);
+
   useEffect(() => {
     const loadUser = async () => {
-      // Inicializar supabase solo en el cliente
-      if (!supabase) {
-        supabase = createClient();
-      }
-
       try {
         if (!supabase) {
           console.log('Supabase not configured, using test account');
           setUser({ id: 'test-dev', email: 'dev@test.local' });
+          
+          // Cargar progreso guardado
+          const saved = localStorage.getItem('pulso_form_autosave');
+          if (saved) {
+            try {
+              const { form: savedForm, step: savedStep } = JSON.parse(saved);
+              setForm(savedForm);
+              setStep(savedStep);
+              console.log('📂 Progreso recuperado del navegador');
+            } catch (err) {
+              console.log('No hay progreso guardado');
+            }
+          }
           return;
         }
 
@@ -453,36 +545,31 @@ export default function Dashboard() {
 
         if (error || !data.user) {
           console.log('Development mode: No user, using test account');
-          // Development mode - use test account without authentication
           setUser({ id: 'test-dev', email: 'dev@test.local' });
         } else {
           console.log('User found:', data.user.email);
           setUser(data.user);
         }
+
+        // Cargar progreso guardado
+        const saved = localStorage.getItem('pulso_form_autosave');
+        if (saved) {
+          try {
+            const { form: savedForm, step: savedStep } = JSON.parse(saved);
+            setForm(savedForm);
+            setStep(savedStep);
+            console.log('📂 Progreso recuperado del navegador');
+          } catch (err) {
+            console.log('No hay progreso guardado');
+          }
+        }
       } catch (error) {
         console.error('Auth error:', error);
-        // Development fallback - don't redirect, use test account
-        console.log('Development mode: Using test account due to auth error');
         setUser({ id: 'test-dev', email: 'dev@test.local' });
-      }
-
-      // Cargar progreso guardado si existe
-      const saved = localStorage.getItem('pulso_form_autosave');
-      if (saved) {
-        try {
-          const { form: savedForm, step: savedStep } = JSON.parse(saved);
-          setForm(savedForm);
-          setStep(savedStep);
-          console.log('📂 Progreso recuperado del navegador');
-        } catch (err) {
-          console.log('No hay progreso guardado');
-        }
       }
     };
     loadUser();
   }, [router]);
-
-  useAutoSave(form, step);
 
   const updateForm = (field: string, value: any) => {
     setForm((prev: any) => ({ ...prev, [field]: value }));
@@ -493,7 +580,6 @@ export default function Dashboard() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      // Query a codify_benchmarks para obtener banda salarial
       let bandaData = { p25: 2000000, p50: 3500000, p75: 5000000 };
 
       try {
@@ -565,6 +651,9 @@ export default function Dashboard() {
         industria: form.industria || '',
       };
 
+      // Limpiar localStorage después de calcular
+      localStorage.removeItem('pulso_form_autosave');
+
       setAnalysisResults(results);
       setStep('resultado');
     } finally {
@@ -583,7 +672,7 @@ export default function Dashboard() {
 
   if (!user) {
     return (
-      <div style={{ minHeight: '100vh', background: '#2D1B5E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#1C1B2E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center', color: '#aaa' }}>
           <p>Cargando...</p>
         </div>
@@ -606,13 +695,13 @@ export default function Dashboard() {
     return (
       <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #2D1B5E 0%, #1C1B2E 100%)', padding: '40px 20px' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{ background: 'linear-gradient(135deg, #16213e 0%, #2D1B5E 100%)', border: '2px solid #BF057D', borderRadius: '16px', padding: '40px', marginBottom: '40px', textAlign: 'center', boxShadow: '0 8px 32px rgba(0, 208, 132, 0.2)' }}>
+          <div style={{ background: 'linear-gradient(135deg, #16213e 0%, #2D1B5E 100%)', border: '2px solid #BF057D', borderRadius: '16px', padding: '40px', marginBottom: '40px', textAlign: 'center', boxShadow: '0 8px 32px rgba(191, 5, 125, 0.2)' }}>
             <p style={{ color: '#aaa', fontSize: '14px', margin: '0 0 20px 0' }}>Tu Puntuación Codify</p>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '40px', marginBottom: '30px' }}>
               <div style={{ position: 'relative', width: '120px', height: '120px' }}>
                 <svg viewBox="0 0 120 120" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
                   <circle cx="60" cy="60" r="55" fill="none" stroke="#16213e" strokeWidth="8" />
-                  <circle cx="60" cy="60" r="55" fill="none" stroke="#BF057D" strokeWidth="8" strokeDasharray={`${(analysisResults.score_total / 100) * 345} 345`} strokeLinecap="round" style={{ transition: 'stroke-dasharray 2s ease-in-out', filter: 'drop-shadow(0 0 8px rgba(0, 208, 132, 0.5))' }} />
+                  <circle cx="60" cy="60" r="55" fill="none" stroke="#BF057D" strokeWidth="8" strokeDasharray={`${(analysisResults.score_total / 100) * 345} 345`} strokeLinecap="round" style={{ transition: 'stroke-dasharray 2s ease-in-out', filter: 'drop-shadow(0 0 8px rgba(191, 5, 125, 0.5))' }} />
                 </svg>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
                   <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#BF057D' }}>{analysisResults.score_total}</div>
@@ -620,7 +709,7 @@ export default function Dashboard() {
                 </div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg, #BF057D 0%, #00a85c 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(0, 208, 132, 0.3)' }}>
+                <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg, #BF057D 0%, #9A0462 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(191, 5, 125, 0.3)' }}>
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ fontSize: '14px', color: '#fff', marginBottom: '4px' }}>Grade</div>
                     <div style={{ fontSize: '40px', fontWeight: 'bold', color: '#fff' }}>{analysisResults.grade}</div>
@@ -674,7 +763,7 @@ export default function Dashboard() {
           </div>
 
           <div style={{ textAlign: 'center', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button onClick={() => { setAnalysisResults(null); setStep(1); setForm({ soft_skills: { comunicacion: 5, liderazgo: 5, resolucion_conflictos: 5, negociacion: 5, trabajo_equipo: 5 }, habilidades_tecnicas: [] }); }} style={{ padding: '12px 32px', backgroundColor: '#BF057D', color: '#1C1B2E', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>← Nuevo Análisis</button>
+            <button onClick={() => { setAnalysisResults(null); setStep(1); setForm({ soft_skills: { comunicacion: 5, liderazgo: 5, resolucion_conflictos: 5, negociacion: 5, trabajo_equipo: 5 }, habilidades_tecnicas: [] }); }} style={{ padding: '12px 32px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>← Nuevo Análisis</button>
             <button onClick={logout} style={{ padding: '12px 32px', backgroundColor: '#666', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>Salir</button>
           </div>
         </div>
@@ -689,15 +778,12 @@ export default function Dashboard() {
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
           <h1 style={{ color: '#BF057D', fontSize: '24px', margin: 0 }}>PULSO by Codify 🎯</h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {user && <span style={{ fontSize: '12px', color: '#aaa' }}>{user.email}</span>}
-            <button onClick={logout} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid #aaa', background: 'transparent', color: '#aaa', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}>Salir</button>
-          </div>
+          <button onClick={logout} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid #aaa', background: 'transparent', color: '#aaa', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}>Salir</button>
         </div>
 
         <div style={{ marginBottom: '30px' }}>
           <div style={{ height: '6px', background: 'rgba(148,163,184,0.15)', borderRadius: '3px', overflow: 'hidden' }}>
-            <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #BF057D, #00a85c)', borderRadius: '3px', transition: 'width 0.3s' }} />
+            <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #BF057D, #9A0462)', borderRadius: '3px', transition: 'width 0.3s' }} />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
             <span style={{ fontSize: '11px', color: '#64748b' }}>Paso {step} de 8</span>
@@ -717,9 +803,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-
-
-
-
-
