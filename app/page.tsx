@@ -1,11 +1,8 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
-// Buttons redirect to login page
+import Link from 'next/link';
 
 export default function Home() {
-  const router = useRouter();
 
   return (
     <div style={{ background: '#1C1B2E', color: '#F3F0FB', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
@@ -19,8 +16,8 @@ export default function Home() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <button onClick={() => router.push('/login')} style={{ background: 'transparent', color: '#F3F0FB', border: '1px solid #BF057D', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}>Iniciar sesión</button>
-          <button onClick={() => router.push('/login')} style={{ background: '#BF057D', color: '#FFF', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '700' }}>Descubre tu valor</button>
+          <Link href="/login" style={{ background: 'transparent', color: '#F3F0FB', border: '1px solid #BF057D', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '600', textDecoration: 'none', display: 'inline-block' }}>Iniciar sesión</Link>
+          <Link href="/login" style={{ background: '#BF057D', color: '#FFF', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '700', textDecoration: 'none', display: 'inline-block' }}>Descubre tu valor</Link>
         </div>
       </nav>
 
@@ -32,9 +29,9 @@ export default function Home() {
         <p style={{ fontSize: '20px', color: '#E8E4F4', marginBottom: '40px', maxWidth: '700px', margin: '0 auto 40px' }}>
           PULSO homologa tu cargo y compara tu salario con el benchmark del mercado laboral chileno. Descubre si estás alineado, y obtén un plan personalizado para crecer.
         </p>
-        <button onClick={() => router.push('/login')} style={{ background: '#BF057D', color: '#FFF', border: 'none', padding: '16px 48px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: '700', boxShadow: '0 8px 20px rgba(191, 5, 125, 0.3)' }}>
+        <Link href="/login" style={{ background: '#BF057D', color: '#FFF', border: 'none', padding: '16px 48px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: '700', boxShadow: '0 8px 20px rgba(191, 5, 125, 0.3)', textDecoration: 'none', display: 'inline-block' }}>
           Comenzar análisis
-        </button>
+        </Link>
       </section>
 
       {/* FEATURES */}
@@ -116,9 +113,9 @@ export default function Home() {
         <p style={{ fontSize: '18px', color: '#E8E4F4', marginBottom: '40px' }}>
           Toma el control de tu carrera. Análisis completo en 5 minutos.
         </p>
-        <button onClick={() => router.push('/login')} style={{ background: '#BF057D', color: '#FFF', border: 'none', padding: '16px 48px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: '700', boxShadow: '0 8px 20px rgba(191, 5, 125, 0.3)' }}>
+        <Link href="/login" style={{ background: '#BF057D', color: '#FFF', border: 'none', padding: '16px 48px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: '700', boxShadow: '0 8px 20px rgba(191, 5, 125, 0.3)', textDecoration: 'none', display: 'inline-block' }}>
           Comenzar ahora
-        </button>
+        </Link>
       </section>
 
       {/* FOOTER */}
