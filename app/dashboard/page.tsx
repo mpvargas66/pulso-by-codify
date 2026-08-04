@@ -7,6 +7,16 @@ import ChatWindow from '@/components/ChatWindow';
 
 const supabase = createClient();
 
+const useAutoSave = (form: UserForm, step: Step) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      localStorage.setItem('pulso_form_autosave', JSON.stringify({ form, step }));
+      console.log('✅ Progreso guardado automáticamente');
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [form, step]);
+};
+
 const EDUCATIONS = ['Ingeniería en Informática', 'Ingeniería en Computación', 'Ingeniería en Sistemas', 'Ingeniería en Software', 'Ingeniería Comercial', 'Ingeniería Industrial', 'Técnico en Informática', 'Técnico en Programación', 'Administración de Empresas', 'Contador/a', 'Abogado/a', 'Especialista en RRHH', 'Especialista en Marketing', 'Especialista en Logística', 'Data Scientist', 'Product Manager', 'UX/UI Designer', 'Profesor/a'];
 
 const INDUSTRIES = ['Tecnología', 'Finanzas', 'Retail', 'Logística & Supply Chain', 'Legal', 'Recursos Humanos', 'Marketing', 'Educación', 'Salud', 'Construcción', 'Energía', 'Minería'];
@@ -111,24 +121,52 @@ const searchJobs = (industry: string, query: string): string[] => {
   return jobs.filter(j => j.toLowerCase().includes(lower)).slice(0, 10);
 };
 
+const FIELD_HELP = {
+  edad: '💡 Tu edad actual (18-70 años)',
+  genero: '💡 Selecciona tu identidad de género',
+  region: '💡 Región donde trabajas actualmente',
+  educacion: '💡 Tu formación académica más alta',
+  anos_experiencia: '💡 Años totales trabajando en tu industria',
+  industria: '💡 Industria principal donde trabajas',
+  tamano_empresa: '💡 Número de empleados de tu empresa',
+  anos_empresa: '💡 Tiempo que llevas en esta empresa',
+  cargo: '💡 Tu cargo actual o último cargo',
+  anos_cargo: '💡 Tiempo en este cargo',
+  modalidad: '💡 Tipo de jornada (presencial/híbrido/remoto)',
+  tipo_contrato: '💡 Tipo de contratación',
+  salario_bruto: '💡 Sueldo mensual ANTES de impuestos',
+  salario_liquido: '💡 Lo que recibes en tu cuenta cada mes',
+};
+
 function Step1Basic({ form, updateForm, onNext }: any) {
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 1: Datos Básicos</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>Edad</label>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Edad
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.edad}</span>
+          </label>
           <input type="number" min="18" max="70" value={form.edad || ''} onChange={(e) => updateForm('edad', parseInt(e.target.value))} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }} />
+          {form.edad && form.edad < 18 && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ Debes tener al menos 18 años</div>}
+          {form.edad && form.edad > 70 && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ Edad máxima permitida es 70 años</div>}
         </div>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>Género</label>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Género
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.genero}</span>
+          </label>
           <select value={form.genero || ''} onChange={(e) => updateForm('genero', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}>
             <option value="">Selecciona...</option>
             {GENDERS.map((g) => <option key={g} value={g}>{g}</option>)}
           </select>
         </div>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>Región</label>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Región
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.region}</span>
+          </label>
           <select value={form.region || ''} onChange={(e) => updateForm('region', e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff', fontSize: '14px' }}>
             <option value="">Selecciona...</option>
             {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
@@ -422,9 +460,24 @@ export default function Dashboard() {
         console.log('Development mode: Using test account due to auth error');
         setUser({ id: 'test-dev', email: 'dev@test.local' });
       }
+
+      // Cargar progreso guardado si existe
+      const saved = localStorage.getItem('pulso_form_autosave');
+      if (saved) {
+        try {
+          const { form: savedForm, step: savedStep } = JSON.parse(saved);
+          setForm(savedForm);
+          setStep(savedStep);
+          console.log('📂 Progreso recuperado del navegador');
+        } catch (err) {
+          console.log('No hay progreso guardado');
+        }
+      }
     };
     loadUser();
   }, [router]);
+
+  useAutoSave(form, step);
 
   const updateForm = (field: string, value: any) => {
     setForm((prev: any) => ({ ...prev, [field]: value }));
