@@ -83,21 +83,30 @@ const EDUCATIONS = ['Ingeniería en Informática', 'Ingeniería en Computación'
 const INDUSTRIES = ['Tecnología', 'Finanzas', 'Retail', 'Logística & Supply Chain', 'Legal', 'Recursos Humanos', 'Marketing', 'Educación', 'Salud', 'Construcción', 'Energía', 'Minería'];
 
 const JOBS_BY_INDUSTRY: Record<string, string[]> = {
-  'Tecnología': ['Software Engineer', 'Frontend Engineer', 'Backend Engineer', 'DevOps Engineer', 'Product Manager', 'Data Scientist', 'QA Engineer'],
-  'Finanzas': ['Analista Financiero', 'Gerente Financiero', 'Trader', 'CFO', 'Controller'],
-  'Retail': ['Gerente de Tienda', 'Coordinador de Tienda', 'Vendedor/a', 'Merchandiser'],
-  'Logística & Supply Chain': ['Coordinador Logístico', 'Gerente de Logística', 'Especialista en Procurement'],
-  'Legal': ['Abogado/a Junior', 'Abogado/a Senior', 'General Counsel'],
-  'Recursos Humanos': ['Especialista en RRHH', 'Gerente de RRHH', 'Especialista en Reclutamiento'],
-  'Marketing': ['Especialista en Marketing', 'Gerente de Marketing', 'Community Manager'],
-  'Educación': ['Profesor/a', 'Capacitador/a', 'Director de Carrera'],
-  'Salud': ['Enfermero/a', 'Médico/a', 'Especialista en Seguridad'],
-  'Construcción': ['Ingeniero de Proyecto', 'Supervisor de Obras', 'Jefe de Proyecto'],
-  'Energía': ['Ingeniero de Operaciones', 'Gestor de Energía', 'Especialista en HSE'],
-  'Minería': ['Ingeniero de Mina', 'Supervisor de Mina', 'Gestor de Procesos'],
+  'Tecnología': ['Software Engineer', 'Frontend Engineer', 'Backend Engineer', 'Full Stack Engineer', 'DevOps Engineer', 'Cloud Architect', 'Product Manager', 'Data Scientist', 'Data Engineer', 'ML Engineer', 'QA Engineer', 'QA Automation', 'Tech Lead', 'Engineering Manager', 'Security Engineer', 'Cybersecurity Analyst', 'Solutions Architect', 'System Administrator', 'Database Administrator', 'Network Engineer', 'IT Support', 'UX/UI Designer', 'Product Designer'],
+  'Finanzas': ['Analista Financiero', 'Gerente Financiero', 'Controller', 'CFO', 'Trader', 'Analista Bursátil', 'Asesor Financiero', 'Especialista en Tesorería', 'Auditor', 'Contador/a', 'Especialista en Impuestos', 'Analista de Crédito', 'Risk Manager', 'Investment Banker'],
+  'Retail': ['Gerente de Tienda', 'Sub-Gerente', 'Coordinador de Tienda', 'Vendedor/a', 'Merchandiser', 'Visual Merchandiser', 'Cajero/a', 'Recepcionista', 'Gerente de Operaciones', 'Especialista en Inventario'],
+  'Logística & Supply Chain': ['Coordinador Logístico', 'Gerente de Logística', 'Especialista en Procurement', 'Jefe de Almacén', 'Operario de Almacén', 'Especialista en Distribución', 'Planificador de Demanda', 'Supply Chain Manager', 'Especialista en Aduanas', 'Traffic Manager'],
+  'Legal': ['Abogado/a Junior', 'Abogado/a Senior', 'General Counsel', 'Asesor Legal', 'Especialista en Cumplimiento', 'Notario/a', 'Procurador/a', 'Abogado/a Corporativo', 'Abogado/a Laboral', 'Abogado/a Litigante'],
+  'Recursos Humanos': ['Especialista en RRHH', 'Gerente de RRHH', 'Especialista en Reclutamiento', 'Jefe de Reclutamiento', 'Especialista en Compensación', 'Especialista en Capacitación', 'Coordinador/a de Recursos Humanos', 'HR Business Partner', 'Especialista en Cultura'],
+  'Marketing': ['Especialista en Marketing', 'Gerente de Marketing', 'Community Manager', 'Social Media Manager', 'Content Manager', 'Especialista SEO/SEM', 'Marketing Manager', 'Brand Manager', 'Product Marketing Manager', 'Marketing Analytics'],
+  'Educación': ['Profesor/a', 'Capacitador/a', 'Instructor/a', 'Director de Carrera', 'Coordinador/a Académico', 'Diseñador Instruccional', 'Especialista en E-Learning', 'Tutor/a', 'Jefe de Estudios'],
+  'Salud': ['Enfermero/a', 'Médico/a', 'Dentista', 'Psicólogo/a', 'Fisioterapeuta', 'Especialista en Seguridad', 'Coordinador/a de Salud', 'Técnico en Salud', 'Farmacéutico/a', 'Nutricionista'],
+  'Construcción': ['Ingeniero de Proyecto', 'Supervisor de Obras', 'Jefe de Proyecto', 'Maestro de Obra', 'Capataz', 'Arquitecto', 'Arquitecto Técnico', 'Especialista en HSE'],
+  'Energía': ['Ingeniero de Operaciones', 'Gestor de Energía', 'Especialista en HSE', 'Técnico de Mantenimiento', 'Operario', 'Ingeniero de Proyectos', 'Especialista en Sostenibilidad'],
+  'Minería': ['Ingeniero de Mina', 'Supervisor de Mina', 'Gestor de Procesos', 'Técnico de Mina', 'Especialista en Seguridad', 'Operario de Mina', 'Ingeniero de Ventilación'],
 };
 
 const REGIONS = ['Arica y Parinacota', 'Tarapacá', 'Antofagasta', 'Atacama', 'Coquimbo', 'Valparaíso', 'Metropolitana', 'Libertador General Bernardo O\'Higgins', 'Maule', 'Ñuble', 'Biobío', 'La Araucanía', 'Los Ríos', 'Los Lagos', 'Aysén', 'Magallanes'];
+
+const EDUCATION_LEVELS = [
+  { value: 'basica', label: 'Educación Básica' },
+  { value: 'media', label: 'Educación Media (Secundaria)' },
+  { value: 'tecnico', label: 'Técnico (2-3 años)' },
+  { value: 'profesional', label: 'Profesional/Licenciado (4+ años)' },
+  { value: 'magister', label: 'Magister' },
+  { value: 'doctorado', label: 'Doctorado' },
+];
 
 const CONTRACT_TYPES = ['Indefinido', 'Plazo Fijo', 'Honorarios', 'Artículo 22', 'Otro'];
 const COMPANY_SIZES = [{ value: 'Micro', label: 'Micro (1-9)' }, { value: 'Pequeña', label: 'Pequeña (10-49)' }, { value: 'Mediana', label: 'Mediana (50-149)' }, { value: 'Grande', label: 'Grande (200-500)' }, { value: 'Corporativo', label: 'Corporativo (500+)' }];
@@ -153,6 +162,7 @@ interface UserForm {
   edad?: number;
   genero?: string;
   region?: string;
+  nivel_educacion?: string;
   educacion?: string;
   anos_experiencia?: number;
   industria?: string;
@@ -252,6 +262,59 @@ function Step1Basic({ form, updateForm, onNext }: any) {
 }
 
 function Step2Education({ form, updateForm, onNext, onBack }: any) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!form.nivel_educacion) newErrors.nivel_educacion = 'Requerido';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  return (
+    <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
+      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 2: Nivel Educación</h2>
+      <p style={{ color: '#E8E4F4', marginBottom: '24px', fontSize: '13px' }}>💡 Selecciona tu nivel educativo más alto</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {EDUCATION_LEVELS.map((level) => (
+          <label
+            key={level.value}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '14px',
+              borderRadius: '8px',
+              border: form.nivel_educacion === level.value ? '2px solid #BF057D' : '1px solid #16213e',
+              backgroundColor: form.nivel_educacion === level.value ? 'rgba(191, 5, 125, 0.15)' : 'transparent',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+          >
+            <input
+              type="radio"
+              name="nivel_educacion"
+              value={level.value}
+              checked={form.nivel_educacion === level.value}
+              onChange={() => updateForm('nivel_educacion', level.value)}
+              style={{ accentColor: '#BF057D', cursor: 'pointer' }}
+            />
+            <span style={{ color: form.nivel_educacion === level.value ? '#BF057D' : '#E8E4F4', fontWeight: form.nivel_educacion === level.value ? '600' : '400', fontSize: '14px' }}>
+              {level.label}
+            </span>
+          </label>
+        ))}
+      </div>
+      {errors.nivel_educacion && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '12px' }}>⚠️ {errors.nivel_educacion}</div>}
+      <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#16213e', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
+        <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: !form.nivel_educacion ? 0.5 : 1 }}>Siguiente →</button>
+      </div>
+    </div>
+  );
+}
+
+function Step2Carrera({ form, updateForm, onNext, onBack }: any) {
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -265,7 +328,7 @@ function Step2Education({ form, updateForm, onNext, onBack }: any) {
 
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
-      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 2: Formación</h2>
+      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 3: Carrera/Especialidad</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
           <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
@@ -307,7 +370,7 @@ function Step3Experience({ form, updateForm, onNext, onBack }: any) {
 
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
-      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 3: Experiencia</h2>
+      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 4: Experiencia</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
           <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
@@ -527,7 +590,7 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
 
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
-      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 7: Skills Técnicos</h2>
+      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 8: Skills Técnicos</h2>
       <p style={{ color: '#E8E4F4', marginBottom: '16px', fontSize: '13px' }}>💡 {selectedSkills.length} seleccionadas</p>
 
       <input
@@ -588,7 +651,7 @@ function Step8SoftSkills({ form, updateForm, onNext, onBack }: any) {
 
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
-      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 8: Soft Skills</h2>
+      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 9: Soft Skills</h2>
       <p style={{ color: '#E8E4F4', marginBottom: '24px', fontSize: '13px' }}>💡 Evalúate del 1 al 10 en cada competencia</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {sliders.map((s) => (
@@ -906,12 +969,13 @@ export default function Dashboard() {
 
         {step === 1 && <Step1Basic form={form} updateForm={updateForm} onNext={() => setStep(2)} />}
         {step === 2 && <Step2Education form={form} updateForm={updateForm} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
-        {step === 3 && <Step3Experience form={form} updateForm={updateForm} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
-        {step === 4 && <Step4Company form={form} updateForm={updateForm} onNext={() => setStep(5)} onBack={() => setStep(3)} />}
-        {step === 5 && <Step5Job form={form} updateForm={updateForm} onNext={() => setStep(6)} onBack={() => setStep(4)} />}
-        {step === 6 && <Step6Contract form={form} updateForm={updateForm} onNext={() => setStep(7)} onBack={() => setStep(5)} />}
-        {step === 7 && <Step7Skills form={form} updateForm={updateForm} onNext={() => setStep(8)} onBack={() => setStep(6)} />}
-        {step === 8 && <Step8SoftSkills form={form} updateForm={updateForm} onNext={handleCalcular} onBack={() => setStep(7)} />}
+        {step === 3 && <Step2Carrera form={form} updateForm={updateForm} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
+        {step === 4 && <Step3Experience form={form} updateForm={updateForm} onNext={() => setStep(5)} onBack={() => setStep(3)} />}
+        {step === 5 && <Step4Company form={form} updateForm={updateForm} onNext={() => setStep(6)} onBack={() => setStep(4)} />}
+        {step === 6 && <Step5Job form={form} updateForm={updateForm} onNext={() => setStep(7)} onBack={() => setStep(5)} />}
+        {step === 7 && <Step6Contract form={form} updateForm={updateForm} onNext={() => setStep(8)} onBack={() => setStep(6)} />}
+        {step === 8 && <Step7Skills form={form} updateForm={updateForm} onNext={() => setStep(9)} onBack={() => setStep(7)} />}
+        {step === 9 && <Step8SoftSkills form={form} updateForm={updateForm} onNext={handleCalcular} onBack={() => setStep(8)} />}
       </div>
     </div>
   );
