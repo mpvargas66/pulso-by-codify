@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
+// Buttons redirect to login page
+
 export default function Home() {
   const router = useRouter();
 
