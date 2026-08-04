@@ -418,12 +418,12 @@ export default function Dashboard() {
         if (supabase) {
           const result = await supabase
             .from('codify_benchmarks')
-            .select('banda_p25, banda_p50, banda_p75')
+            .select('salario_p25, salario_p50, salario_p75')
             .eq('cargo', form.cargo || '')
             .eq('industria', form.industria || '')
             .lte('anos_experiencia_min', form.anos_experiencia || 0)
             .gte('anos_experiencia_max', form.anos_experiencia || 0)
-            .order('banda_p50', { ascending: false })
+            .order('salario_p50', { ascending: false })
             .limit(1);
           benchmarkData = result.data;
           benchmarkError = result.error;
@@ -432,9 +432,9 @@ export default function Dashboard() {
         if (benchmarkData && benchmarkData.length > 0 && !benchmarkError) {
           const benchmark = benchmarkData[0];
           bandaData = {
-            p25: benchmark.banda_p25 || bandaData.p25,
-            p50: benchmark.banda_p50 || bandaData.p50,
-            p75: benchmark.banda_p75 || bandaData.p75,
+            p25: benchmark.salario_p25 || bandaData.p25,
+            p50: benchmark.salario_p50 || bandaData.p50,
+            p75: benchmark.salario_p75 || bandaData.p75,
           };
           console.log('Benchmark encontrado:', benchmark);
         } else {
