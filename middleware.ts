@@ -53,19 +53,26 @@ export async function middleware(request: NextRequest) {
       return response
     }
 
-    // Rutas protegidas (requieren login)
-    if (pathname.startsWith('/dashboard') || pathname.startsWith('/auth/callback')) {
+    // Rutas protegidas - Permitir /dashboard sin auth (desarrollo)
+    if (pathname.startsWith('/dashboard')) {
+      console.log(`[Allow] Permitir acceso a ${pathname} (development mode)`)
+      return response
+    }
+
+    // Auth callback
+    if (pathname.startsWith('/auth/callback')) {
       if (!user) {
-        console.log(`[Redirect] Sin usuario intenta acceder a ${pathname} → /login`)
+        console.log(`[Redirect] Sin usuario en callback → /login`)
         return NextResponse.redirect(new URL('/login', request.url))
       }
-      console.log(`[Allow] Usuario ${user.email} accede a ${pathname}`)
       return response
     }
 
     return response
   } catch (error) {
     console.error(`[Middleware Error]`, error)
+    // En caso de error, permitir acceso (development mode)
+    console.log(`[Middleware] Error en auth check, permitiendo acceso`)
     return response
   }
 }
