@@ -35,6 +35,17 @@ const COMPANY_SIZES = [{ value: 'Micro', label: 'Micro (1-9)' }, { value: 'Peque
 const WORK_MODALITIES = ['Presencial', 'Híbrido', 'Remoto'];
 const GENDERS = ['Femenino', 'Masculino', 'Otra identidad de género', 'Prefiero no decir'];
 
+const formatSalary = (value: number | string): string => {
+  if (!value) return '';
+  const num = typeof value === 'string' ? parseInt(value.replace(/\D/g, '')) : value;
+  return num.toLocaleString('es-CL', { style: 'currency', currency: 'CLP', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+};
+
+const formatSalaryInput = (value: number | string): string => {
+  if (!value) return '';
+  return value.toString().replace(/\D/g, '');
+};
+
 const SKILLS_BY_CATEGORY: Record<string, string[]> = {
   'Tech': ['Python', 'JavaScript/TypeScript', 'SQL', 'React', 'Java', 'C++', 'Node.js', 'Vue.js', 'AWS', 'Docker', 'Kubernetes', 'Git/GitHub', 'Machine Learning', 'TensorFlow', 'API Development'],
   'Data & Analytics': ['Excel Avanzado', 'Power BI', 'Tableau', 'Google Analytics', 'Looker Studio', 'Apache Spark', 'R Programming', 'SQL Avanzado'],
@@ -261,12 +272,30 @@ function Step6Contract({ form, updateForm, onNext, onBack }: any) {
           </select>
         </div>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>Salario bruto</label>
-          <input type="number" placeholder="3000000" value={form.salario_bruto || ''} onChange={(e) => updateForm('salario_bruto', parseInt(e.target.value) || 0)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }} />
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Salario bruto (actual)
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>💡 Monto mensual antes de impuestos</span>
+          </label>
+          <input
+            type="text"
+            placeholder="$3.000.000"
+            value={form.salario_bruto ? formatSalary(form.salario_bruto) : ''}
+            onChange={(e) => updateForm('salario_bruto', parseInt(e.target.value.replace(/\D/g, '')) || 0)}
+            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }}
+          />
         </div>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>Salario líquido</label>
-          <input type="number" placeholder="2100000" value={form.salario_liquido || ''} onChange={(e) => updateForm('salario_liquido', parseInt(e.target.value) || 0)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }} />
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Salario líquido (actual)
+            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>💡 Monto que recibes en tu cuenta</span>
+          </label>
+          <input
+            type="text"
+            placeholder="$2.100.000"
+            value={form.salario_liquido ? formatSalary(form.salario_liquido) : ''}
+            onChange={(e) => updateForm('salario_liquido', parseInt(e.target.value.replace(/\D/g, '')) || 0)}
+            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1a1a2e', color: '#fff', fontSize: '14px' }}
+          />
         </div>
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
