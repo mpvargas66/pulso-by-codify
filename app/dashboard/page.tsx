@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 import ChatWindow from '@/components/ChatWindow';
 
-const supabase = createClient();
+let supabase: any = null;
 
 const useAutoSave = (form: UserForm, step: Step) => {
   useEffect(() => {
@@ -436,6 +436,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     const loadUser = async () => {
+      // Inicializar supabase solo en el cliente
+      if (!supabase) {
+        supabase = createClient();
+      }
+
       try {
         if (!supabase) {
           console.log('Supabase not configured, using test account');
