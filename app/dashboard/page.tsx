@@ -417,13 +417,14 @@ export default function Dashboard() {
           .order('banda_p50', { ascending: false })
           .limit(1);
 
-        if (benchmarkData && !benchmarkError) {
+        if (benchmarkData && benchmarkData.length > 0 && !benchmarkError) {
+          const benchmark = benchmarkData[0];
           bandaData = {
-            p25: benchmarkData.banda_p25 || bandaData.p25,
-            p50: benchmarkData.banda_p50 || bandaData.p50,
-            p75: benchmarkData.banda_p75 || bandaData.p75,
+            p25: benchmark.banda_p25 || bandaData.p25,
+            p50: benchmark.banda_p50 || bandaData.p50,
+            p75: benchmark.banda_p75 || bandaData.p75,
           };
-          console.log('Benchmark encontrado:', benchmarkData);
+          console.log('Benchmark encontrado:', benchmark);
         } else {
           console.log('Usando valores por defecto de benchmark');
         }
