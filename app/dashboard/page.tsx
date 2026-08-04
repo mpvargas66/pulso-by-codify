@@ -10,9 +10,9 @@ function CustomSelect({ value, onChange, options, label, help, error }: any) {
 
   return (
     <div>
-      <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+      <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
         {label}
-        {help && <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{help}</span>}
+        {help && <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{help}</span>}
       </label>
       <div style={{ position: 'relative' }}>
         <button
@@ -57,7 +57,7 @@ function CustomSelect({ value, onChange, options, label, help, error }: any) {
                 style={{
                   padding: '12px',
                   cursor: 'pointer',
-                  color: value === opt.value ? '#BF057D' : '#aaa',
+                  color: value === opt.value ? '#BF057D' : '#E8E4F4',
                   background: value === opt.value ? 'rgba(191, 5, 125, 0.1)' : 'transparent',
                   borderBottom: '1px solid rgba(191, 5, 125, 0.1)',
                   fontSize: '14px',
@@ -65,7 +65,7 @@ function CustomSelect({ value, onChange, options, label, help, error }: any) {
                   fontWeight: value === opt.value ? '500' : '400'
                 }}
                 onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(191, 5, 125, 0.1)'; e.currentTarget.style.color = '#BF057D'; }}
-                onMouseOut={(e) => { e.currentTarget.style.background = value === opt.value ? 'rgba(191, 5, 125, 0.1)' : 'transparent'; e.currentTarget.style.color = value === opt.value ? '#BF057D' : '#aaa'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = value === opt.value ? 'rgba(191, 5, 125, 0.1)' : 'transparent'; e.currentTarget.style.color = value === opt.value ? '#BF057D' : '#E8E4F4'; }}
               >
                 {opt.label}
               </div>
@@ -135,6 +135,16 @@ const FIELD_HELP = {
   tipo_contrato: '💡 Tipo de contratación',
   salario_bruto: '💡 Sueldo mensual ANTES de impuestos',
   salario_liquido: '💡 Lo que recibes en tu cuenta cada mes',
+};
+
+const SKILLS_HELP = {
+  'Tech': '💡 Lenguajes, frameworks y herramientas de programación',
+  'Data & Analytics': '💡 Análisis de datos, business intelligence y reportes',
+  'Finanzas': '💡 Modelos financieros, análisis y gestión',
+  'Logística & Supply Chain': '💡 Procesos logísticos y supply chain',
+  'Ventas & Marketing': '💡 Herramientas de CRM y marketing digital',
+  'Legal & Compliance': '💡 Gestión legal y normativa',
+  'Transversal': '💡 Habilidades aplicables en cualquier industria',
 };
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 'resultado';
@@ -212,9 +222,9 @@ function Step1Basic({ form, updateForm, onNext }: any) {
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 1: Datos Básicos</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+          <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Edad
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.edad}</span>
+            <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.edad}</span>
           </label>
           <input type="number" min="18" max="70" value={form.edad || ''} onChange={(e) => updateForm('edad', parseInt(e.target.value))} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.edad ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
           {errors.edad && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.edad}</div>}
@@ -258,16 +268,16 @@ function Step2Education({ form, updateForm, onNext, onBack }: any) {
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 2: Formación</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+          <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Educación
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.educacion}</span>
+            <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.educacion}</span>
           </label>
           <div style={{ position: 'relative' }}>
             <input type="text" placeholder="Busca tu carrera..." value={input} onChange={(e) => { setInput(e.target.value); setSuggestions(searchEducations(e.target.value)); }} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.educacion ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
             {suggestions.length > 0 && (
               <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#1C1B2E', border: '1px solid #16213e', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '300px', overflowY: 'auto', zIndex: 10 }}>
                 {suggestions.map((s, i) => (
-                  <div key={i} onClick={() => { updateForm('educacion', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#aaa', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1a1a2e'; e.currentTarget.style.color = '#aaa'; }}>{s}</div>
+                  <div key={i} onClick={() => { updateForm('educacion', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#E8E4F4', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1a1a2e'; e.currentTarget.style.color = '#E8E4F4'; }}>{s}</div>
                 ))}
               </div>
             )}
@@ -300,13 +310,13 @@ function Step3Experience({ form, updateForm, onNext, onBack }: any) {
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 3: Experiencia</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
+          <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
             Años totales
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_experiencia}</span>
+            <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_experiencia}</span>
           </label>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <input type="number" min="0" max="50" value={form.anos_experiencia || 0} onChange={(e) => updateForm('anos_experiencia', parseInt(e.target.value) || 0)} style={{ width: '70px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
-            <span style={{ color: '#aaa', fontSize: '12px' }}>años</span>
+            <span style={{ color: '#E8E4F4', fontSize: '12px' }}>años</span>
             <input type="range" min="0" max="50" value={form.anos_experiencia || 0} onChange={(e) => updateForm('anos_experiencia', parseInt(e.target.value))} style={{ flex: 1, accentColor: '#BF057D' }} />
           </div>
         </div>
@@ -351,13 +361,13 @@ function Step4Company({ form, updateForm, onNext, onBack }: any) {
           error={errors.tamano_empresa}
         />
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
+          <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
             Años en empresa
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_empresa}</span>
+            <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_empresa}</span>
           </label>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <input type="number" min="0" max="40" value={form.anos_empresa || 0} onChange={(e) => updateForm('anos_empresa', parseInt(e.target.value) || 0)} style={{ width: '70px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
-            <span style={{ color: '#aaa', fontSize: '12px' }}>años</span>
+            <span style={{ color: '#E8E4F4', fontSize: '12px' }}>años</span>
             <input type="range" min="0" max="40" value={form.anos_empresa || 0} onChange={(e) => updateForm('anos_empresa', parseInt(e.target.value))} style={{ flex: 1, accentColor: '#BF057D' }} />
           </div>
         </div>
@@ -389,16 +399,16 @@ function Step5Job({ form, updateForm, onNext, onBack }: any) {
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 5: Cargo</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+          <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Cargo
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.cargo}</span>
+            <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.cargo}</span>
           </label>
           <div style={{ position: 'relative' }}>
             <input type="text" placeholder="Busca tu cargo..." value={input} onChange={(e) => { setInput(e.target.value); setSuggestions(searchJobs(form.industria, e.target.value)); }} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.cargo ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
             {suggestions.length > 0 && (
               <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#1C1B2E', border: '1px solid #16213e', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '250px', overflowY: 'auto', zIndex: 10 }}>
                 {suggestions.map((s, i) => (
-                  <div key={i} onClick={() => { updateForm('cargo', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#aaa', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1a1a2e'; e.currentTarget.style.color = '#aaa'; }}>{s}</div>
+                  <div key={i} onClick={() => { updateForm('cargo', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#E8E4F4', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1a1a2e'; e.currentTarget.style.color = '#E8E4F4'; }}>{s}</div>
                 ))}
               </div>
             )}
@@ -407,13 +417,13 @@ function Step5Job({ form, updateForm, onNext, onBack }: any) {
         </div>
         {form.cargo && <div style={{ padding: '12px', backgroundColor: 'rgba(191, 5, 125, 0.15)', borderRadius: '8px', color: '#BF057D', fontSize: '13px' }}>✓ {form.cargo}</div>}
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
+          <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
             Años en cargo
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_cargo}</span>
+            <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_cargo}</span>
           </label>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <input type="number" min="0" max="40" value={form.anos_cargo || 0} onChange={(e) => updateForm('anos_cargo', parseInt(e.target.value) || 0)} style={{ width: '70px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
-            <span style={{ color: '#aaa', fontSize: '12px' }}>años</span>
+            <span style={{ color: '#E8E4F4', fontSize: '12px' }}>años</span>
             <input type="range" min="0" max="40" value={form.anos_cargo || 0} onChange={(e) => updateForm('anos_cargo', parseInt(e.target.value))} style={{ flex: 1, accentColor: '#BF057D' }} />
           </div>
         </div>
@@ -459,17 +469,17 @@ function Step6Contract({ form, updateForm, onNext, onBack }: any) {
           error={errors.tipo_contrato}
         />
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+          <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Salario bruto (actual)
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.salario_bruto}</span>
+            <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.salario_bruto}</span>
           </label>
           <input type="text" placeholder="$3.000.000" value={form.salario_bruto ? formatSalary(form.salario_bruto) : ''} onChange={(e) => updateForm('salario_bruto', parseInt(e.target.value.replace(/\D/g, '')) || 0)} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.salario_bruto ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
           {errors.salario_bruto && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.salario_bruto}</div>}
         </div>
         <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+          <label style={{ color: '#E8E4F4', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Salario líquido (actual)
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.salario_liquido}</span>
+            <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.salario_liquido}</span>
           </label>
           <input type="text" placeholder="$2.100.000" value={form.salario_liquido ? formatSalary(form.salario_liquido) : ''} onChange={(e) => updateForm('salario_liquido', parseInt(e.target.value.replace(/\D/g, '')) || 0)} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.salario_liquido ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
           {errors.salario_liquido && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.salario_liquido}</div>}
@@ -503,16 +513,19 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 7: Skills Técnicos</h2>
-      <p style={{ color: '#aaa', marginBottom: '24px', fontSize: '13px' }}>💡 Selecciona las habilidades que dominas. {selectedSkills.length} seleccionadas.</p>
+      <p style={{ color: '#E8E4F4', marginBottom: '24px', fontSize: '13px' }}>💡 Selecciona las habilidades que dominas. {selectedSkills.length} seleccionadas.</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {Object.entries(SKILLS_BY_CATEGORY).map(([category, skills]) => (
           <div key={category} style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid #16213e', backgroundColor: '#0f3460' }}>
             <div onClick={() => toggleCategory(category)} style={{ padding: '14px 16px', backgroundColor: '#16213e', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
                 <span style={{ color: '#BF057D', fontSize: '16px' }}>{expandedCategories[category] ? '▼' : '▶'}</span>
-                <span style={{ color: '#BF057D', fontWeight: '600',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }}>{category}</span>
+                <div>
+                  <div style={{ color: '#BF057D', fontWeight: '600', fontSize: '14px' }}>{category}</div>
+                  <div style={{ color: '#999', fontSize: '11px', marginTop: '2px' }}>{SKILLS_HELP[category as keyof typeof SKILLS_HELP]}</div>
+                </div>
               </div>
-              <span style={{ color: '#666', fontSize: '12px' }}>{skills.filter((s) => selectedSkills.includes(s)).length}/{skills.length}</span>
+              <span style={{ color: '#999', fontSize: '12px' }}>{skills.filter((s) => selectedSkills.includes(s)).length}/{skills.length}</span>
             </div>
             {expandedCategories[category] && (
               <div style={{ padding: '16px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '12px' }}>
@@ -521,7 +534,7 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
                   return (
                     <label key={skill} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', backgroundColor: isSelected ? 'rgba(191, 5, 125, 0.15)' : 'rgba(30, 41, 59, 0.6)', border: isSelected ? '1px solid #BF057D' : '1px solid #16213e', cursor: 'pointer' }}>
                       <input type="checkbox" checked={isSelected} onChange={() => toggleSkill(skill)} style={{ width: '18px', height: '18px', accentColor: '#BF057D', cursor: 'pointer' }} />
-                      <span style={{ color: isSelected ? '#BF057D' : '#aaa', fontSize: '13px', fontWeight: isSelected ? '600' : '400' }}>{skill}</span>
+                      <span style={{ color: isSelected ? '#BF057D' : '#E8E4F4', fontSize: '13px', fontWeight: isSelected ? '600' : '400' }}>{skill}</span>
                     </label>
                   );
                 })}
@@ -544,14 +557,14 @@ function Step8SoftSkills({ form, updateForm, onNext, onBack }: any) {
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 8: Soft Skills</h2>
-      <p style={{ color: '#aaa', marginBottom: '24px', fontSize: '13px' }}>💡 Evalúate del 1 al 10 en cada competencia</p>
+      <p style={{ color: '#E8E4F4', marginBottom: '24px', fontSize: '13px' }}>💡 Evalúate del 1 al 10 en cada competencia</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {sliders.map((s) => (
           <div key={s.key}>
-            <label style={{ fontSize: '13px', fontWeight: '600', color: '#aaa', marginBottom: '8px', display: 'block' }}>{s.label}</label>
+            <label style={{ fontSize: '13px', fontWeight: '600', color: '#E8E4F4', marginBottom: '8px', display: 'block' }}>{s.label}</label>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
               <input type="number" min="1" max="10" value={form.soft_skills?.[s.key] || 5} onChange={(e) => updateForm('soft_skills', { ...form.soft_skills, [s.key]: Math.max(1, Math.min(10, parseInt(e.target.value) || 5)) })} style={{ width: '60px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #16213e', backgroundColor: '#1C1B2E', color: '#BF057D', fontSize: '14px', fontWeight: '600', textAlign: 'center' }} />
-              <span style={{ color: '#aaa', fontSize: '12px' }}>/10</span>
+              <span style={{ color: '#E8E4F4', fontSize: '12px' }}>/10</span>
               <input type="range" min="1" max="10" value={form.soft_skills?.[s.key] || 5} onChange={(e) => updateForm('soft_skills', { ...form.soft_skills, [s.key]: parseInt(e.target.value) })} style={{ flex: 1, accentColor: '#BF057D' }} />
             </div>
           </div>
@@ -741,7 +754,7 @@ export default function Dashboard() {
   if (!user) {
     return (
       <div style={{ minHeight: '100vh', background: '#1C1B2E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center', color: '#aaa' }}>
+        <div style={{ textAlign: 'center', color: '#E8E4F4' }}>
           <p>Cargando...</p>
         </div>
       </div>
@@ -753,7 +766,7 @@ export default function Dashboard() {
       <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #2D1B5E 0%, #1C1B2E 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <h1 style={{ color: '#BF057D', marginBottom: '20px' }}>🎯 Analizando tu perfil...</h1>
-          <p style={{ color: '#aaa' }}>Calculando tu score...</p>
+          <p style={{ color: '#E8E4F4' }}>Calculando tu score...</p>
         </div>
       </div>
     );
@@ -764,7 +777,7 @@ export default function Dashboard() {
       <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #2D1B5E 0%, #1C1B2E 100%)', padding: '40px 20px' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div style={{ background: 'linear-gradient(135deg, #16213e 0%, #2D1B5E 100%)', border: '2px solid #BF057D', borderRadius: '16px', padding: '40px', marginBottom: '40px', textAlign: 'center', boxShadow: '0 8px 32px rgba(191, 5, 125, 0.2)' }}>
-            <p style={{ color: '#aaa', fontSize: '14px', margin: '0 0 20px 0' }}>Tu Puntuación Codify</p>
+            <p style={{ color: '#E8E4F4', fontSize: '14px', margin: '0 0 20px 0' }}>Tu Puntuación Codify</p>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '40px', marginBottom: '30px' }}>
               <div style={{ position: 'relative', width: '120px', height: '120px' }}>
                 <svg viewBox="0 0 120 120" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
@@ -773,7 +786,7 @@ export default function Dashboard() {
                 </svg>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
                   <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#BF057D' }}>{analysisResults.score_total}</div>
-                  <div style={{ fontSize: '12px', color: '#aaa' }}>/100</div>
+                  <div style={{ fontSize: '12px', color: '#E8E4F4' }}>/100</div>
                 </div>
               </div>
               <div style={{ textAlign: 'center' }}>
@@ -789,24 +802,24 @@ export default function Dashboard() {
               <p style={{ color: '#BF057D', fontSize: '16px', fontWeight: '600' }}>
                 {analysisResults.score_total >= 80 ? '🌟 Excelente posicionamiento' : analysisResults.score_total >= 60 ? '✅ Buen desempeño' : analysisResults.score_total >= 40 ? '📈 Potencial de crecimiento' : '🚀 Oportunidad de desarrollo'}
               </p>
-              <p style={{ color: '#aaa', fontSize: '13px', marginTop: '10px' }}>Cargo: {analysisResults.cargo_homologado} | Industria: {analysisResults.industria}</p>
+              <p style={{ color: '#E8E4F4', fontSize: '13px', marginTop: '10px' }}>Cargo: {analysisResults.cargo_homologado} | Industria: {analysisResults.industria}</p>
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '40px' }}>
             <div style={{ background: '#16213e', border: '1px solid #16213e', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ color: '#BF057D', marginBottom: '16px' }}>💰 Banda Salarial</h3>
-              <div><p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>P25</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p25 / 1000000).toFixed(1)}M</p></div>
-              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>P50 (Promedio)</p><p style={{ color: '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p50 / 1000000).toFixed(1)}M</p></div>
-              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>P75</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p75 / 1000000).toFixed(1)}M</p></div>
+              <div><p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>P25</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p25 / 1000000).toFixed(1)}M</p></div>
+              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>P50 (Promedio)</p><p style={{ color: '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p50 / 1000000).toFixed(1)}M</p></div>
+              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>P75</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p75 / 1000000).toFixed(1)}M</p></div>
             </div>
 
             <div style={{ background: '#16213e', border: '1px solid #16213e', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ color: '#BF057D', marginBottom: '16px' }}>📊 Tu Salario</h3>
-              <p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>Salario Actual</p>
+              <p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>Salario Actual</p>
               <p style={{ color: '#fff', fontSize: '20px', fontWeight: 'bold', margin: '8px 0' }}>${(analysisResults.salario_actual / 1000000).toFixed(1)}M</p>
               <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #16213e' }}>
-                <p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>Brecha vs P50</p>
+                <p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>Brecha vs P50</p>
                 <p style={{ color: analysisResults.brecha_percentil < 0 ? '#ff6b6b' : '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '8px 0' }}>
                   {analysisResults.brecha_percentil > 0 ? '+' : ''}{analysisResults.brecha_percentil}%
                 </p>
@@ -832,7 +845,7 @@ export default function Dashboard() {
 
           <div style={{ textAlign: 'center', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <button onClick={() => { setAnalysisResults(null); setStep(1); setForm({ soft_skills: { comunicacion: 5, liderazgo: 5, resolucion_conflictos: 5, negociacion: 5, trabajo_equipo: 5 }, habilidades_tecnicas: [] }); }} style={{ padding: '12px 32px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>← Nuevo Análisis</button>
-            <button onClick={logout} style={{ padding: '12px 32px', backgroundColor: '#666', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>Salir</button>
+            <button onClick={logout} style={{ padding: '12px 32px', backgroundColor: '#999', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>Salir</button>
           </div>
         </div>
       </div>
@@ -846,7 +859,7 @@ export default function Dashboard() {
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
           <h1 style={{ color: '#BF057D', fontSize: '24px', margin: 0 }}>PULSO by Codify 🎯</h1>
-          <button onClick={logout} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid #aaa', background: 'transparent', color: '#aaa', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}>Salir</button>
+          <button onClick={logout} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid #aaa', background: 'transparent', color: '#E8E4F4', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}>Salir</button>
         </div>
 
         <div style={{ marginBottom: '30px' }}>
