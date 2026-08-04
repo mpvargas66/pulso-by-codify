@@ -2,12 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase';
 import ChatWindow from '@/components/ChatWindow';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+const supabase = createClient();
 
 const EDUCATIONS = ['Ingeniería en Informática', 'Ingeniería en Computación', 'Ingeniería en Sistemas', 'Ingeniería en Software', 'Ingeniería Comercial', 'Ingeniería Industrial', 'Técnico en Informática', 'Técnico en Programación', 'Administración de Empresas', 'Contador/a', 'Abogado/a', 'Especialista en RRHH', 'Especialista en Marketing', 'Especialista en Logística', 'Data Scientist', 'Product Manager', 'UX/UI Designer', 'Profesor/a'];
 
@@ -517,8 +515,10 @@ export default function Dashboard() {
   };
 
   const logout = async () => {
-    if (supabase) {
+    try {
       await supabase.auth.signOut();
+    } catch (error) {
+      console.error('Logout error:', error);
     }
     router.push('/login');
   };
