@@ -403,6 +403,31 @@ export default function Dashboard() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
+      // Query a codify_benchmarks para obtener banda salarial
+      let bandaData = { p25: 2000000, p50: 3500000, p75: 5000000 };
+
+      try {
+        const { data: benchmarkData, error: benchmarkError } = await supabase
+          .from('codify_benchmarks')
+          .select('*')
+          .eq('cargo', form.cargo || '')
+          .eq('industria', form.industria || '')
+          .single();
+
+        if (benchmarkData && !benchmarkError) {
+          bandaData = {
+            p25: benchmarkData.banda_p25 || bandaData.p25,
+            p50: benchmarkData.banda_p50 || bandaData.p50,
+            p75: benchmarkData.banda_p75 || bandaData.p75,
+          };
+          console.log('Benchmark encontrado:', benchmarkData);
+        } else {
+          console.log('Usando valores por defecto de benchmark');
+        }
+      } catch (err) {
+        console.log('Error al consultar benchmarks, usando valores por defecto', err);
+      }
+
       const baseScore = 50;
       const experienceBonus = Math.min(30, (form.anos_experiencia || 0) * 2);
       const skillsBonus = Math.min(10, (form.habilidades_tecnicas?.length || 0) * 0.5);
@@ -421,7 +446,6 @@ export default function Dashboard() {
         interaccion_comunicacion: form.soft_skills?.comunicacion || 5,
       };
 
-      const bandaData = { p25: 2000000, p50: 3500000, p75: 5000000 };
       const brecha = form.salario_liquido! - bandaData.p50;
       const brechaPercentil = ((brecha / form.salario_liquido!) * 100).toFixed(1);
 
