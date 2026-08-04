@@ -631,7 +631,10 @@ export default function Dashboard() {
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
           <h1 style={{ color: '#00d084', fontSize: '24px', margin: 0 }}>PULSO by Codify 🎯</h1>
-          <button onClick={logout} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid #aaa', background: 'transparent', color: '#aaa', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}>Salir</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {user && <span style={{ fontSize: '12px', color: '#aaa' }}>{user.email}</span>}
+            <button onClick={logout} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid #aaa', background: 'transparent', color: '#aaa', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}>Salir</button>
+          </div>
         </div>
 
         <div style={{ marginBottom: '30px' }}>
