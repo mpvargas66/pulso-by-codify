@@ -87,13 +87,15 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a', padding: 20 }}>
-      <div style={{ width: '100%', maxWidth: 420, background: 'rgba(30,41,59,0.6)', backdropFilter: 'blur(20px)', borderRadius: 20, padding: 32, border: '1px solid rgba(148,163,184,0.15)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #2D1B5E 0%, #1C1B2E 100%)', padding: 20 }}>
+      <div style={{ width: '100%', maxWidth: 420, background: 'rgba(45,27,94,0.7)', backdropFilter: 'blur(20px)', borderRadius: 20, padding: 32, border: '1px solid rgba(191, 5, 125, 0.2)' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ width: 64, height: 64, borderRadius: 20, background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, margin: '0 auto 20px', boxShadow: '0 8px 30px rgba(34,197,94,0.3)' }}>📊</div>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#f8fafc', marginBottom: 8 }}>Bienvenido a Pulso</h1>
-          <p style={{ fontSize: 14, color: '#64748b' }}>Inicia sesión para evaluar tu posición en el mercado</p>
+          <div style={{ marginBottom: 16 }}>
+            <img src="https://codifyanalytics.com/storage/header-logos/01KSQBC6WDJ44NMC75X9Y8MWNA.png" alt="Codify" style={{ height: 48, margin: '0 auto' }} />
+          </div>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#F3F0FB', marginBottom: 8 }}>Bienvenido a PULSO</h1>
+          <p style={{ fontSize: 14, color: '#E8E4F4' }}>Inicia sesión para evaluar tu posición en el mercado</p>
         </div>
 
         {/* Tabs */}
@@ -103,8 +105,8 @@ export default function Login() {
             style={{
               flex: 1,
               padding: '12px',
-              background: tab === 'login' ? 'rgba(34,197,94,0.2)' : 'transparent',
-              color: tab === 'login' ? '#22c55e' : '#64748b',
+              background: tab === 'login' ? 'rgba(191, 5, 125,0.2)' : 'transparent',
+              color: tab === 'login' ? '#BF057D' : '#E8E4F4',
               border: 'none',
               borderRadius: 10,
               fontSize: 14,
@@ -120,8 +122,8 @@ export default function Login() {
             style={{
               flex: 1,
               padding: '12px',
-              background: tab === 'signup' ? 'rgba(34,197,94,0.2)' : 'transparent',
-              color: tab === 'signup' ? '#22c55e' : '#64748b',
+              background: tab === 'signup' ? 'rgba(191, 5, 125,0.2)' : 'transparent',
+              color: tab === 'signup' ? '#BF057D' : '#E8E4F4',
               border: 'none',
               borderRadius: 10,
               fontSize: 14,
@@ -137,7 +139,7 @@ export default function Login() {
         {/* Email/Password Form */}
         <form onSubmit={tab === 'login' ? handleEmailLogin : handleEmailSignup} style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
           <div>
-            <label style={{ display: 'block', fontSize: 13, color: '#94a3b8', marginBottom: 8, fontWeight: 500 }}>Email</label>
+            <label style={{ display: 'block', fontSize: 13, color: '#E8E4F4', marginBottom: 8, fontWeight: 500 }}>Email</label>
             <input
               type="email"
               value={email}
@@ -149,21 +151,21 @@ export default function Login() {
                 width: '100%',
                 padding: '12px 16px',
                 borderRadius: 10,
-                border: '1px solid rgba(148,163,184,0.2)',
-                background: 'rgba(15,23,42,0.5)',
-                color: '#f8fafc',
+                border: '1px solid rgba(191, 5, 125, 0.2)',
+                background: 'rgba(45,27,94,0.5)',
+                color: '#F3F0FB',
                 fontSize: 14,
                 outline: 'none',
                 transition: 'border-color 0.3s',
                 opacity: loading ? 0.6 : 1,
               }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(34,197,94,0.5)'; }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(191, 5, 125,0.5)'; }}
               onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(148,163,184,0.2)'; }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: 13, color: '#94a3b8', marginBottom: 8, fontWeight: 500 }}>Contraseña</label>
+            <label style={{ display: 'block', fontSize: 13, color: '#E8E4F4', marginBottom: 8, fontWeight: 500 }}>Contraseña</label>
             <input
               type="password"
               value={password}
@@ -175,15 +177,15 @@ export default function Login() {
                 width: '100%',
                 padding: '12px 16px',
                 borderRadius: 10,
-                border: '1px solid rgba(148,163,184,0.2)',
-                background: 'rgba(15,23,42,0.5)',
-                color: '#f8fafc',
+                border: '1px solid rgba(191, 5, 125, 0.2)',
+                background: 'rgba(45,27,94,0.5)',
+                color: '#F3F0FB',
                 fontSize: 14,
                 outline: 'none',
                 transition: 'border-color 0.3s',
                 opacity: loading ? 0.6 : 1,
               }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(34,197,94,0.5)'; }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(191, 5, 125,0.5)'; }}
               onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(148,163,184,0.2)'; }}
             />
           </div>
@@ -192,7 +194,7 @@ export default function Login() {
           {error && <div style={{ padding: 12, background: 'rgba(239,68,68,0.15)', borderRadius: 8, color: '#fca5a5', fontSize: 13, border: '1px solid rgba(239,68,68,0.3)' }}>⚠️ {error}</div>}
 
           {/* Success Message */}
-          {message && <div style={{ padding: 12, background: 'rgba(34,197,94,0.15)', borderRadius: 8, color: '#86efac', fontSize: 13, border: '1px solid rgba(34,197,94,0.3)' }}>✓ {message}</div>}
+          {message && <div style={{ padding: 12, background: 'rgba(191, 5, 125,0.15)', borderRadius: 8, color: '#BF057D', fontSize: 13, border: '1px solid rgba(191, 5, 125,0.3)' }}>✓ {message}</div>}
 
           <button
             type="submit"
@@ -200,7 +202,7 @@ export default function Login() {
             style={{
               width: '100%',
               padding: '14px 24px',
-              background: loading || !email || !password ? '#666' : 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+              background: loading || !email || !password ? '#666' : 'linear-gradient(135deg, #BF057D 0%, #2D1B5E 100%)',
               color: '#1a1a2e',
               border: 'none',
               borderRadius: 12,
@@ -208,7 +210,7 @@ export default function Login() {
               fontWeight: 700,
               cursor: loading || !email || !password ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s',
-              boxShadow: '0 4px 15px rgba(34,197,94,0.25)',
+              boxShadow: '0 4px 15px rgba(191, 5, 125,0.25)',
             }}
           >
             {loading ? 'Cargando...' : tab === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
@@ -217,9 +219,9 @@ export default function Login() {
 
         {/* Divider */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-          <div style={{ flex: 1, height: 1, background: 'rgba(148,163,184,0.2)' }} />
-          <span style={{ fontSize: 12, color: '#64748b' }}>O continúa con</span>
-          <div style={{ flex: 1, height: 1, background: 'rgba(148,163,184,0.2)' }} />
+          <div style={{ flex: 1, height: 1, background: 'rgba(191, 5, 125, 0.2)' }} />
+          <span style={{ fontSize: 12, color: '#E8E4F4' }}>O continúa con</span>
+          <div style={{ flex: 1, height: 1, background: 'rgba(191, 5, 125, 0.2)' }} />
         </div>
 
         {/* Google Login */}
