@@ -5,6 +5,79 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import ChatWindow from '@/components/ChatWindow';
 
+function CustomSelect({ value, onChange, options, label, help, error }: any) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+        {label}
+        {help && <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{help}</span>}
+      </label>
+      <div style={{ position: 'relative' }}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          style={{
+            width: '100%',
+            padding: '12px',
+            background: '#16213e',
+            color: '#BF057D',
+            border: `1px solid ${error ? '#ff6b6b' : '#BF057D'}`,
+            borderRadius: '8px',
+            textAlign: 'left',
+            fontSize: '14px',
+            cursor: 'pointer',
+            fontWeight: '500',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
+        >
+          {options.find((o: any) => o.value === value)?.label || 'Selecciona...'}
+          <span style={{ color: '#BF057D', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>▼</span>
+        </button>
+
+        {isOpen && (
+          <div style={{
+            position: 'absolute',
+            top: 'calc(100% + 4px)',
+            left: '0',
+            right: '0',
+            background: '#16213e',
+            border: '1px solid #BF057D',
+            borderRadius: '8px',
+            zIndex: '10',
+            overflow: 'hidden',
+            boxShadow: '0 4px 12px rgba(191, 5, 125, 0.2)'
+          }}>
+            {options.map((opt: any) => (
+              <div
+                key={opt.value}
+                onClick={() => { onChange(opt.value); setIsOpen(false); }}
+                style={{
+                  padding: '12px',
+                  cursor: 'pointer',
+                  color: value === opt.value ? '#BF057D' : '#aaa',
+                  background: value === opt.value ? 'rgba(191, 5, 125, 0.1)' : 'transparent',
+                  borderBottom: '1px solid rgba(191, 5, 125, 0.1)',
+                  fontSize: '14px',
+                  transition: 'all 0.2s',
+                  fontWeight: value === opt.value ? '500' : '400'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(191, 5, 125, 0.1)'; e.currentTarget.style.color = '#BF057D'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = value === opt.value ? 'rgba(191, 5, 125, 0.1)' : 'transparent'; e.currentTarget.style.color = value === opt.value ? '#BF057D' : '#aaa'; }}
+              >
+                {opt.label}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      {error && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {error}</div>}
+    </div>
+  );
+}
+
 const EDUCATIONS = ['Ingeniería en Informática', 'Ingeniería en Computación', 'Ingeniería en Sistemas', 'Ingeniería en Software', 'Ingeniería Comercial', 'Ingeniería Industrial', 'Técnico en Informática', 'Técnico en Programación', 'Administración de Empresas', 'Contador/a', 'Abogado/a', 'Especialista en RRHH', 'Especialista en Marketing', 'Especialista en Logística', 'Data Scientist', 'Product Manager', 'UX/UI Designer', 'Profesor/a'];
 
 const INDUSTRIES = ['Tecnología', 'Finanzas', 'Retail', 'Logística & Supply Chain', 'Legal', 'Recursos Humanos', 'Marketing', 'Educación', 'Salud', 'Construcción', 'Energía', 'Minería'];
@@ -146,28 +219,22 @@ function Step1Basic({ form, updateForm, onNext }: any) {
           <input type="number" min="18" max="70" value={form.edad || ''} onChange={(e) => updateForm('edad', parseInt(e.target.value))} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.edad ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
           {errors.edad && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.edad}</div>}
         </div>
-        <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
-            Género
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.genero}</span>
-          </label>
-          <select value={form.genero || ''} onChange={(e) => updateForm('genero', e.target.value)} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.genero ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }}>
-            <option value="">Selecciona...</option>
-            {GENDERS.map((g) => <option key={g} value={g}>{g}</option>)}
-          </select>
-          {errors.genero && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.genero}</div>}
-        </div>
-        <div>
-          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
-            Región
-            <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.region}</span>
-          </label>
-          <select value={form.region || ''} onChange={(e) => updateForm('region', e.target.value)} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.region ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }}>
-            <option value="">Selecciona...</option>
-            {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
-          </select>
-          {errors.region && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.region}</div>}
-        </div>
+        <CustomSelect
+          value={form.genero}
+          onChange={(val: string) => updateForm('genero', val)}
+          options={[{ value: '', label: 'Selecciona...' }, ...GENDERS.map(g => ({ value: g, label: g }))]}
+          label="Género"
+          help={FIELD_HELP.genero}
+          error={errors.genero}
+        />
+        <CustomSelect
+          value={form.region}
+          onChange={(val: string) => updateForm('region', val)}
+          options={[{ value: '', label: 'Selecciona...' }, ...REGIONS.map(r => ({ value: r, label: r }))]}
+          label="Región"
+          help={FIELD_HELP.region}
+          error={errors.region}
+        />
       </div>
       <button onClick={() => validate() && onNext()} style={{ width: '100%', padding: '12px', marginTop: '20px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
     </div>
