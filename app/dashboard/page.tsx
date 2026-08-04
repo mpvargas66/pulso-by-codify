@@ -409,10 +409,13 @@ export default function Dashboard() {
       try {
         const { data: benchmarkData, error: benchmarkError } = await supabase
           .from('codify_benchmarks')
-          .select('*')
+          .select('banda_p25, banda_p50, banda_p75')
           .eq('cargo', form.cargo || '')
           .eq('industria', form.industria || '')
-          .single();
+          .lte('anos_experiencia_min', form.anos_experiencia || 0)
+          .gte('anos_experiencia_max', form.anos_experiencia || 0)
+          .order('banda_p50', { ascending: false })
+          .limit(1);
 
         if (benchmarkData && !benchmarkError) {
           bandaData = {
