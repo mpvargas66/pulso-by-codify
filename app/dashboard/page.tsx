@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import ChatWindow from '@/components/ChatWindow';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 const EDUCATIONS = ['Ingeniería en Informática', 'Ingeniería en Computación', 'Ingeniería en Sistemas', 'Ingeniería en Software', 'Ingeniería Comercial', 'Ingeniería Industrial', 'Técnico en Informática', 'Técnico en Programación', 'Administración de Empresas', 'Contador/a', 'Abogado/a', 'Especialista en RRHH', 'Especialista en Marketing', 'Especialista en Logística', 'Data Scientist', 'Product Manager', 'UX/UI Designer', 'Profesor/a'];
 
@@ -373,6 +372,12 @@ export default function Dashboard() {
   useEffect(() => {
     const loadUser = async () => {
       try {
+        if (!supabase) {
+          console.log('Supabase not configured, using test account');
+          setUser({ id: 'test-dev', email: 'dev@test.local' });
+          return;
+        }
+
         const { data, error } = await supabase.auth.getUser();
         console.log('Auth check:', { data, error });
 
@@ -407,15 +412,22 @@ export default function Dashboard() {
       let bandaData = { p25: 2000000, p50: 3500000, p75: 5000000 };
 
       try {
-        const { data: benchmarkData, error: benchmarkError } = await supabase
-          .from('codify_benchmarks')
-          .select('banda_p25, banda_p50, banda_p75')
-          .eq('cargo', form.cargo || '')
-          .eq('industria', form.industria || '')
-          .lte('anos_experiencia_min', form.anos_experiencia || 0)
-          .gte('anos_experiencia_max', form.anos_experiencia || 0)
-          .order('banda_p50', { ascending: false })
-          .limit(1);
+        let benchmarkData = null;
+        let benchmarkError = null;
+
+        if (supabase) {
+          const result = await supabase
+            .from('codify_benchmarks')
+            .select('banda_p25, banda_p50, banda_p75')
+            .eq('cargo', form.cargo || '')
+            .eq('industria', form.industria || '')
+            .lte('anos_experiencia_min', form.anos_experiencia || 0)
+            .gte('anos_experiencia_max', form.anos_experiencia || 0)
+            .order('banda_p50', { ascending: false })
+            .limit(1);
+          benchmarkData = result.data;
+          benchmarkError = result.error;
+        }
 
         if (benchmarkData && benchmarkData.length > 0 && !benchmarkError) {
           const benchmark = benchmarkData[0];
@@ -476,7 +488,9 @@ export default function Dashboard() {
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     router.push('/login');
   };
 
