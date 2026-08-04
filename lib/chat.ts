@@ -20,7 +20,7 @@ export interface AnalysisData {
     interaccion_comunicacion: number;
   };
   salario_actual: number;
-  banda_p50: number;
+  salario_p50: number;
   brecha_percentil: number;
   ultimo_cargo: string;
   anos_experiencia: number;
@@ -44,7 +44,7 @@ PERFIL DEL USUARIO:
 
 MÉTRICAS SALARIALES:
 - Salario actual: $${analysisData.salario_actual.toLocaleString('es-CL')} CLP
-- Banda P50 mercado: $${analysisData.banda_p50.toLocaleString('es-CL')} CLP
+- Banda P50 mercado: $${analysisData.salario_p50.toLocaleString('es-CL')} CLP
 - Brecha vs percentil: ${analysisData.brecha_percentil}%
 
 SCORE CODIFY:

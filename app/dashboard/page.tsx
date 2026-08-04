@@ -80,9 +80,9 @@ interface AnalysisResult {
     interaccion_comunicacion: number;
   };
   salario_actual: number;
-  banda_p25: number;
-  banda_p50: number;
-  banda_p75: number;
+  salario_p25: number;
+  salario_p50: number;
+  salario_p75: number;
   brecha_percentil: number;
   ultimo_cargo: string;
   anos_experiencia: number;
@@ -471,9 +471,9 @@ export default function Dashboard() {
         cargo_homologado: form.cargo || 'N/A',
         factor_scores: factorScores,
         salario_actual: form.salario_liquido || 0,
-        banda_p25: bandaData.p25,
-        banda_p50: bandaData.p50,
-        banda_p75: bandaData.p75,
+        salario_p25: bandaData.p25,
+        salario_p50: bandaData.p50,
+        salario_p75: bandaData.p75,
         brecha_percentil: parseFloat(brechaPercentil as string),
         ultimo_cargo: form.cargo || '',
         anos_experiencia: form.anos_experiencia || 0,
@@ -552,9 +552,9 @@ export default function Dashboard() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '40px' }}>
             <div style={{ background: '#16213e', border: '1px solid #16213e', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ color: '#00d084', marginBottom: '16px' }}>💰 Banda Salarial</h3>
-              <div><p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>P25</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.banda_p25 / 1000000).toFixed(1)}M</p></div>
-              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>P50 (Promedio)</p><p style={{ color: '#00d084', fontSize: '18px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.banda_p50 / 1000000).toFixed(1)}M</p></div>
-              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>P75</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.banda_p75 / 1000000).toFixed(1)}M</p></div>
+              <div><p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>P25</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p25 / 1000000).toFixed(1)}M</p></div>
+              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>P50 (Promedio)</p><p style={{ color: '#00d084', fontSize: '18px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p50 / 1000000).toFixed(1)}M</p></div>
+              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#aaa', fontSize: '12px', margin: '0' }}>P75</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p75 / 1000000).toFixed(1)}M</p></div>
             </div>
 
             <div style={{ background: '#16213e', border: '1px solid #16213e', borderRadius: '12px', padding: '20px' }}>
@@ -578,7 +578,7 @@ export default function Dashboard() {
               cargo_homologado: analysisResults.cargo_homologado,
               factor_scores: analysisResults.factor_scores,
               salario_actual: analysisResults.salario_actual,
-              banda_p50: analysisResults.banda_p50,
+              salario_p50: analysisResults.salario_p50,
               brecha_percentil: analysisResults.brecha_percentil,
               ultimo_cargo: analysisResults.ultimo_cargo,
               anos_experiencia: analysisResults.anos_experiencia,
