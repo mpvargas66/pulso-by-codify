@@ -220,7 +220,7 @@ function Step1Basic({ form, updateForm, onNext }: any) {
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!form.edad) newErrors.edad = 'Requerido';
-    if (form.edad && (form.edad < 18 || form.edad > 70)) newErrors.edad = 'Debe estar entre 18-70';
+    if (form.edad && (form.edad < 18 || form.edad > 99)) newErrors.edad = 'Debe estar entre 18-99';
     if (!form.genero) newErrors.genero = 'Requerido';
     if (!form.region) newErrors.region = 'Requerido';
     setErrors(newErrors);
@@ -236,7 +236,25 @@ function Step1Basic({ form, updateForm, onNext }: any) {
             Edad
             <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.edad}</span>
           </label>
-          <input type="number" min="18" max="70" value={form.edad || ''} onChange={(e) => updateForm('edad', parseInt(e.target.value))} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.edad ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
+          <input
+            type="number"
+            min="18"
+            max="99"
+            value={form.edad || ''}
+            onChange={(e) => {
+              const val = parseInt(e.target.value);
+              if (val >= 18 && val <= 99) updateForm('edad', val);
+            }}
+            style={{
+              width: '100%',
+              padding: '12px',
+              borderRadius: '8px',
+              border: `1px solid ${errors.edad ? '#ff6b6b' : '#16213e'}`,
+              backgroundColor: '#1a1a2e',
+              color: '#fff',
+              fontSize: '14px'
+            }}
+          />
           {errors.edad && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.edad}</div>}
         </div>
         <CustomSelect
