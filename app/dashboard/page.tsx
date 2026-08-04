@@ -243,7 +243,7 @@ function Step1Basic({ form, updateForm, onNext }: any) {
             value={form.edad || ''}
             onChange={(e) => {
               const val = parseInt(e.target.value);
-              if (val >= 18 && val <= 99) updateForm('edad', val);
+              if (!isNaN(val)) updateForm('edad', val);
             }}
             style={{
               width: '100%',
