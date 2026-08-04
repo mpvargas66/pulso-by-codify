@@ -13,7 +13,9 @@ export default function Login() {
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
 
-  const supabase = createClient()
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabase = supabaseUrl && supabaseKey ? createClient() : null
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
