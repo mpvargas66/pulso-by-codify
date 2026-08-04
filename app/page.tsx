@@ -10,8 +10,8 @@ export default function Home() {
         Homologa tu posición con la metodología que usan las empresas líderes de Chile.
       </p>
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
-        <button onClick={() => window.location.href = '/login'} style={{ padding: '14px 28px', background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', color: '#0f172a', borderRadius: 12, fontSize: 15, fontWeight: 800, textDecoration: 'none', boxShadow: '0 4px 20px rgba(34,197,94,0.25)', border: 'none', cursor: 'pointer' }}>Descubre tu valor</button>
-        <button onClick={() => window.location.href = '/login'} style={{ padding: '14px 28px', background: 'rgba(30,41,59,0.6)', color: '#f8fafc', borderRadius: 12, fontSize: 15, fontWeight: 700, textDecoration: 'none', border: '1px solid rgba(148,163,184,0.2)', cursor: 'pointer' }}>Iniciar sesión</button>
+        <button type="button" onClick={() => { window.location.href = '/login'; }} style={{ padding: '14px 28px', background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', color: '#0f172a', borderRadius: 12, fontSize: 15, fontWeight: 800, boxShadow: '0 4px 20px rgba(34,197,94,0.25)', border: 'none', cursor: 'pointer' }}>Descubre tu valor</button>
+        <button type="button" onClick={() => { window.location.href = '/login'; }} style={{ padding: '14px 28px', background: 'rgba(30,41,59,0.6)', color: '#f8fafc', borderRadius: 12, fontSize: 15, fontWeight: 700, border: '1px solid rgba(148,163,184,0.2)', cursor: 'pointer' }}>Iniciar sesión</button>
       </div>
     </main>
   )
