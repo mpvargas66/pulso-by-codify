@@ -494,7 +494,8 @@ function Step6Contract({ form, updateForm, onNext, onBack }: any) {
 }
 
 function Step7Skills({ form, updateForm, onNext, onBack }: any) {
-  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({ 'Tech': true, 'Data & Analytics': false, 'Finanzas': false, 'Logística & Supply Chain': false, 'Ventas & Marketing': false, 'Legal & Compliance': false, 'Transversal': true });
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({ 'Tech': false, 'Data & Analytics': false, 'Finanzas': false, 'Logística & Supply Chain': false, 'Ventas & Marketing': false, 'Legal & Compliance': false, 'Transversal': false });
+  const [searchQuery, setSearchQuery] = useState('');
 
   const selectedSkills = form.habilidades_tecnicas || [];
 
@@ -510,12 +511,43 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
     setExpandedCategories((prev) => ({ ...prev, [category]: !prev[category] }));
   };
 
+  const allSkills = Object.values(SKILLS_BY_CATEGORY).flat();
+  const matchingSkills = allSkills.filter(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()));
+  const categoriesWithMatches = Object.keys(SKILLS_BY_CATEGORY).filter(cat =>
+    SKILLS_BY_CATEGORY[cat].some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  useEffect(() => {
+    const newExpanded = { ...expandedCategories };
+    Object.keys(expandedCategories).forEach(cat => {
+      newExpanded[cat] = searchQuery.length > 0 && categoriesWithMatches.includes(cat);
+    });
+    setExpandedCategories(newExpanded);
+  }, [searchQuery]);
+
   return (
     <div style={{ background: '#16213e', borderRadius: '12px', padding: '30px', border: '1px solid #16213e' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 7: Skills Técnicos</h2>
-      <p style={{ color: '#E8E4F4', marginBottom: '24px', fontSize: '13px' }}>💡 Selecciona las habilidades que dominas. {selectedSkills.length} seleccionadas.</p>
+      <p style={{ color: '#E8E4F4', marginBottom: '16px', fontSize: '13px' }}>💡 {selectedSkills.length} seleccionadas</p>
+
+      <input
+        type="text"
+        placeholder="🔍 Busca un skill (ej: Python, React, SQL...)"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        style={{
+          width: '100%',
+          padding: '12px',
+          borderRadius: '8px',
+          border: '1px solid #BF057D',
+          backgroundColor: '#1a1a2e',
+          color: '#E8E4F4',
+          fontSize: '14px',
+          marginBottom: '24px'
+        }}
+      />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {Object.entries(SKILLS_BY_CATEGORY).map(([category, skills]) => (
+        {Object.entries(SKILLS_BY_CATEGORY).filter(([category]) => searchQuery.length === 0 || categoriesWithMatches.includes(category)).map(([category, skills]) => (
           <div key={category} style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid #16213e', backgroundColor: '#0f3460' }}>
             <div onClick={() => toggleCategory(category)} style={{ padding: '14px 16px', backgroundColor: '#16213e', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
@@ -529,7 +561,7 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
             </div>
             {expandedCategories[category] && (
               <div style={{ padding: '16px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '12px' }}>
-                {skills.map((skill) => {
+                {skills.filter(skill => searchQuery.length === 0 || skill.toLowerCase().includes(searchQuery.toLowerCase())).map((skill) => {
                   const isSelected = selectedSkills.includes(skill);
                   return (
                     <label key={skill} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', backgroundColor: isSelected ? 'rgba(191, 5, 125, 0.15)' : 'rgba(30, 41, 59, 0.6)', border: isSelected ? '1px solid #BF057D' : '1px solid #16213e', cursor: 'pointer' }}>
