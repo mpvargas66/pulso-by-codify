@@ -22,6 +22,12 @@ export default function Login() {
     setError('')
     setLoading(true)
 
+    if (!supabase) {
+      setError('Autenticación no disponible')
+      setLoading(false)
+      return
+    }
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -45,6 +51,12 @@ export default function Login() {
     setError('')
     setMessage('')
     setLoading(true)
+
+    if (!supabase) {
+      setError('Autenticación no disponible')
+      setLoading(false)
+      return
+    }
 
     try {
       const { error } = await supabase.auth.signUp({
@@ -72,6 +84,12 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     setError('')
     setLoading(true)
+
+    if (!supabase) {
+      setError('Autenticación no disponible')
+      setLoading(false)
+      return
+    }
 
     try {
       const { error } = await supabase.auth.signInWithOAuth({
