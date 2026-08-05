@@ -354,7 +354,31 @@ function Step2Carrera({ form, updateForm, onNext, onBack }: any) {
             <span style={{ color: '#999', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.educacion}</span>
           </label>
           <div style={{ position: 'relative' }}>
-            <input type="text" placeholder="Busca tu carrera..." value={input} onChange={(e) => { setInput(e.target.value); setSuggestions(searchEducations(e.target.value)); }} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.educacion ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#1C1B2E', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
+            <input
+              type="text"
+              placeholder="Busca tu carrera..."
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                const query = e.target.value.toLowerCase();
+                if (!query.trim()) {
+                  setSuggestions([]);
+                } else {
+                  const allProfessions = Object.values(JOBS_BY_INDUSTRY).flat();
+                  const filtered = allProfessions.filter(p => p.toLowerCase().includes(query)).slice(0, 10);
+                  setSuggestions(filtered);
+                }
+              }}
+              style={{
+                width: '100%',
+                padding: '12px 36px 12px 12px',
+                borderRadius: '8px',
+                border: `1px solid ${errors.educacion ? '#ff6b6b' : '#16213e'}`,
+                backgroundColor: '#1C1B2E',
+                color: '#fff',
+                fontSize: '14px'
+              }}
+            />
             {suggestions.length > 0 && (
               <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#1C1B2E', border: '1px solid #16213e', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '300px', overflowY: 'auto', zIndex: 10 }}>
                 {suggestions.map((s, i) => (
