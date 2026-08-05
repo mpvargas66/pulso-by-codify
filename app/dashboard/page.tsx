@@ -516,12 +516,14 @@ function Step5Job({ form, updateForm, onNext, onBack }: any) {
     return Object.keys(newErrors).length === 0;
   };
 
+  const normalizeString = (str: string) => str.normalize('NFD').replace(/[̀-ͯ]/g, '');
+
   return (
     <div style={{ background: '#F8FAFC', borderRadius: '12px', padding: '30px', border: '1px solid #E2E8F0' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 5: Cargo</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#0F172A', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Cargo
             <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.cargo}</span>
           </label>
@@ -529,42 +531,50 @@ function Step5Job({ form, updateForm, onNext, onBack }: any) {
             <input type="text" placeholder="Busca tu cargo..." value={input} onChange={(e) => {
               setInput(e.target.value);
               const jobs = JOBS_BY_INDUSTRY[form.industria] || [];
-              const filtered = jobs.filter(j => j.toLowerCase().includes(e.target.value.toLowerCase())).slice(0, 10);
+              const normalized = normalizeString(e.target.value.toLowerCase());
+              const filtered = jobs.filter(j => normalizeString(j.toLowerCase()).includes(normalized)).slice(0, 10);
               setSuggestions(filtered);
-            }} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.cargo ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#FFFFFF', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
+            }} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.cargo ? '#DC2626' : '#CBD5E1'}`, backgroundColor: '#FFFFFF', color: '#0F172A', fontSize: '14px', fontWeight: '500' }} />
             {suggestions.length > 0 && (
-              <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '250px', overflowY: 'auto', zIndex: 10 }}>
+              <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#E2E8F0', border: '1px solid #CBD5E1', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '250px', overflowY: 'auto', zIndex: 10 }}>
                 {suggestions.map((s, i) => (
-                  <div key={i} onClick={() => { updateForm('cargo', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#0F172A', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1a1a2e'; e.currentTarget.style.color = '#E8E4F4'; }}>{s}</div>
+                  <div key={i} onClick={() => { updateForm('cargo', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #CBD5E1', color: '#334155', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'rgba(191, 5, 125, 0.2)'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#E2E8F0'; }}>{s}</div>
                 ))}
               </div>
             )}
           </div>
-          {errors.cargo && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.cargo}</div>}
+          {errors.cargo && <div style={{ color: '#DC2626', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.cargo}</div>}
         </div>
         {form.cargo && <div style={{ padding: '12px', backgroundColor: 'rgba(191, 5, 125, 0.15)', borderRadius: '8px', color: '#BF057D', fontSize: '13px' }}>✓ {form.cargo}</div>}
         <div>
-          <label style={{ color: '#0F172A', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
             Años en cargo
             <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_cargo}</span>
           </label>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <input type="number" min="0" max="40" value={form.anos_cargo || 0} onChange={(e) => updateForm('anos_cargo', parseInt(e.target.value) || 0)} style={{ width: '70px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
-            <span style={{ color: '#0F172A', fontSize: '12px' }}>años</span>
+            <input type="number" min="0" max="40" value={form.anos_cargo || 0} onChange={(e) => { const val = parseInt(e.target.value); if (!isNaN(val)) updateForm('anos_cargo', val); }} style={{ width: '70px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF', color: '#0F172A', fontSize: '14px', fontWeight: '500' }} />
+            <span style={{ color: '#334155', fontSize: '12px' }}>años</span>
             <input type="range" min="0" max="40" value={form.anos_cargo || 0} onChange={(e) => updateForm('anos_cargo', parseInt(e.target.value))} style={{ flex: 1, accentColor: '#BF057D' }} />
           </div>
         </div>
-        <CustomSelect
-          value={form.modalidad}
-          onChange={(val: string) => updateForm('modalidad', val)}
-          options={[{ value: '', label: 'Selecciona...' }, ...WORK_MODALITIES.map(m => ({ value: m, label: m }))]}
-          label="Modalidad"
-          help={FIELD_HELP.modalidad}
-          error={errors.modalidad}
-        />
+        <div>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Modalidad
+            <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.modalidad}</span>
+          </label>
+          <CustomSelect
+            value={form.modalidad}
+            onChange={(val) => updateForm('modalidad', val)}
+            options={[{ value: '', label: 'Selecciona...' }, ...WORK_MODALITIES.map(m => ({ value: m, label: m }))]}
+            label=""
+            help=""
+            error={errors.modalidad}
+          />
+          {errors.modalidad && <div style={{ color: '#DC2626', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.modalidad}</div>}
+        </div>
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#F8FAFC', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
+        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#FFFFFF', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
         <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
       </div>
     </div>
@@ -587,33 +597,40 @@ function Step6Contract({ form, updateForm, onNext, onBack }: any) {
     <div style={{ background: '#F8FAFC', borderRadius: '12px', padding: '30px', border: '1px solid #E2E8F0' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 6: Contrato</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <CustomSelect
-          value={form.tipo_contrato}
-          onChange={(val: string) => updateForm('tipo_contrato', val)}
-          options={[{ value: '', label: 'Selecciona...' }, ...CONTRACT_TYPES.map(c => ({ value: c, label: c }))]}
-          label="Tipo contrato"
-          help={FIELD_HELP.tipo_contrato}
-          error={errors.tipo_contrato}
-        />
         <div>
-          <label style={{ color: '#0F172A', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Tipo contrato
+            <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.tipo_contrato}</span>
+          </label>
+          <CustomSelect
+            value={form.tipo_contrato}
+            onChange={(val) => updateForm('tipo_contrato', val)}
+            options={[{ value: '', label: 'Selecciona...' }, ...CONTRACT_TYPES.map(c => ({ value: c, label: c }))]}
+            label=""
+            help=""
+            error={errors.tipo_contrato}
+          />
+          {errors.tipo_contrato && <div style={{ color: '#DC2626', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.tipo_contrato}</div>}
+        </div>
+        <div>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Salario bruto (actual)
             <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.salario_bruto}</span>
           </label>
-          <input type="text" placeholder="$3.000.000" value={form.salario_bruto ? formatSalary(form.salario_bruto) : ''} onChange={(e) => updateForm('salario_bruto', parseInt(e.target.value.replace(/\D/g, '')) || 0)} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.salario_bruto ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#FFFFFF', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
-          {errors.salario_bruto && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.salario_bruto}</div>}
+          <input type="text" placeholder="$3.000.000" value={form.salario_bruto ? formatSalary(form.salario_bruto) : ''} onChange={(e) => updateForm('salario_bruto', parseInt(e.target.value.replace(/\D/g, '')) || 0)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.salario_bruto ? '#DC2626' : '#CBD5E1'}`, backgroundColor: '#FFFFFF', color: '#0F172A', fontSize: '14px', fontWeight: '500' }} />
+          {errors.salario_bruto && <div style={{ color: '#DC2626', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.salario_bruto}</div>}
         </div>
         <div>
-          <label style={{ color: '#0F172A', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
             Salario líquido (actual)
             <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.salario_liquido}</span>
           </label>
-          <input type="text" placeholder="$2.100.000" value={form.salario_liquido ? formatSalary(form.salario_liquido) : ''} onChange={(e) => updateForm('salario_liquido', parseInt(e.target.value.replace(/\D/g, '')) || 0)} style={{ width: '100%', padding: '12px 36px 12px 12px', borderRadius: '8px', border: `1px solid ${errors.salario_liquido ? '#ff6b6b' : '#16213e'}`, backgroundColor: '#FFFFFF', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
-          {errors.salario_liquido && <div style={{ color: '#ff6b6b', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.salario_liquido}</div>}
+          <input type="text" placeholder="$2.100.000" value={form.salario_liquido ? formatSalary(form.salario_liquido) : ''} onChange={(e) => updateForm('salario_liquido', parseInt(e.target.value.replace(/\D/g, '')) || 0)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: `1px solid ${errors.salario_liquido ? '#DC2626' : '#CBD5E1'}`, backgroundColor: '#FFFFFF', color: '#0F172A', fontSize: '14px', fontWeight: '500' }} />
+          {errors.salario_liquido && <div style={{ color: '#DC2626', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.salario_liquido}</div>}
         </div>
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#F8FAFC', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
+        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#FFFFFF', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
         <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
       </div>
     </div>
@@ -716,21 +733,21 @@ function Step8SoftSkills({ form, updateForm, onNext, onBack }: any) {
   return (
     <div style={{ background: '#F8FAFC', borderRadius: '12px', padding: '30px', border: '1px solid #E2E8F0' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 9: Soft Skills</h2>
-      <p style={{ color: '#0F172A', marginBottom: '24px', fontSize: '13px' }}>💡 Evalúate del 1 al 10 en cada competencia</p>
+      <p style={{ color: '#334155', marginBottom: '24px', fontSize: '13px' }}>💡 Evalúate del 1 al 10 en cada competencia</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {sliders.map((s) => (
           <div key={s.key}>
-            <label style={{ fontSize: '13px', fontWeight: '600', color: '#0F172A', marginBottom: '8px', display: 'block' }}>{s.label}</label>
+            <label style={{ fontSize: '13px', fontWeight: '600', color: '#334155', marginBottom: '8px', display: 'block' }}>{s.label}</label>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <input type="number" min="1" max="10" value={form.soft_skills?.[s.key] || 5} onChange={(e) => updateForm('soft_skills', { ...form.soft_skills, [s.key]: Math.max(1, Math.min(10, parseInt(e.target.value) || 5)) })} style={{ width: '60px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', color: '#BF057D', fontSize: '14px', fontWeight: '600', textAlign: 'center' }} />
-              <span style={{ color: '#0F172A', fontSize: '12px' }}>/10</span>
+              <input type="number" min="1" max="10" value={form.soft_skills?.[s.key] || 5} onChange={(e) => updateForm('soft_skills', { ...form.soft_skills, [s.key]: Math.max(1, Math.min(10, parseInt(e.target.value) || 5)) })} style={{ width: '60px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF', color: '#0F172A', fontSize: '14px', fontWeight: '600', textAlign: 'center' }} />
+              <span style={{ color: '#334155', fontSize: '12px' }}>/10</span>
               <input type="range" min="1" max="10" value={form.soft_skills?.[s.key] || 5} onChange={(e) => updateForm('soft_skills', { ...form.soft_skills, [s.key]: parseInt(e.target.value) })} style={{ flex: 1, accentColor: '#BF057D' }} />
             </div>
           </div>
         ))}
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#F8FAFC', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
+        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#FFFFFF', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
         <button onClick={onNext} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>Calcular →</button>
       </div>
     </div>
@@ -950,7 +967,7 @@ export default function Dashboard() {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '40px', marginBottom: '30px' }}>
               <div style={{ position: 'relative', width: '120px', height: '120px' }}>
                 <svg viewBox="0 0 120 120" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-                  <circle cx="60" cy="60" r="55" fill="none" stroke="#16213e" strokeWidth="8" />
+                  <circle cx="60" cy="60" r="55" fill="none" stroke="#CBD5E1" strokeWidth="8" />
                   <circle cx="60" cy="60" r="55" fill="none" stroke="#BF057D" strokeWidth="8" strokeDasharray={`${(analysisResults.score_total / 100) * 345} 345`} strokeLinecap="round" style={{ transition: 'stroke-dasharray 2s ease-in-out', filter: 'drop-shadow(0 0 8px rgba(191, 5, 125, 0.5))' }} />
                 </svg>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
@@ -967,29 +984,29 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #16213e' }}>
+            <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #CBD5E1' }}>
               <p style={{ color: '#BF057D', fontSize: '16px', fontWeight: '600' }}>
                 {analysisResults.score_total >= 80 ? '🌟 Excelente posicionamiento' : analysisResults.score_total >= 60 ? '✅ Buen desempeño' : analysisResults.score_total >= 40 ? '📈 Potencial de crecimiento' : '🚀 Oportunidad de desarrollo'}
               </p>
-              <p style={{ color: '#0F172A', fontSize: '13px', marginTop: '10px' }}>Cargo: {analysisResults.cargo_homologado} | Industria: {analysisResults.industria}</p>
+              <p style={{ color: '#334155', fontSize: '13px', marginTop: '10px' }}>Cargo: {analysisResults.cargo_homologado} | Industria: {analysisResults.industria}</p>
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '40px' }}>
             <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ color: '#BF057D', marginBottom: '16px' }}>💰 Banda Salarial</h3>
-              <div><p style={{ color: '#0F172A', fontSize: '12px', margin: '0' }}>P25</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p25 / 1000000).toFixed(1)}M</p></div>
-              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#0F172A', fontSize: '12px', margin: '0' }}>P50 (Promedio)</p><p style={{ color: '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p50 / 1000000).toFixed(1)}M</p></div>
-              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #16213e' }}><p style={{ color: '#0F172A', fontSize: '12px', margin: '0' }}>P75</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p75 / 1000000).toFixed(1)}M</p></div>
+              <div><p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>P25</p><p style={{ color: '#0F172A', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p25 / 1000000).toFixed(1)}M</p></div>
+              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #CBD5E1' }}><p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>P50 (Promedio)</p><p style={{ color: '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p50 / 1000000).toFixed(1)}M</p></div>
+              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #CBD5E1' }}><p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>P75</p><p style={{ color: '#0F172A', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p75 / 1000000).toFixed(1)}M</p></div>
             </div>
 
             <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ color: '#BF057D', marginBottom: '16px' }}>📊 Tu Salario</h3>
-              <p style={{ color: '#0F172A', fontSize: '12px', margin: '0' }}>Salario Actual</p>
-              <p style={{ color: '#fff', fontSize: '20px', fontWeight: 'bold', margin: '8px 0' }}>${(analysisResults.salario_actual / 1000000).toFixed(1)}M</p>
-              <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #16213e' }}>
-                <p style={{ color: '#0F172A', fontSize: '12px', margin: '0' }}>Brecha vs P50</p>
-                <p style={{ color: analysisResults.brecha_percentil < 0 ? '#ff6b6b' : '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '8px 0' }}>
+              <p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>Salario Actual</p>
+              <p style={{ color: '#0F172A', fontSize: '20px', fontWeight: 'bold', margin: '8px 0' }}>${(analysisResults.salario_actual / 1000000).toFixed(1)}M</p>
+              <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #CBD5E1' }}>
+                <p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>Brecha vs P50</p>
+                <p style={{ color: analysisResults.brecha_percentil < 0 ? '#DC2626' : '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '8px 0' }}>
                   {analysisResults.brecha_percentil > 0 ? '+' : ''}{analysisResults.brecha_percentil}%
                 </p>
               </div>
