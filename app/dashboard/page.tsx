@@ -976,6 +976,17 @@ export default function Dashboard() {
     );
   }
 
+  if (!analysisResults && step === 'resultado') {
+    return (
+      <div style={{ minHeight: '100vh', background: '#1a1a2e', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ color: '#BF057D', marginBottom: '20px' }}>🎯 Cargando resultados...</h1>
+          <p style={{ color: '#E8E4F4' }}>Uno momento...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (analysisResults) {
     return (
       <div style={{ minHeight: '100vh', background: '#1a1a2e', padding: '40px 20px' }}>
