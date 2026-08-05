@@ -257,6 +257,33 @@ export default function Login() {
             </div>
           )}
 
+          {tab === 'signup' && (
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155' }}>
+              <input
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                disabled={loading}
+                style={{
+                  width: '18px',
+                  height: '18px',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  accentColor: '#BF057D',
+                }}
+              />
+              <span>
+                Acepto los{' '}
+                <a
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); setShowTerms(true); }}
+                  style={{ color: '#BF057D', textDecoration: 'none', fontWeight: '600' }}
+                >
+                  Términos y Condiciones
+                </a>
+              </span>
+            </label>
+          )}
+
           {/* Error Message */}
           {error && <div style={{ padding: 12, background: 'rgba(239,68,68,0.15)', borderRadius: 8, color: '#fca5a5', fontSize: 13, border: '1px solid rgba(239,68,68,0.3)' }}>⚠️ {error}</div>}
 
@@ -265,7 +292,7 @@ export default function Login() {
 
           <button
             type="submit"
-            disabled={loading || !email || !password || (tab === 'signup' && password !== confirmPassword)}
+            disabled={loading || !email || !password || (tab === 'signup' && (password !== confirmPassword || !termsAccepted))}
             style={{
               width: '100%',
               padding: '14px 24px',

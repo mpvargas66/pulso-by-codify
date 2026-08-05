@@ -175,17 +175,31 @@ export default function Register() {
             )}
           </div>
 
-          {/* Terms Acceptance Indicator */}
-          <div style={{
-            padding: '12px',
-            background: termsAccepted ? 'rgba(22, 163, 74, 0.15)' : 'rgba(217, 119, 6, 0.15)',
-            borderRadius: '8px',
-            fontSize: '13px',
-            color: termsAccepted ? '#15803D' : '#92400E',
-            border: `1px solid ${termsAccepted ? 'rgba(22, 163, 74, 0.3)' : 'rgba(217, 119, 6, 0.3)'}`,
-          }}>
-            {termsAccepted ? '✓ Términos y Condiciones aceptados' : '⚠️ Debes aceptar los Términos y Condiciones'}
-          </div>
+          {/* Terms Acceptance Checkbox */}
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155' }}>
+            <input
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              disabled={loading}
+              style={{
+                width: '18px',
+                height: '18px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                accentColor: '#BF057D',
+              }}
+            />
+            <span>
+              Acepto los{' '}
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); setShowTerms(true); }}
+                style={{ color: '#BF057D', textDecoration: 'none', fontWeight: '600' }}
+              >
+                Términos y Condiciones
+              </a>
+            </span>
+          </label>
 
           {/* Error Message */}
           {error && <div style={{ padding: 12, background: 'rgba(239,68,68,0.15)', borderRadius: 8, color: '#fca5a5', fontSize: 13, border: '1px solid rgba(239,68,68,0.3)' }}>⚠️ {error}</div>}
