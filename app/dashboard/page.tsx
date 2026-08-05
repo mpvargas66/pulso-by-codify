@@ -1121,7 +1121,15 @@ export default function Dashboard() {
     pdf.save(`PULSO-Visado-Codify-${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
-  const scoreMessage = analysisResults ? (analysisResults.score_total >= 80 ? '🌟 Excelente posicionamiento' : analysisResults.score_total >= 60 ? '✅ Buen desempeño' : analysisResults.score_total >= 40 ? '📈 Potencial de crecimiento' : '🚀 Oportunidad de desarrollo') : '';
+  const getScoreMessage = (results: AnalysisResult | null): string => {
+    if (!results) return '';
+    if (results.score_total >= 80) return '🌟 Excelente posicionamiento';
+    if (results.score_total >= 60) return '✅ Buen desempeño';
+    if (results.score_total >= 40) return '📈 Potencial de crecimiento';
+    return '🚀 Oportunidad de desarrollo';
+  };
+
+  const scoreMessage = getScoreMessage(analysisResults);
 
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF', padding: '40px 20px' }}>
