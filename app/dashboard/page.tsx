@@ -249,9 +249,9 @@ function Step1Basic({ form, updateForm, onNext }: any) {
               width: '100%',
               padding: '12px',
               borderRadius: '8px',
-              border: `1px solid ${errors.edad ? '#ff6b6b' : '#16213e'}`,
+              border: `1px solid ${errors.edad ? '#ff6b6b' : '#E2E8F0'}`,
               backgroundColor: '#FFFFFF',
-              color: '#fff',
+              color: '#0F172A',
               fontSize: '14px'
             }}
           />
