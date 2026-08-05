@@ -472,7 +472,7 @@ function Step4Company({ form, updateForm, onNext, onBack }: any) {
           </label>
           <CustomSelect
             value={form.tamano_empresa}
-            onChange={(val) => updateForm('tamano_empresa', val)}
+            onChange={(val: string) => updateForm('tamano_empresa', val)}
             options={[{ value: '', label: 'Selecciona...' }, ...COMPANY_SIZES.map(s => ({ value: s.value, label: s.label }))]}
             label=""
             help=""
@@ -564,7 +564,7 @@ function Step5Job({ form, updateForm, onNext, onBack }: any) {
           </label>
           <CustomSelect
             value={form.modalidad}
-            onChange={(val) => updateForm('modalidad', val)}
+            onChange={(val: string) => updateForm('modalidad', val)}
             options={[{ value: '', label: 'Selecciona...' }, ...WORK_MODALITIES.map(m => ({ value: m, label: m }))]}
             label=""
             help=""
@@ -604,7 +604,7 @@ function Step6Contract({ form, updateForm, onNext, onBack }: any) {
           </label>
           <CustomSelect
             value={form.tipo_contrato}
-            onChange={(val) => updateForm('tipo_contrato', val)}
+            onChange={(val: string) => updateForm('tipo_contrato', val)}
             options={[{ value: '', label: 'Selecciona...' }, ...CONTRACT_TYPES.map(c => ({ value: c, label: c }))]}
             label=""
             help=""
