@@ -1214,7 +1214,7 @@ export default function Dashboard() {
             <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '20px' }}>
               <p style={{ color: '#334155', fontSize: '14px', margin: '0 0 12px 0' }}>Salario Líquido Mensual</p>
               <p style={{ color: '#0F172A', fontSize: '24px', margin: '0 0 16px 0', fontWeight: '700' }}>${((analysisResults?.salario_actual ?? 0) / 1000000).toFixed(1)}M</p>
-              <div style={{ padding: '12px', backgroundColor: analysisResults && analysisResults.brecha_percentil < 0 ? '#FCE7F3' : '#F0FDF4', borderRadius: '6px', textAlign: 'center' }}>
+              <div style={{ padding: '12px', backgroundColor: (analysisResults?.brecha_percentil ?? 0) < 0 ? '#FCE7F3' : '#F0FDF4', borderRadius: '6px', textAlign: 'center' }}>
                 <p style={{ color: analysisResults && analysisResults.brecha_percentil < 0 ? '#BE185D' : '#15803D', fontSize: '13px', margin: '0', fontWeight: '600' }}>
                   Brecha vs P50: {analysisResults ? ((analysisResults.brecha_percentil > 0 ? '+' : '') + analysisResults.brecha_percentil + '%') : 'N/A'}
                 </p>
