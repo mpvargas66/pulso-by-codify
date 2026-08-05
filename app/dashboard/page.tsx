@@ -1080,7 +1080,7 @@ export default function Dashboard() {
           <div style={{ textAlign: 'center', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <button onClick={downloadPDF} style={{ padding: '12px 32px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>📥 Descargar PDF</button>
             <button onClick={() => { setAnalysisResults(null); setStep(1); setForm({ soft_skills: { comunicacion: 5, liderazgo: 5, resolucion_conflictos: 5, negociacion: 5, trabajo_equipo: 5 }, habilidades_tecnicas: [] }); }} style={{ padding: '12px 32px', backgroundColor: '#FFFFFF', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>← Nuevo Análisis</button>
-            <button onClick={logout} style={{ padding: '12px 32px', backgroundColor: '#999', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>Salir</button>
+            <button onClick={logout} style={{ padding: '12px 32px', backgroundColor: '#999', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>Cerrar Sesión</button>
           </div>
         </div>
       </div>
