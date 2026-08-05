@@ -938,11 +938,6 @@ export default function Dashboard() {
   };
 
   const logout = async () => {
-    try {
-      await supabase.auth.signOut();
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
     // Limpiar localStorage
     localStorage.removeItem('pulso_form_autosave');
     // Resetear state
@@ -953,6 +948,17 @@ export default function Dashboard() {
     setStep(1);
     setAnalysisResults(null);
     setUser(null);
+
+    // Intentar logout en Supabase (no bloqueante)
+    try {
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+
+    // Redirigir sin esperar
     router.push('/login');
   };
 
