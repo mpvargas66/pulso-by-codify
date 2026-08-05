@@ -729,19 +729,19 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
 
 function Step8SoftSkills({ form, updateForm, onNext, onBack }: any) {
   const sliders = [
-    { key: 'comunicacion', label: 'Comunicación', desc: { 1: 'Dificultad para expresar ideas', 5: 'Comunicas bien en reuniones comunes', 10: 'Comunicas con claridad y persuasión en cualquier contexto' } },
-    { key: 'liderazgo', label: 'Liderazgo', desc: { 1: 'Prefieres seguir instrucciones', 5: 'Guías equipos en proyectos comunes', 10: 'Inspiras y motivas equipos hacia metas ambiciosas' } },
-    { key: 'resolucion_conflictos', label: 'Resolución de Conflictos', desc: { 1: 'Evitas confrontaciones', 5: 'Resuelves conflictos comunes', 10: 'Medias conflictos complejos encontrando soluciones win-win' } },
-    { key: 'negociacion', label: 'Negociación', desc: { 1: 'Aceptas las condiciones sin cuestionar', 5: 'Negocias términos básicos efectivamente', 10: 'Negocias acuerdos complejos obteniendo máximo valor' } },
-    { key: 'trabajo_equipo', label: 'Trabajo en Equipo', desc: { 1: 'Prefieres trabajar solo', 5: 'Colaboras bien con tu equipo', 10: 'Eres pieza clave que potencia a todo el equipo' } }
+    { key: 'comunicacion', label: 'Comunicación', desc: { '1': 'Dificultad para expresar ideas', '5': 'Comunicas bien en reuniones comunes', '10': 'Comunicas con claridad y persuasión en cualquier contexto' } },
+    { key: 'liderazgo', label: 'Liderazgo', desc: { '1': 'Prefieres seguir instrucciones', '5': 'Guías equipos en proyectos comunes', '10': 'Inspiras y motivas equipos hacia metas ambiciosas' } },
+    { key: 'resolucion_conflictos', label: 'Resolución de Conflictos', desc: { '1': 'Evitas confrontaciones', '5': 'Resuelves conflictos comunes', '10': 'Medias conflictos complejos encontrando soluciones win-win' } },
+    { key: 'negociacion', label: 'Negociación', desc: { '1': 'Aceptas las condiciones sin cuestionar', '5': 'Negocias términos básicos efectivamente', '10': 'Negocias acuerdos complejos obteniendo máximo valor' } },
+    { key: 'trabajo_equipo', label: 'Trabajo en Equipo', desc: { '1': 'Prefieres trabajar solo', '5': 'Colaboras bien con tu equipo', '10': 'Eres pieza clave que potencia a todo el equipo' } }
   ];
 
   const getDescription = (key: string, value: number) => {
     const skill = sliders.find(s => s.key === key);
     if (!skill) return '';
-    if (value <= 3) return skill.desc[1];
-    if (value <= 7) return skill.desc[5];
-    return skill.desc[10];
+    if (value <= 3) return skill.desc['1'];
+    if (value <= 7) return skill.desc['5'];
+    return skill.desc['10'];
   };
 
   return (
