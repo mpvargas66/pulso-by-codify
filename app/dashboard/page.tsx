@@ -987,6 +987,25 @@ export default function Dashboard() {
     );
   }
 
+  const downloadPDF = async () => {
+    const element = document.getElementById('resultado-pdf');
+    if (!element) return;
+
+    const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#1a1a2e' });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const imgWidth = 210;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    pdf.save(`PULSO-Visado-Codify-${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
   if (analysisResults) {
     return (
       <div id="resultado-pdf" style={{ minHeight: '100vh', background: '#1a1a2e', padding: '40px 20px' }}>
@@ -1103,25 +1122,6 @@ export default function Dashboard() {
       </div>
     </div>
   );
-
-  const downloadPDF = async () => {
-    const element = document.getElementById('resultado-pdf');
-    if (!element) return;
-
-    const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#ffffff' });
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
-    });
-
-    const imgWidth = 210;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-    pdf.save(`PULSO-Visado-Codify-${new Date().toISOString().split('T')[0]}.pdf`);
-  };
 
   const getScoreMessage = (results: AnalysisResult | null): string => {
     if (!results) return '';
