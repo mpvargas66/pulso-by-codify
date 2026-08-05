@@ -989,7 +989,7 @@ export default function Dashboard() {
 
   if (analysisResults) {
     return (
-      <div style={{ minHeight: '100vh', background: '#1a1a2e', padding: '40px 20px' }}>
+      <div id="resultado-pdf" style={{ minHeight: '100vh', background: '#1a1a2e', padding: '40px 20px' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div style={{ background: 'linear-gradient(135deg, #16213e 0%, #0f3460 100%)', border: '2px solid #BF057D', borderRadius: '16px', padding: '40px', marginBottom: '40px', textAlign: 'center', boxShadow: '0 8px 32px rgba(191, 5, 125, 0.4)' }}>
             <p style={{ color: '#E8E4F4', fontSize: '14px', margin: '0 0 20px 0' }}>Tu Puntuación Codify</p>
@@ -1059,7 +1059,8 @@ export default function Dashboard() {
           </div>
 
           <div style={{ textAlign: 'center', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button onClick={() => { setAnalysisResults(null); setStep(1); setForm({ soft_skills: { comunicacion: 5, liderazgo: 5, resolucion_conflictos: 5, negociacion: 5, trabajo_equipo: 5 }, habilidades_tecnicas: [] }); }} style={{ padding: '12px 32px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>← Nuevo Análisis</button>
+            <button onClick={downloadPDF} style={{ padding: '12px 32px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>📥 Descargar PDF</button>
+            <button onClick={() => { setAnalysisResults(null); setStep(1); setForm({ soft_skills: { comunicacion: 5, liderazgo: 5, resolucion_conflictos: 5, negociacion: 5, trabajo_equipo: 5 }, habilidades_tecnicas: [] }); }} style={{ padding: '12px 32px', backgroundColor: '#FFFFFF', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>← Nuevo Análisis</button>
             <button onClick={logout} style={{ padding: '12px 32px', backgroundColor: '#999', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>Salir</button>
           </div>
         </div>
@@ -1137,7 +1138,7 @@ export default function Dashboard() {
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
         {/* ELEMENTO PARA PDF */}
-        <div id="resultado-pdf" style={{ background: '#FFFFFF', padding: '60px 40px', pageBreakAfter: 'always' }}>
+        <div style={{ background: '#FFFFFF', padding: '60px 40px', pageBreakAfter: 'always' }}>
 
           {/* HEADER CON LOGO CODIFY */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '3px solid #BF057D' }}>
