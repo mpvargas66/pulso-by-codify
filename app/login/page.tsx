@@ -9,6 +9,7 @@ export default function Login() {
   const [tab, setTab] = useState<'login' | 'signup'>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
@@ -40,6 +41,12 @@ export default function Login() {
     e.preventDefault()
     setError('')
     setMessage('')
+
+    if (password !== confirmPassword) {
+      setError('Las contraseñas no coinciden')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -57,6 +64,7 @@ export default function Login() {
         setMessage('¡Cuenta creada! Redirigiendo al dashboard...')
         setEmail('')
         setPassword('')
+        setConfirmPassword('')
         setTimeout(() => router.push('/dashboard'), 1500)
       }
     } catch (err: any) {
@@ -189,6 +197,37 @@ export default function Login() {
             />
           </div>
 
+          {tab === 'signup' && (
+            <div>
+              <label style={{ display: 'block', fontSize: 13, color: '#334155', marginBottom: 8, fontWeight: 500 }}>Confirmar Contraseña</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+                required={tab === 'signup'}
+                disabled={loading}
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  borderRadius: 10,
+                  border: password && confirmPassword && password !== confirmPassword ? '1px solid #DC2626' : '1px solid #E2E8F0',
+                  background: '#F1F5F9',
+                  color: '#0F172A',
+                  fontSize: 14,
+                  outline: 'none',
+                  transition: 'border-color 0.3s',
+                  opacity: loading ? 0.6 : 1,
+                }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(191, 5, 125,0.5)'; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = password && confirmPassword && password !== confirmPassword ? '#DC2626' : 'rgba(148,163,184,0.2)'; }}
+              />
+              {password && confirmPassword && password !== confirmPassword && (
+                <div style={{ color: '#DC2626', fontSize: 12, marginTop: 4 }}>⚠️ Las contraseñas no coinciden</div>
+              )}
+            </div>
+          )}
+
           {/* Error Message */}
           {error && <div style={{ padding: 12, background: 'rgba(239,68,68,0.15)', borderRadius: 8, color: '#fca5a5', fontSize: 13, border: '1px solid rgba(239,68,68,0.3)' }}>⚠️ {error}</div>}
 
@@ -197,17 +236,17 @@ export default function Login() {
 
           <button
             type="submit"
-            disabled={loading || !email || !password}
+            disabled={loading || !email || !password || (tab === 'signup' && password !== confirmPassword)}
             style={{
               width: '100%',
               padding: '14px 24px',
-              background: loading || !email || !password ? '#94A3B8' : '#BF057D',
+              background: loading || !email || !password || (tab === 'signup' && password !== confirmPassword) ? '#94A3B8' : '#BF057D',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: 12,
               fontSize: 15,
               fontWeight: 700,
-              cursor: loading || !email || !password ? 'not-allowed' : 'pointer',
+              cursor: loading || !email || !password || (tab === 'signup' && password !== confirmPassword) ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s',
               boxShadow: '0 4px 15px rgba(191, 5, 125,0.25)',
             }}
