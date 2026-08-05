@@ -978,14 +978,14 @@ export default function Dashboard() {
 
   if (analysisResults) {
     return (
-      <div style={{ minHeight: '100vh', background: '#FFFFFF', padding: '40px 20px' }}>
+      <div style={{ minHeight: '100vh', background: '#1a1a2e', padding: '40px 20px' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{ background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)', border: '2px solid #BF057D', borderRadius: '16px', padding: '40px', marginBottom: '40px', textAlign: 'center', boxShadow: '0 8px 32px rgba(191, 5, 125, 0.2)' }}>
-            <p style={{ color: '#0F172A', fontSize: '14px', margin: '0 0 20px 0' }}>Tu Puntuación Codify</p>
+          <div style={{ background: 'linear-gradient(135deg, #16213e 0%, #0f3460 100%)', border: '2px solid #BF057D', borderRadius: '16px', padding: '40px', marginBottom: '40px', textAlign: 'center', boxShadow: '0 8px 32px rgba(191, 5, 125, 0.4)' }}>
+            <p style={{ color: '#E8E4F4', fontSize: '14px', margin: '0 0 20px 0' }}>Tu Puntuación Codify</p>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '40px', marginBottom: '30px' }}>
               <div style={{ position: 'relative', width: '120px', height: '120px' }}>
                 <svg viewBox="0 0 120 120" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-                  <circle cx="60" cy="60" r="55" fill="none" stroke="#CBD5E1" strokeWidth="8" />
+                  <circle cx="60" cy="60" r="55" fill="none" stroke="#16213e" strokeWidth="8" />
                   <circle cx="60" cy="60" r="55" fill="none" stroke="#BF057D" strokeWidth="8" strokeDasharray={`${(analysisResults.score_total / 100) * 345} 345`} strokeLinecap="round" style={{ transition: 'stroke-dasharray 2s ease-in-out', filter: 'drop-shadow(0 0 8px rgba(191, 5, 125, 0.5))' }} />
                 </svg>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
@@ -1002,29 +1002,29 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #CBD5E1' }}>
+            <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #16213e' }}>
               <p style={{ color: '#BF057D', fontSize: '16px', fontWeight: '600' }}>
                 {analysisResults.score_total >= 80 ? '🌟 Excelente posicionamiento' : analysisResults.score_total >= 60 ? '✅ Buen desempeño' : analysisResults.score_total >= 40 ? '📈 Potencial de crecimiento' : '🚀 Oportunidad de desarrollo'}
               </p>
-              <p style={{ color: '#334155', fontSize: '13px', marginTop: '10px' }}>Cargo: {analysisResults.cargo_homologado} | Industria: {analysisResults.industria}</p>
+              <p style={{ color: '#E8E4F4', fontSize: '13px', marginTop: '10px' }}>Cargo: {analysisResults.cargo_homologado} | Industria: {analysisResults.industria}</p>
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '40px' }}>
-            <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '20px' }}>
+            <div style={{ background: '#16213e', border: '1px solid #0f3460', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ color: '#BF057D', marginBottom: '16px' }}>💰 Banda Salarial</h3>
-              <div><p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>P25</p><p style={{ color: '#0F172A', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p25 / 1000000).toFixed(1)}M</p></div>
-              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #CBD5E1' }}><p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>P50 (Promedio)</p><p style={{ color: '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p50 / 1000000).toFixed(1)}M</p></div>
-              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #CBD5E1' }}><p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>P75</p><p style={{ color: '#0F172A', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p75 / 1000000).toFixed(1)}M</p></div>
+              <div><p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>P25</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p25 / 1000000).toFixed(1)}M</p></div>
+              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #0f3460' }}><p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>P50 (Promedio)</p><p style={{ color: '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p50 / 1000000).toFixed(1)}M</p></div>
+              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #0f3460' }}><p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>P75</p><p style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>${(analysisResults.salario_p75 / 1000000).toFixed(1)}M</p></div>
             </div>
 
-            <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '20px' }}>
+            <div style={{ background: '#16213e', border: '1px solid #0f3460', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ color: '#BF057D', marginBottom: '16px' }}>📊 Tu Salario</h3>
-              <p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>Salario Actual</p>
-              <p style={{ color: '#0F172A', fontSize: '20px', fontWeight: 'bold', margin: '8px 0' }}>${(analysisResults.salario_actual / 1000000).toFixed(1)}M</p>
-              <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #CBD5E1' }}>
-                <p style={{ color: '#334155', fontSize: '12px', margin: '0' }}>Brecha vs P50</p>
-                <p style={{ color: analysisResults.brecha_percentil < 0 ? '#DC2626' : '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '8px 0' }}>
+              <p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>Salario Actual</p>
+              <p style={{ color: '#fff', fontSize: '20px', fontWeight: 'bold', margin: '8px 0' }}>${(analysisResults.salario_actual / 1000000).toFixed(1)}M</p>
+              <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #0f3460' }}>
+                <p style={{ color: '#E8E4F4', fontSize: '12px', margin: '0' }}>Brecha vs P50</p>
+                <p style={{ color: analysisResults.brecha_percentil < 0 ? '#ff6b6b' : '#BF057D', fontSize: '18px', fontWeight: 'bold', margin: '8px 0' }}>
                   {analysisResults.brecha_percentil > 0 ? '+' : ''}{analysisResults.brecha_percentil}%
                 </p>
               </div>
