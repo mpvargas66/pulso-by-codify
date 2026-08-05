@@ -99,6 +99,8 @@ const JOBS_BY_INDUSTRY: Record<string, string[]> = {
 
 const REGIONS = ['Arica y Parinacota', 'Tarapacá', 'Antofagasta', 'Atacama', 'Coquimbo', 'Valparaíso', 'Metropolitana', 'Libertador General Bernardo O\'Higgins', 'Maule', 'Ñuble', 'Biobío', 'La Araucanía', 'Los Ríos', 'Los Lagos', 'Aysén', 'Magallanes'];
 
+const SPECIALTIES = ['Ingeniería en Informática', 'Ingeniería en Computación', 'Ingeniería en Sistemas', 'Ingeniería en Software', 'Técnico en Informática', 'Técnico en Programación', 'Ingeniería Comercial', 'Ingeniería Industrial', 'Administración de Empresas', 'Contador/a', 'Abogado/a', 'Psicólogo/a', 'Especialista en RRHH', 'Especialista en Marketing', 'Especialista en Logística', 'Data Science', 'Product Management', 'UX/UI Design', 'Profesor/a', 'Enfermero/a', 'Médico/a', 'Dentista', 'Ingeniero/a Civil', 'Arquitecto/a'];
+
 const EDUCATION_LEVELS = [
   { value: 'basica', label: 'Educación Básica' },
   { value: 'media', label: 'Educación Media (Secundaria)' },
@@ -364,8 +366,7 @@ function Step2Carrera({ form, updateForm, onNext, onBack }: any) {
                 if (!query.trim()) {
                   setSuggestions([]);
                 } else {
-                  const allProfessions = Object.values(JOBS_BY_INDUSTRY).flat();
-                  const filtered = allProfessions.filter(p => p.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(query)).slice(0, 10);
+                  const filtered = SPECIALTIES.filter(s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(query)).slice(0, 10);
                   setSuggestions(filtered);
                 }
               }}
