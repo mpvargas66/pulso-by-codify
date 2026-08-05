@@ -43,7 +43,7 @@ function CustomSelect({ value, onChange, options, label, help, error }: any) {
             top: 'calc(100% + 4px)',
             left: '0',
             right: '0',
-            background: '#F8FAFC',
+            background: '#E2E8F0',
             border: '1px solid #BF057D',
             borderRadius: '8px',
             zIndex: '10',
@@ -57,15 +57,15 @@ function CustomSelect({ value, onChange, options, label, help, error }: any) {
                 style={{
                   padding: '12px',
                   cursor: 'pointer',
-                  color: value === opt.value ? '#BF057D' : '#E8E4F4',
+                  color: value === opt.value ? '#BF057D' : '#334155',
                   background: value === opt.value ? 'rgba(191, 5, 125, 0.1)' : 'transparent',
                   borderBottom: '1px solid rgba(191, 5, 125, 0.1)',
                   fontSize: '14px',
                   transition: 'all 0.2s',
                   fontWeight: value === opt.value ? '500' : '400'
                 }}
-                onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(191, 5, 125, 0.1)'; e.currentTarget.style.color = '#BF057D'; }}
-                onMouseOut={(e) => { e.currentTarget.style.background = value === opt.value ? 'rgba(191, 5, 125, 0.1)' : 'transparent'; e.currentTarget.style.color = value === opt.value ? '#BF057D' : '#E8E4F4'; }}
+                onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(191, 5, 125, 0.2)'; e.currentTarget.style.color = '#BF057D'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = value === opt.value ? 'rgba(191, 5, 125, 0.1)' : 'transparent'; e.currentTarget.style.color = value === opt.value ? '#BF057D' : '#334155'; }}
               >
                 {opt.label}
               </div>
