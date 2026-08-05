@@ -990,7 +990,7 @@ export default function Dashboard() {
                 </svg>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
                   <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#BF057D' }}>{analysisResults.score_total}</div>
-                  <div style={{ fontSize: '12px', color: '#0F172A' }}>/100</div>
+                  <div style={{ fontSize: '12px', color: '#E8E4F4' }}>/100</div>
                 </div>
               </div>
               <div style={{ textAlign: 'center' }}>
