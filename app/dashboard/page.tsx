@@ -360,12 +360,12 @@ function Step2Carrera({ form, updateForm, onNext, onBack }: any) {
               value={input}
               onChange={(e) => {
                 setInput(e.target.value);
-                const query = e.target.value.toLowerCase();
+                const query = e.target.value.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
                 if (!query.trim()) {
                   setSuggestions([]);
                 } else {
                   const allProfessions = Object.values(JOBS_BY_INDUSTRY).flat();
-                  const filtered = allProfessions.filter(p => p.toLowerCase().includes(query)).slice(0, 10);
+                  const filtered = allProfessions.filter(p => p.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(query)).slice(0, 10);
                   setSuggestions(filtered);
                 }
               }}
