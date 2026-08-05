@@ -1286,7 +1286,7 @@ export default function Dashboard() {
             score_total: analysisResults?.score_total || 0,
             grade: analysisResults?.grade || 0,
             cargo_homologado: analysisResults?.cargo_homologado || '',
-            factor_scores: analysisResults?.factor_scores || {},
+            factor_scores: analysisResults?.factor_scores || { expertise_funcional: 0, expertise_negocio: 0, influencia_liderazgo: 0, resolucion_problemas: 0, naturaleza_impacto: 0, alcance_impacto: 0, interaccion_comunicacion: 0 },
             salario_actual: analysisResults?.salario_actual || 0,
             salario_p50: analysisResults?.salario_p50 || 0,
             brecha_percentil: analysisResults?.brecha_percentil || 0,
