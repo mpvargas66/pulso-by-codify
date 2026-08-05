@@ -303,7 +303,7 @@ function Step2Education({ form, updateForm, onNext, onBack }: any) {
               gap: '12px',
               padding: '14px',
               borderRadius: '8px',
-              border: form.nivel_educacion === level.value ? '2px solid #BF057D' : '1px solid #16213e',
+              border: form.nivel_educacion === level.value ? '2px solid #BF057D' : '1px solid #CBD5E1',
               backgroundColor: form.nivel_educacion === level.value ? 'rgba(191, 5, 125, 0.15)' : 'transparent',
               cursor: 'pointer',
               transition: 'all 0.2s'
@@ -317,7 +317,7 @@ function Step2Education({ form, updateForm, onNext, onBack }: any) {
               onChange={() => updateForm('nivel_educacion', level.value)}
               style={{ accentColor: '#BF057D', cursor: 'pointer' }}
             />
-            <span style={{ color: form.nivel_educacion === level.value ? '#BF057D' : '#E8E4F4', fontWeight: form.nivel_educacion === level.value ? '600' : '400', fontSize: '14px' }}>
+            <span style={{ color: form.nivel_educacion === level.value ? '#BF057D' : '#334155', fontWeight: form.nivel_educacion === level.value ? '600' : '400', fontSize: '14px' }}>
               {level.label}
             </span>
           </label>
@@ -383,7 +383,7 @@ function Step2Carrera({ form, updateForm, onNext, onBack }: any) {
             {suggestions.length > 0 && (
               <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderTop: 'none', borderRadius: '0 0 8px 8px', maxHeight: '300px', overflowY: 'auto', zIndex: 10 }}>
                 {suggestions.map((s, i) => (
-                  <div key={i} onClick={() => { updateForm('educacion', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #16213e', color: '#0F172A', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#16213e'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1a1a2e'; e.currentTarget.style.color = '#E8E4F4'; }}>{s}</div>
+                  <div key={i} onClick={() => { updateForm('educacion', s); setInput(''); setSuggestions([]); }} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid #E2E8F0', color: '#334155', fontSize: '13px' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'rgba(191, 5, 125, 0.1)'; e.currentTarget.style.color = '#BF057D'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.color = '#334155'; }}>{s}</div>
                 ))}
               </div>
             )}
@@ -708,9 +708,9 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
                 {skills.filter(skill => searchQuery.length === 0 || skill.toLowerCase().includes(searchQuery.toLowerCase())).map((skill) => {
                   const isSelected = selectedSkills.includes(skill);
                   return (
-                    <label key={skill} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', backgroundColor: isSelected ? 'rgba(191, 5, 125, 0.15)' : 'rgba(30, 41, 59, 0.6)', border: isSelected ? '1px solid #BF057D' : '1px solid #16213e', cursor: 'pointer' }}>
+                    <label key={skill} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', backgroundColor: isSelected ? 'rgba(191, 5, 125, 0.15)' : '#F1F5F9', border: isSelected ? '1px solid #BF057D' : '1px solid #CBD5E1', cursor: 'pointer' }}>
                       <input type="checkbox" checked={isSelected} onChange={() => toggleSkill(skill)} style={{ width: '18px', height: '18px', accentColor: '#BF057D', cursor: 'pointer' }} />
-                      <span style={{ color: isSelected ? '#BF057D' : '#E8E4F4', fontSize: '13px', fontWeight: isSelected ? '600' : '400' }}>{skill}</span>
+                      <span style={{ color: isSelected ? '#BF057D' : '#334155', fontSize: '13px', fontWeight: isSelected ? '600' : '400' }}>{skill}</span>
                     </label>
                   );
                 })}
@@ -728,23 +728,41 @@ function Step7Skills({ form, updateForm, onNext, onBack }: any) {
 }
 
 function Step8SoftSkills({ form, updateForm, onNext, onBack }: any) {
-  const sliders = [{ key: 'comunicacion', label: 'Comunicación' }, { key: 'liderazgo', label: 'Liderazgo' }, { key: 'resolucion_conflictos', label: 'Resolución de Conflictos' }, { key: 'negociacion', label: 'Negociación' }, { key: 'trabajo_equipo', label: 'Trabajo en Equipo' }];
+  const sliders = [
+    { key: 'comunicacion', label: 'Comunicación', desc: { 1: 'Dificultad para expresar ideas', 5: 'Comunicas bien en reuniones comunes', 10: 'Comunicas con claridad y persuasión en cualquier contexto' } },
+    { key: 'liderazgo', label: 'Liderazgo', desc: { 1: 'Prefieres seguir instrucciones', 5: 'Guías equipos en proyectos comunes', 10: 'Inspiras y motivas equipos hacia metas ambiciosas' } },
+    { key: 'resolucion_conflictos', label: 'Resolución de Conflictos', desc: { 1: 'Evitas confrontaciones', 5: 'Resuelves conflictos comunes', 10: 'Medias conflictos complejos encontrando soluciones win-win' } },
+    { key: 'negociacion', label: 'Negociación', desc: { 1: 'Aceptas las condiciones sin cuestionar', 5: 'Negocias términos básicos efectivamente', 10: 'Negocias acuerdos complejos obteniendo máximo valor' } },
+    { key: 'trabajo_equipo', label: 'Trabajo en Equipo', desc: { 1: 'Prefieres trabajar solo', 5: 'Colaboras bien con tu equipo', 10: 'Eres pieza clave que potencia a todo el equipo' } }
+  ];
+
+  const getDescription = (key: string, value: number) => {
+    const skill = sliders.find(s => s.key === key);
+    if (!skill) return '';
+    if (value <= 3) return skill.desc[1];
+    if (value <= 7) return skill.desc[5];
+    return skill.desc[10];
+  };
 
   return (
     <div style={{ background: '#F8FAFC', borderRadius: '12px', padding: '30px', border: '1px solid #E2E8F0' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 9: Soft Skills</h2>
       <p style={{ color: '#334155', marginBottom: '24px', fontSize: '13px' }}>💡 Evalúate del 1 al 10 en cada competencia</p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {sliders.map((s) => (
-          <div key={s.key}>
-            <label style={{ fontSize: '13px', fontWeight: '600', color: '#334155', marginBottom: '8px', display: 'block' }}>{s.label}</label>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <input type="number" min="1" max="10" value={form.soft_skills?.[s.key] || 5} onChange={(e) => updateForm('soft_skills', { ...form.soft_skills, [s.key]: Math.max(1, Math.min(10, parseInt(e.target.value) || 5)) })} style={{ width: '60px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF', color: '#0F172A', fontSize: '14px', fontWeight: '600', textAlign: 'center' }} />
-              <span style={{ color: '#334155', fontSize: '12px' }}>/10</span>
-              <input type="range" min="1" max="10" value={form.soft_skills?.[s.key] || 5} onChange={(e) => updateForm('soft_skills', { ...form.soft_skills, [s.key]: parseInt(e.target.value) })} style={{ flex: 1, accentColor: '#BF057D' }} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+        {sliders.map((s) => {
+          const value = form.soft_skills?.[s.key] || 5;
+          return (
+            <div key={s.key}>
+              <label style={{ fontSize: '13px', fontWeight: '600', color: '#334155', marginBottom: '8px', display: 'block' }}>{s.label}</label>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <input type="number" min="1" max="10" value={value} onChange={(e) => updateForm('soft_skills', { ...form.soft_skills, [s.key]: Math.max(1, Math.min(10, parseInt(e.target.value) || 5)) })} style={{ width: '60px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF', color: '#0F172A', fontSize: '14px', fontWeight: '600', textAlign: 'center' }} />
+                <span style={{ color: '#334155', fontSize: '12px' }}>/10</span>
+                <input type="range" min="1" max="10" value={value} onChange={(e) => updateForm('soft_skills', { ...form.soft_skills, [s.key]: parseInt(e.target.value) })} style={{ flex: 1, accentColor: '#BF057D' }} />
+              </div>
+              <p style={{ color: '#64748B', fontSize: '12px', marginTop: '8px', fontStyle: 'italic' }}>📌 {getDescription(s.key, value)}</p>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
         <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#FFFFFF', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
