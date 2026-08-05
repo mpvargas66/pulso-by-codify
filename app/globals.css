@@ -1,53 +1,62 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-:root {
-  --bg-primary: #0f172a;
-  --bg-card: rgba(30, 41, 59, 0.6);
-  --bg-card-solid: #1e293b;
-  --border: rgba(148, 163, 184, 0.15);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent: #22c55e;
-  --accent-hover: #16a34a;
-  --accent-glow: rgba(34, 197, 94, 0.25);
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --glass: rgba(30, 41, 59, 0.4);
-}
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
+:root {
+  --primary: #BF057D;
+  --secondary: #2D1B5E;
+  --background: #FFFFFF;
+  --surface-1: #F8FAFC;
+  --surface-2: #F1F5F9;
+  --surface-3: #E2E8F0;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --border: #CBD5E1;
+  --error: #DC2626;
 }
 
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--bg-primary);
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
   color: var(--text-primary);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  background-image: 
-    radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(79, 70, 229, 0.06) 0%, transparent 50%);
-  background-attachment: fixed;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+#__next {
+  width: 100%;
+  height: 100%;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.15); }
-  50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.3); }
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease forwards;
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #BF057D;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9A0462;
+}
+
+/* Selection */
+::selection {
+  background: rgba(191, 5, 125, 0.2);
+  color: var(--text-primary);
+}
+
+input, select, textarea {
+  font-family: inherit;
 }

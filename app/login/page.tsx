@@ -85,15 +85,15 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #2D1B5E 0%, #1C1B2E 100%)', padding: 20 }}>
-      <div style={{ width: '100%', maxWidth: 420, background: 'rgba(45,27,94,0.7)', backdropFilter: 'blur(20px)', borderRadius: 20, padding: 32, border: '1px solid rgba(191, 5, 125, 0.2)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)', padding: 20 }}>
+      <div style={{ width: '100%', maxWidth: 420, background: '#FFFFFF', backdropFilter: 'blur(20px)', borderRadius: 20, padding: 32, border: '1px solid #E2E8F0' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ marginBottom: 16 }}>
             <img src="https://codifyanalytics.com/storage/header-logos/01KSQBC6WDJ44NMC75X9Y8MWNA.png" alt="Codify" style={{ height: 48, margin: '0 auto' }} />
           </div>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#F3F0FB', marginBottom: 8 }}>Bienvenido a PULSO</h1>
-          <p style={{ fontSize: 14, color: '#E8E4F4' }}>Inicia sesión para evaluar tu posición en el mercado</p>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#0F172A', marginBottom: 8 }}>Bienvenido a PULSO</h1>
+          <p style={{ fontSize: 14, color: '#334155' }}>Inicia sesión para evaluar tu posición en el mercado</p>
         </div>
 
         {/* Tabs */}
@@ -137,7 +137,7 @@ export default function Login() {
         {/* Email/Password Form */}
         <form onSubmit={tab === 'login' ? handleEmailLogin : handleEmailSignup} style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
           <div>
-            <label style={{ display: 'block', fontSize: 13, color: '#E8E4F4', marginBottom: 8, fontWeight: 500 }}>Email</label>
+            <label style={{ display: 'block', fontSize: 13, color: '#334155', marginBottom: 8, fontWeight: 500 }}>Email</label>
             <input
               type="email"
               value={email}
@@ -149,9 +149,9 @@ export default function Login() {
                 width: '100%',
                 padding: '12px 16px',
                 borderRadius: 10,
-                border: '1px solid rgba(191, 5, 125, 0.2)',
+                border: '1px solid #E2E8F0',
                 background: 'rgba(45,27,94,0.5)',
-                color: '#F3F0FB',
+                color: '#0F172A',
                 fontSize: 14,
                 outline: 'none',
                 transition: 'border-color 0.3s',
@@ -163,7 +163,7 @@ export default function Login() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: 13, color: '#E8E4F4', marginBottom: 8, fontWeight: 500 }}>Contraseña</label>
+            <label style={{ display: 'block', fontSize: 13, color: '#334155', marginBottom: 8, fontWeight: 500 }}>Contraseña</label>
             <input
               type="password"
               value={password}
@@ -175,9 +175,9 @@ export default function Login() {
                 width: '100%',
                 padding: '12px 16px',
                 borderRadius: 10,
-                border: '1px solid rgba(191, 5, 125, 0.2)',
+                border: '1px solid #E2E8F0',
                 background: 'rgba(45,27,94,0.5)',
-                color: '#F3F0FB',
+                color: '#0F172A',
                 fontSize: 14,
                 outline: 'none',
                 transition: 'border-color 0.3s',
@@ -218,7 +218,7 @@ export default function Login() {
         {/* Divider */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
           <div style={{ flex: 1, height: 1, background: 'rgba(191, 5, 125, 0.2)' }} />
-          <span style={{ fontSize: 12, color: '#E8E4F4' }}>O continúa con</span>
+          <span style={{ fontSize: 12, color: '#334155' }}>O continúa con</span>
           <div style={{ flex: 1, height: 1, background: 'rgba(191, 5, 125, 0.2)' }} />
         </div>
 
