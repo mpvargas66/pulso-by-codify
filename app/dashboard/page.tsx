@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import ChatWindow from '@/components/ChatWindow';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 function CustomSelect({ value, onChange, options, label, help, error }: any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -1096,6 +1098,193 @@ export default function Dashboard() {
         {step === 7 && <Step6Contract form={form} updateForm={updateForm} onNext={() => setStep(8)} onBack={() => setStep(6)} />}
         {step === 8 && <Step7Skills form={form} updateForm={updateForm} onNext={() => setStep(9)} onBack={() => setStep(7)} />}
         {step === 9 && <Step8SoftSkills form={form} updateForm={updateForm} onNext={handleCalcular} onBack={() => setStep(8)} />}
+      </div>
+    </div>
+  );
+
+  const downloadPDF = async () => {
+    const element = document.getElementById('resultado-pdf');
+    if (!element) return;
+
+    const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#ffffff' });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const imgWidth = 210;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    pdf.save(`PULSO-Visado-Codify-${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#FFFFFF', padding: '40px 20px' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+
+        {/* ELEMENTO PARA PDF */}
+        <div id="resultado-pdf" style={{ background: '#FFFFFF', padding: '60px 40px', pageBreakAfter: 'always' }}>
+
+          {/* HEADER CON LOGO CODIFY */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '3px solid #BF057D' }}>
+            <div>
+              <h1 style={{ color: '#BF057D', fontSize: '28px', margin: '0 0 8px 0', fontWeight: '700' }}>PULSO by Codify</h1>
+              <p style={{ color: '#334155', fontSize: '13px', margin: '0', fontWeight: '500' }}>Análisis de Homologación Salarial</p>
+            </div>
+            <img src="https://codifyanalytics.com/storage/header-logos/01KSQBC6WDJ44NMC75X9Y8MWNA.png" alt="Codify" style={{ height: '60px', objectFit: 'contain' }} />
+          </div>
+
+          {/* FECHA Y MUESTRA */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '40px', padding: '16px', backgroundColor: '#F8FAFC', borderRadius: '8px' }}>
+            <div>
+              <p style={{ color: '#64748B', fontSize: '12px', margin: '0 0 6px 0', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Fecha de Análisis</p>
+              <p style={{ color: '#0F172A', fontSize: '16px', margin: '0', fontWeight: '600' }}>{new Date().toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            </div>
+            <div>
+              <p style={{ color: '#64748B', fontSize: '12px', margin: '0 0 6px 0', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Base de Datos</p>
+              <p style={{ color: '#0F172A', fontSize: '16px', margin: '0', fontWeight: '600' }}>350,000+ cargos</p>
+            </div>
+          </div>
+
+          {/* SCORE PRINCIPAL */}
+          <div style={{ background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)', border: '2px solid #BF057D', borderRadius: '12px', padding: '32px', marginBottom: '40px', textAlign: 'center' }}>
+            <p style={{ color: '#64748B', fontSize: '13px', margin: '0 0 16px 0', textTransform: 'uppercase' }}>Score Total</p>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '40px', marginBottom: '20px' }}>
+              <div>
+                <div style={{ fontSize: '48px', fontWeight: '700', color: '#BF057D', marginBottom: '4px' }}>{analysisResults?.score_total || 0}</div>
+                <div style={{ fontSize: '12px', color: '#64748B' }}>/100</div>
+              </div>
+              <div style={{ width: '120px', height: '120px', borderRadius: '50%', background: 'linear-gradient(135deg, #BF057D 0%, #9A0462 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(191, 5, 125, 0.2)' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '12px', color: '#fff', marginBottom: '4px' }}>Grade</div>
+                  <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#fff' }}>{analysisResults?.grade || 0}</div>
+                </div>
+              </div>
+            </div>
+            <p style={{ color: '#BF057D', fontSize: '14px', margin: '0', fontWeight: '600' }}>
+              {analysisResults && (analysisResults.score_total >= 80 ? '🌟 Excelente posicionamiento' : analysisResults.score_total >= 60 ? '✅ Buen desempeño' : analysisResults.score_total >= 40 ? '📈 Potencial de crecimiento' : '🚀 Oportunidad de desarrollo')}
+            </p>
+          </div>
+
+          {/* HOMOLOGACIÓN */}
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#0F172A', fontSize: '16px', margin: '0 0 16px 0', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Homologación Codify</h2>
+            <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '20px' }}>
+              <p style={{ color: '#334155', fontSize: '14px', margin: '0 0 8px 0' }}><strong>Cargo:</strong> {analysisResults?.cargo_homologado || 'N/A'}</p>
+              <p style={{ color: '#334155', fontSize: '14px', margin: '0 0 8px 0' }}><strong>Industria:</strong> {analysisResults?.industria || 'N/A'}</p>
+              <p style={{ color: '#334155', fontSize: '14px', margin: '0' }}><strong>Años Experiencia:</strong> {analysisResults?.anos_experiencia || 0}</p>
+            </div>
+          </div>
+
+          {/* BANDA SALARIAL */}
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#0F172A', fontSize: '16px', margin: '0 0 16px 0', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Banda Salarial Benchmark</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
+                <p style={{ color: '#64748B', fontSize: '12px', margin: '0 0 8px 0', textTransform: 'uppercase' }}>P25</p>
+                <p style={{ color: '#0F172A', fontSize: '18px', margin: '0', fontWeight: '700' }}>${analysisResults ? (analysisResults.salario_p25 / 1000000).toFixed(1) : 0}M</p>
+              </div>
+              <div style={{ background: '#F1F5F9', border: '2px solid #BF057D', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
+                <p style={{ color: '#BF057D', fontSize: '12px', margin: '0 0 8px 0', textTransform: 'uppercase', fontWeight: '600' }}>P50 (Mediana)</p>
+                <p style={{ color: '#BF057D', fontSize: '18px', margin: '0', fontWeight: '700' }}>${analysisResults ? (analysisResults.salario_p50 / 1000000).toFixed(1) : 0}M</p>
+              </div>
+              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
+                <p style={{ color: '#64748B', fontSize: '12px', margin: '0 0 8px 0', textTransform: 'uppercase' }}>P75</p>
+                <p style={{ color: '#0F172A', fontSize: '18px', margin: '0', fontWeight: '700' }}>${analysisResults ? (analysisResults.salario_p75 / 1000000).toFixed(1) : 0}M</p>
+              </div>
+            </div>
+          </div>
+
+          {/* TU SALARIO */}
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#0F172A', fontSize: '16px', margin: '0 0 16px 0', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tu Salario Actual</h2>
+            <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '20px' }}>
+              <p style={{ color: '#334155', fontSize: '14px', margin: '0 0 12px 0' }}>Salario Líquido Mensual</p>
+              <p style={{ color: '#0F172A', fontSize: '24px', margin: '0 0 16px 0', fontWeight: '700' }}>${analysisResults ? (analysisResults.salario_actual / 1000000).toFixed(1) : 0}M</p>
+              <div style={{ padding: '12px', backgroundColor: analysisResults && analysisResults.brecha_percentil < 0 ? '#FCE7F3' : '#F0FDF4', borderRadius: '6px', textAlign: 'center' }}>
+                <p style={{ color: analysisResults && analysisResults.brecha_percentil < 0 ? '#BE185D' : '#15803D', fontSize: '13px', margin: '0', fontWeight: '600' }}>
+                  Brecha vs P50: {analysisResults ? (analysisResults.brecha_percentil > 0 ? '+' : '') + analysisResults.brecha_percentil + '%' : 'N/A'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* FACTOR SCORES */}
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ color: '#0F172A', fontSize: '16px', margin: '0 0 16px 0', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Factor Scores (1-10)</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
+                <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Expertise Funcional</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.expertise_funcional.toFixed(1) : 0}/10</p>
+              </div>
+              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
+                <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Expertise Negocio</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.expertise_negocio.toFixed(1) : 0}/10</p>
+              </div>
+              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
+                <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Liderazgo</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.influencia_liderazgo.toFixed(1) : 0}/10</p>
+              </div>
+              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
+                <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Resolución</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.resolucion_problemas.toFixed(1) : 0}/10</p>
+              </div>
+              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
+                <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Impacto</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.naturaleza_impacto.toFixed(1) : 0}/10</p>
+              </div>
+              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
+                <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Comunicación</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.interaccion_comunicacion.toFixed(1) : 0}/10</p>
+              </div>
+            </div>
+          </div>
+
+          {/* FOOTER */}
+          <div style={{ borderTop: '2px solid #E2E8F0', paddingTop: '20px', marginTop: '40px', textAlign: 'center' }}>
+            <p style={{ color: '#64748B', fontSize: '11px', margin: '0 0 8px 0' }}>Este documento ha sido generado por PULSO by Codify</p>
+            <p style={{ color: '#64748B', fontSize: '11px', margin: '0 0 8px 0' }}>Análisis basado en 350,000+ posiciones en mercado chileno</p>
+            <div style={{ marginTop: '12px', padding: '12px', backgroundColor: '#F8FAFC', borderRadius: '6px', border: '1px solid #E2E8F0' }}>
+              <p style={{ color: '#0F172A', fontSize: '10px', margin: '0', fontStyle: 'italic' }}>
+                ✓ Visado por Codify Analytics | {new Date().toLocaleDateString('es-CL')}
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        {/* BOTONES DE ACCIÓN (fuera del PDF) */}
+        <div style={{ marginTop: '32px', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button onClick={downloadPDF} style={{ padding: '12px 32px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>
+            📥 Descargar PDF
+          </button>
+          <button onClick={() => { setAnalysisResults(null); setStep(1); setForm({ soft_skills: { comunicacion: 5, liderazgo: 5, resolucion_conflictos: 5, negociacion: 5, trabajo_equipo: 5 }, habilidades_tecnicas: [] }); }} style={{ padding: '12px 32px', backgroundColor: '#FFFFFF', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>
+            ← Nuevo Análisis
+          </button>
+          <button onClick={logout} style={{ padding: '12px 32px', backgroundColor: '#FFFFFF', color: '#334155', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>
+            Salir
+          </button>
+        </div>
+
+        {/* CHAT IA */}
+        <div style={{ marginTop: '40px' }}>
+          <h2 style={{ color: '#BF057D', marginBottom: '16px', fontSize: '18px' }}>💬 Consultor Salarial con IA</h2>
+          <ChatWindow analysisData={{
+            score_total: analysisResults?.score_total || 0,
+            grade: analysisResults?.grade || 0,
+            cargo_homologado: analysisResults?.cargo_homologado || '',
+            factor_scores: analysisResults?.factor_scores || {},
+            salario_actual: analysisResults?.salario_actual || 0,
+            salario_p50: analysisResults?.salario_p50 || 0,
+            brecha_percentil: analysisResults?.brecha_percentil || 0,
+            ultimo_cargo: analysisResults?.ultimo_cargo || '',
+            anos_experiencia: analysisResults?.anos_experiencia || 0,
+            industria: analysisResults?.industria || '',
+          }} />
+        </div>
       </div>
     </div>
   );
