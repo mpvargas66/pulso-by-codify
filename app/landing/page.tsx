@@ -22,14 +22,14 @@ export default function Landing() {
       </nav>
 
       {/* HERO */}
-      <section style={{ padding: '80px 40px', textAlign: 'center', background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)' }}>
+      <section style={{ padding: '80px 40px', textAlign: 'center', background: '#FFFFFF' }}>
         <h1 style={{ fontSize: '56px', fontWeight: '800', marginBottom: '20px', color: '#0F172A' }}>
           Conoce tu <span style={{ color: '#BF057D' }}>verdadero valor</span> en el mercado
         </h1>
-        <p style={{ fontSize: '20px', color: '#0F172A', marginBottom: '40px', maxWidth: '700px', margin: '0 auto 40px' }}>
+        <p style={{ fontSize: '20px', color: '#334155', marginBottom: '40px', maxWidth: '700px', margin: '0 auto 40px', lineHeight: '1.6' }}>
           PULSO homologa tu cargo y compara tu salario con el benchmark del mercado laboral chileno. Descubre si estás alineado, y obtén un plan personalizado para crecer.
         </p>
-        <button onClick={handleCTA} style={{ background: '#BF057D', color: '#FFF', border: 'none', padding: '16px 48px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: '700', boxShadow: '0 8px 20px rgba(191, 5, 125, 0.3)' }}>
+        <button onClick={handleCTA} style={{ background: '#BF057D', color: '#FFFFFF', border: 'none', padding: '16px 48px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: '700', boxShadow: '0 8px 20px rgba(191, 5, 125, 0.3)' }}>
           Comenzar análisis
         </button>
       </section>
@@ -58,7 +58,7 @@ export default function Landing() {
       </section>
 
       {/* PASOS */}
-      <section style={{ padding: '80px 40px', background: '#F8FAFC' }}>
+      <section style={{ padding: '80px 40px', background: '#FFFFFF', borderTop: '1px solid #E2E8F0' }}>
         <h2 style={{ fontSize: '40px', fontWeight: '700', textAlign: 'center', marginBottom: '60px', color: '#0F172A' }}>
           4 pasos hacia tu <span style={{ color: '#BF057D' }}>valor real</span>
         </h2>
@@ -70,12 +70,12 @@ export default function Landing() {
             { step: '4', title: 'Acciona y crece', desc: 'Usa los insights para negociar salario, buscar oportunidades o crecer profesionalmente.' },
           ].map((item, i) => (
             <div key={i} style={{ display: 'flex', gap: '30px', alignItems: 'flex-start' }}>
-              <div style={{ width: '60px', height: '60px', background: '#BF057D', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', fontWeight: '700', color: '#FFF', flexShrink: 0 }}>
+              <div style={{ width: '60px', height: '60px', background: '#BF057D', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', fontWeight: '700', color: '#FFFFFF', flexShrink: 0 }}>
                 {item.step}
               </div>
               <div>
                 <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#0F172A', marginBottom: '8px' }}>{item.title}</h3>
-                <p style={{ fontSize: '15px', color: '#0F172A', lineHeight: '1.6' }}>{item.desc}</p>
+                <p style={{ fontSize: '15px', color: '#334155', lineHeight: '1.6' }}>{item.desc}</p>
               </div>
             </div>
           ))}
@@ -106,25 +106,25 @@ export default function Landing() {
       </section>
 
       {/* CTA FINAL */}
-      <section style={{ padding: '80px 40px', textAlign: 'center', background: 'linear-gradient(135deg, #BF057D 0%, #9A0462 100%)' }}>
-        <h2 style={{ fontSize: '44px', fontWeight: '800', marginBottom: '20px', color: '#FFF' }}>
+      <section style={{ padding: '80px 40px', textAlign: 'center', background: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
+        <h2 style={{ fontSize: '44px', fontWeight: '800', marginBottom: '20px', color: '#0F172A' }}>
           ¿Listo para descubrir tu valor?
         </h2>
-        <p style={{ fontSize: '18px', color: '#0F172A', marginBottom: '40px' }}>
+        <p style={{ fontSize: '18px', color: '#334155', marginBottom: '40px', lineHeight: '1.6' }}>
           Toma el control de tu carrera. Análisis completo en 5 minutos.
         </p>
-        <button onClick={handleCTA} style={{ background: '#FFF', color: '#BF057D', border: 'none', padding: '16px 48px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: '700', boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)' }}>
+        <button onClick={handleCTA} style={{ background: '#BF057D', color: '#FFFFFF', border: 'none', padding: '16px 48px', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: '700', boxShadow: '0 8px 20px rgba(191, 5, 125, 0.3)' }}>
           Comenzar ahora
         </button>
       </section>
 
       {/* FOOTER */}
-      <footer style={{ background: '#0F0E1A', padding: '40px', textAlign: 'center', borderTop: '1px solid rgba(191, 5, 125, 0.2)' }}>
+      <footer style={{ background: '#F8FAFC', padding: '40px', textAlign: 'center', borderTop: '1px solid #E2E8F0' }}>
         <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
           <img src="https://codifyanalytics.com/storage/header-logos/01KSQBC6WDJ44NMC75X9Y8MWNA.png" alt="Codify" style={{ height: '30px' }} />
           <span style={{ fontSize: '14px', color: '#BF057D', fontWeight: '700' }}>PULSO by Codify</span>
         </div>
-        <p style={{ fontSize: '12px', color: '#0F172A', marginBottom: '12px' }}>
+        <p style={{ fontSize: '12px', color: '#334155', marginBottom: '12px' }}>
           Soluciones de análisis salarial y posicionamiento en el mercado laboral chileno
         </p>
         <p style={{ fontSize: '12px', color: '#64748B' }}>
