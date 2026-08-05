@@ -1228,27 +1228,27 @@ export default function Dashboard() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
                 <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Expertise Funcional</p>
-                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.expertise_funcional.toFixed(1) : 0}/10</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{(analysisResults?.factor_scores?.expertise_funcional ?? 0).toFixed(1)}/10</p>
               </div>
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
                 <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Expertise Negocio</p>
-                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.expertise_negocio.toFixed(1) : 0}/10</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{(analysisResults?.factor_scores?.expertise_negocio ?? 0).toFixed(1)}/10</p>
               </div>
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
                 <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Liderazgo</p>
-                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.influencia_liderazgo.toFixed(1) : 0}/10</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{(analysisResults?.factor_scores?.influencia_liderazgo ?? 0).toFixed(1)}/10</p>
               </div>
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
                 <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Resolución</p>
-                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.resolucion_problemas.toFixed(1) : 0}/10</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{(analysisResults?.factor_scores?.resolucion_problemas ?? 0).toFixed(1)}/10</p>
               </div>
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
                 <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Impacto</p>
-                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.naturaleza_impacto.toFixed(1) : 0}/10</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{(analysisResults?.factor_scores?.naturaleza_impacto ?? 0).toFixed(1)}/10</p>
               </div>
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '12px' }}>
                 <p style={{ color: '#334155', fontSize: '12px', margin: '0 0 6px 0' }}>Comunicación</p>
-                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{analysisResults ? analysisResults.factor_scores.interaccion_comunicacion.toFixed(1) : 0}/10</p>
+                <p style={{ color: '#BF057D', fontSize: '16px', margin: '0', fontWeight: '700' }}>{(analysisResults?.factor_scores?.interaccion_comunicacion ?? 0).toFixed(1)}/10</p>
               </div>
             </div>
           </div>
