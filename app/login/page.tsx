@@ -54,9 +54,10 @@ export default function Login() {
       if (error) {
         setError(error.message)
       } else {
-        setMessage('¡Verifica tu email para confirmar tu cuenta!')
+        setMessage('¡Cuenta creada! Redirigiendo al dashboard...')
         setEmail('')
         setPassword('')
+        setTimeout(() => router.push('/dashboard'), 1500)
       }
     } catch (err: any) {
       setError(err.message)
