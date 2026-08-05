@@ -433,7 +433,7 @@ function Step3Experience({ form, updateForm, onNext, onBack }: any) {
           </label>
           <CustomSelect
             value={form.industria}
-            onChange={(val) => updateForm('industria', val)}
+            onChange={(val: string) => updateForm('industria', val)}
             options={[{ value: '', label: 'Selecciona...' }, ...INDUSTRIES.map(i => ({ value: i, label: i }))]}
             label=""
             help=""
