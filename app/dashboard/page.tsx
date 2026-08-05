@@ -851,6 +851,12 @@ export default function Dashboard() {
   };
 
   const handleCalcular = async () => {
+    // Validar datos requeridos
+    if (!form.cargo || !form.industria || !form.salario_liquido) {
+      alert('Por favor completa todos los campos requeridos');
+      return;
+    }
+
     setLoading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -908,8 +914,9 @@ export default function Dashboard() {
         interaccion_comunicacion: form.soft_skills?.comunicacion || 5,
       };
 
-      const brecha = form.salario_liquido! - bandaData.p50;
-      const brechaPercentil = ((brecha / form.salario_liquido!) * 100).toFixed(1);
+      const salarioActual = form.salario_liquido || 1; // Evitar división por cero
+      const brecha = salarioActual - bandaData.p50;
+      const brechaPercentil = ((brecha / salarioActual) * 100).toFixed(1);
 
       const results: AnalysisResult = {
         score_total: Math.round(totalScore),
@@ -971,17 +978,6 @@ export default function Dashboard() {
         <div style={{ textAlign: 'center' }}>
           <h1 style={{ color: '#BF057D', marginBottom: '20px' }}>🎯 Analizando tu perfil...</h1>
           <p style={{ color: '#0F172A' }}>Calculando tu score...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!analysisResults && step === 'resultado') {
-    return (
-      <div style={{ minHeight: '100vh', background: '#1a1a2e', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{ color: '#BF057D', marginBottom: '20px' }}>🎯 Cargando resultados...</h1>
-          <p style={{ color: '#E8E4F4' }}>Uno momento...</p>
         </div>
       </div>
     );
