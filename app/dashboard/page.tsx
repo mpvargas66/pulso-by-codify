@@ -1195,15 +1195,15 @@ export default function Dashboard() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
                 <p style={{ color: '#64748B', fontSize: '12px', margin: '0 0 8px 0', textTransform: 'uppercase' }}>P25</p>
-                <p style={{ color: '#0F172A', fontSize: '18px', margin: '0', fontWeight: '700' }}>${analysisResults ? (analysisResults.salario_p25 / 1000000).toFixed(1) : 0}M</p>
+                <p style={{ color: '#0F172A', fontSize: '18px', margin: '0', fontWeight: '700' }}>${((analysisResults?.salario_p25 ?? 0) / 1000000).toFixed(1)}M</p>
               </div>
               <div style={{ background: '#F1F5F9', border: '2px solid #BF057D', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
                 <p style={{ color: '#BF057D', fontSize: '12px', margin: '0 0 8px 0', textTransform: 'uppercase', fontWeight: '600' }}>P50 (Mediana)</p>
-                <p style={{ color: '#BF057D', fontSize: '18px', margin: '0', fontWeight: '700' }}>${analysisResults ? (analysisResults.salario_p50 / 1000000).toFixed(1) : 0}M</p>
+                <p style={{ color: '#BF057D', fontSize: '18px', margin: '0', fontWeight: '700' }}>${((analysisResults?.salario_p50 ?? 0) / 1000000).toFixed(1)}M</p>
               </div>
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
                 <p style={{ color: '#64748B', fontSize: '12px', margin: '0 0 8px 0', textTransform: 'uppercase' }}>P75</p>
-                <p style={{ color: '#0F172A', fontSize: '18px', margin: '0', fontWeight: '700' }}>${analysisResults ? (analysisResults.salario_p75 / 1000000).toFixed(1) : 0}M</p>
+                <p style={{ color: '#0F172A', fontSize: '18px', margin: '0', fontWeight: '700' }}>${((analysisResults?.salario_p75 ?? 0) / 1000000).toFixed(1)}M</p>
               </div>
             </div>
           </div>
@@ -1213,10 +1213,10 @@ export default function Dashboard() {
             <h2 style={{ color: '#0F172A', fontSize: '16px', margin: '0 0 16px 0', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tu Salario Actual</h2>
             <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '20px' }}>
               <p style={{ color: '#334155', fontSize: '14px', margin: '0 0 12px 0' }}>Salario Líquido Mensual</p>
-              <p style={{ color: '#0F172A', fontSize: '24px', margin: '0 0 16px 0', fontWeight: '700' }}>${analysisResults ? (analysisResults.salario_actual / 1000000).toFixed(1) : 0}M</p>
+              <p style={{ color: '#0F172A', fontSize: '24px', margin: '0 0 16px 0', fontWeight: '700' }}>${((analysisResults?.salario_actual ?? 0) / 1000000).toFixed(1)}M</p>
               <div style={{ padding: '12px', backgroundColor: analysisResults && analysisResults.brecha_percentil < 0 ? '#FCE7F3' : '#F0FDF4', borderRadius: '6px', textAlign: 'center' }}>
                 <p style={{ color: analysisResults && analysisResults.brecha_percentil < 0 ? '#BE185D' : '#15803D', fontSize: '13px', margin: '0', fontWeight: '600' }}>
-                  Brecha vs P50: {analysisResults ? (analysisResults.brecha_percentil > 0 ? '+' : '') + analysisResults.brecha_percentil + '%' : 'N/A'}
+                  Brecha vs P50: {analysisResults ? ((analysisResults.brecha_percentil > 0 ? '+' : '') + analysisResults.brecha_percentil + '%') : 'N/A'}
                 </p>
               </div>
             </div>
