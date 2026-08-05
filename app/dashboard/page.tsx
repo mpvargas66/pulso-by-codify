@@ -1165,7 +1165,7 @@ export default function Dashboard() {
               </div>
             </div>
             <p style={{ color: '#BF057D', fontSize: '14px', margin: '0', fontWeight: '600' }}>
-              {analysisResults && (analysisResults.score_total >= 80 ? '🌟 Excelente posicionamiento' : analysisResults.score_total >= 60 ? '✅ Buen desempeño' : analysisResults.score_total >= 40 ? '📈 Potencial de crecimiento' : '🚀 Oportunidad de desarrollo')}
+              {analysisResults ? (analysisResults.score_total >= 80 ? '🌟 Excelente posicionamiento' : analysisResults.score_total >= 60 ? '✅ Buen desempeño' : analysisResults.score_total >= 40 ? '📈 Potencial de crecimiento' : '🚀 Oportunidad de desarrollo') : ''}
             </p>
           </div>
 
