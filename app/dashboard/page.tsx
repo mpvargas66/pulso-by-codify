@@ -371,12 +371,13 @@ function Step2Carrera({ form, updateForm, onNext, onBack }: any) {
               }}
               style={{
                 width: '100%',
-                padding: '12px 36px 12px 12px',
+                padding: '12px',
                 borderRadius: '8px',
-                border: `1px solid ${errors.educacion ? '#ff6b6b' : '#16213e'}`,
+                border: `1px solid ${errors.educacion ? '#DC2626' : '#CBD5E1'}`,
                 backgroundColor: '#FFFFFF',
-                color: '#fff',
-                fontSize: '14px'
+                color: '#0F172A',
+                fontSize: '14px',
+                fontWeight: '500'
               }}
             />
             {suggestions.length > 0 && (
@@ -412,30 +413,37 @@ function Step3Experience({ form, updateForm, onNext, onBack }: any) {
 
   return (
     <div style={{ background: '#F8FAFC', borderRadius: '12px', padding: '30px', border: '1px solid #E2E8F0' }}>
-      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 4: Experiencia</h2>
+      <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 3: Experiencia</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
-          <label style={{ color: '#0F172A', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
             Años totales
             <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_experiencia}</span>
           </label>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <input type="number" min="0" max="50" value={form.anos_experiencia || 0} onChange={(e) => updateForm('anos_experiencia', parseInt(e.target.value) || 0)} style={{ width: '70px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
-            <span style={{ color: '#0F172A', fontSize: '12px' }}>años</span>
+            <input type="number" min="0" max="50" value={form.anos_experiencia || 0} onChange={(e) => { const val = parseInt(e.target.value); if (!isNaN(val)) updateForm('anos_experiencia', val); }} style={{ width: '70px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF', color: '#0F172A', fontSize: '14px', fontWeight: '500' }} />
+            <span style={{ color: '#334155', fontSize: '12px' }}>años</span>
             <input type="range" min="0" max="50" value={form.anos_experiencia || 0} onChange={(e) => updateForm('anos_experiencia', parseInt(e.target.value))} style={{ flex: 1, accentColor: '#BF057D' }} />
           </div>
         </div>
-        <CustomSelect
-          value={form.industria}
-          onChange={(val: string) => updateForm('industria', val)}
-          options={[{ value: '', label: 'Selecciona...' }, ...INDUSTRIES.map(i => ({ value: i, label: i }))]}
-          label="Industria"
-          help={FIELD_HELP.industria}
-          error={errors.industria}
-        />
+        <div>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Industria
+            <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.industria}</span>
+          </label>
+          <CustomSelect
+            value={form.industria}
+            onChange={(val) => updateForm('industria', val)}
+            options={[{ value: '', label: 'Selecciona...' }, ...INDUSTRIES.map(i => ({ value: i, label: i }))]}
+            label=""
+            help=""
+            error={errors.industria}
+          />
+          {errors.industria && <div style={{ color: '#DC2626', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.industria}</div>}
+        </div>
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#F8FAFC', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
+        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#FFFFFF', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
         <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
       </div>
     </div>
@@ -457,28 +465,35 @@ function Step4Company({ form, updateForm, onNext, onBack }: any) {
     <div style={{ background: '#F8FAFC', borderRadius: '12px', padding: '30px', border: '1px solid #E2E8F0' }}>
       <h2 style={{ color: '#BF057D', marginBottom: '20px', fontSize: '18px' }}>Paso 4: Empresa</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <CustomSelect
-          value={form.tamano_empresa}
-          onChange={(val: string) => updateForm('tamano_empresa', val)}
-          options={[{ value: '', label: 'Selecciona...' }, ...COMPANY_SIZES]}
-          label="Tamaño"
-          help={FIELD_HELP.tamano_empresa}
-          error={errors.tamano_empresa}
-        />
         <div>
-          <label style={{ color: '#0F172A', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            Tamaño
+            <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.tamano_empresa}</span>
+          </label>
+          <CustomSelect
+            value={form.tamano_empresa}
+            onChange={(val) => updateForm('tamano_empresa', val)}
+            options={[{ value: '', label: 'Selecciona...' }, ...COMPANY_SIZES.map(s => ({ value: s.value, label: s.label }))]}
+            label=""
+            help=""
+            error={errors.tamano_empresa}
+          />
+          {errors.tamano_empresa && <div style={{ color: '#DC2626', fontSize: '11px', marginTop: '4px' }}>⚠️ {errors.tamano_empresa}</div>}
+        </div>
+        <div>
+          <label style={{ color: '#334155', fontSize: '12px', display: 'block', marginBottom: '8px' }}>
             Años en empresa
             <span style={{ color: '#64748B', fontSize: '11px', marginLeft: '4px' }}>{FIELD_HELP.anos_empresa}</span>
           </label>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <input type="number" min="0" max="40" value={form.anos_empresa || 0} onChange={(e) => updateForm('anos_empresa', parseInt(e.target.value) || 0)} style={{ width: '70px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', color: '#fff',  fontSize: '14px', appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22 fill=%22none%22%3E%3Cpath d=%22M3 6l5 5 5-5%22 stroke=%22%23BF057D%22 stroke-width=%222%22 stroke-linecap=%22round%22/  %3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', cursor: 'pointer' }} />
-            <span style={{ color: '#0F172A', fontSize: '12px' }}>años</span>
+            <input type="number" min="0" max="40" value={form.anos_empresa || 0} onChange={(e) => { const val = parseInt(e.target.value); if (!isNaN(val)) updateForm('anos_empresa', val); }} style={{ width: '70px', padding: '10px 8px', borderRadius: '8px', border: '1px solid #CBD5E1', backgroundColor: '#FFFFFF', color: '#0F172A', fontSize: '14px', fontWeight: '500' }} />
+            <span style={{ color: '#334155', fontSize: '12px' }}>años</span>
             <input type="range" min="0" max="40" value={form.anos_empresa || 0} onChange={(e) => updateForm('anos_empresa', parseInt(e.target.value))} style={{ flex: 1, accentColor: '#BF057D' }} />
           </div>
         </div>
       </div>
       <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#F8FAFC', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
+        <button onClick={onBack} style={{ flex: 1, padding: '12px', backgroundColor: '#FFFFFF', color: '#BF057D', border: '1px solid #BF057D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>← Atrás</button>
         <button onClick={() => validate() && onNext()} style={{ flex: 1, padding: '12px', backgroundColor: '#BF057D', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', opacity: Object.keys(errors).length > 0 ? 0.5 : 1 }}>Siguiente →</button>
       </div>
     </div>
