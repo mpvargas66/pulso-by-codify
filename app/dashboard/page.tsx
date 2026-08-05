@@ -851,12 +851,6 @@ export default function Dashboard() {
   };
 
   const handleCalcular = async () => {
-    // Validar datos requeridos
-    if (!form.cargo || !form.industria || !form.salario_liquido) {
-      alert('Por favor completa todos los campos requeridos');
-      return;
-    }
-
     setLoading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
