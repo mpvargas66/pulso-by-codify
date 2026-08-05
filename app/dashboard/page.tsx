@@ -1121,6 +1121,8 @@ export default function Dashboard() {
     pdf.save(`PULSO-Visado-Codify-${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
+  const scoreMessage = analysisResults ? (analysisResults.score_total >= 80 ? '🌟 Excelente posicionamiento' : analysisResults.score_total >= 60 ? '✅ Buen desempeño' : analysisResults.score_total >= 40 ? '📈 Potencial de crecimiento' : '🚀 Oportunidad de desarrollo') : '';
+
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF', padding: '40px 20px' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
@@ -1165,7 +1167,7 @@ export default function Dashboard() {
               </div>
             </div>
             <p style={{ color: '#BF057D', fontSize: '14px', margin: '0', fontWeight: '600' }}>
-              {analysisResults ? (analysisResults.score_total >= 80 ? '🌟 Excelente posicionamiento' : analysisResults.score_total >= 60 ? '✅ Buen desempeño' : analysisResults.score_total >= 40 ? '📈 Potencial de crecimiento' : '🚀 Oportunidad de desarrollo') : ''}
+              {scoreMessage}
             </p>
           </div>
 
