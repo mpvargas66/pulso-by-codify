@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { TermsModal } from '@/app/components/TermsModal'
 
 export default function Login() {
   const router = useRouter()
@@ -13,6 +14,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  const [showTerms, setShowTerms] = useState(true)
+  const [termsAccepted, setTermsAccepted] = useState(false)
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,6 +44,12 @@ export default function Login() {
     e.preventDefault()
     setError('')
     setMessage('')
+
+    if (!termsAccepted) {
+      setError('Debes aceptar los Términos y Condiciones')
+      setShowTerms(true)
+      return
+    }
 
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden')
@@ -93,8 +102,28 @@ export default function Login() {
     }
   }
 
+  const handleAcceptTerms = () => {
+    setTermsAccepted(true)
+    setShowTerms(false)
+    localStorage.setItem('pulso_terms_accepted', JSON.stringify({
+      accepted: true,
+      timestamp: new Date().toISOString(),
+    }))
+  }
+
+  const handleDeclineTerms = () => {
+    setShowTerms(false)
+    setError('Debes aceptar los Términos y Condiciones para continuar')
+    setTimeout(() => window.location.href = '/', 2000)
+  }
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)', padding: 20 }}>
+      <TermsModal
+        isOpen={showTerms}
+        onAccept={handleAcceptTerms}
+        onDecline={handleDeclineTerms}
+      />
       <div style={{ width: '100%', maxWidth: 420, background: '#FFFFFF', backdropFilter: 'blur(20px)', borderRadius: 20, padding: 32, border: '1px solid #E2E8F0' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
@@ -228,6 +257,33 @@ export default function Login() {
             </div>
           )}
 
+          {tab === 'signup' && (
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155' }}>
+              <input
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                disabled={loading}
+                style={{
+                  width: '18px',
+                  height: '18px',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  accentColor: '#BF057D',
+                }}
+              />
+              <span>
+                Acepto los{' '}
+                <a
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); setShowTerms(true); }}
+                  style={{ color: '#BF057D', textDecoration: 'none', fontWeight: '600' }}
+                >
+                  Términos y Condiciones
+                </a>
+              </span>
+            </label>
+          )}
+
           {/* Error Message */}
           {error && <div style={{ padding: 12, background: 'rgba(239,68,68,0.15)', borderRadius: 8, color: '#fca5a5', fontSize: 13, border: '1px solid rgba(239,68,68,0.3)' }}>⚠️ {error}</div>}
 
@@ -236,7 +292,7 @@ export default function Login() {
 
           <button
             type="submit"
-            disabled={loading || !email || !password || (tab === 'signup' && password !== confirmPassword)}
+            disabled={loading || !email || !password || (tab === 'signup' && (password !== confirmPassword || !termsAccepted))}
             style={{
               width: '100%',
               padding: '14px 24px',
@@ -293,6 +349,19 @@ export default function Login() {
           </svg>
           Continuar con Google
         </button>
+
+        {/* Footer */}
+        <div style={{ marginTop: '20px', textAlign: 'center', color: '#999', fontSize: '14px' }}>
+          <p>
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); setShowTerms(true); }}
+              style={{ color: '#bf057d' }}
+            >
+              Ver Términos y Condiciones
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   )
